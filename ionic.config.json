@@ -1,0 +1,7 @@
+{
+  "name": "ova-nequi",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
