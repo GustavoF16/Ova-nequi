@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
+
 import { IonicModule } from '@ionic/angular';
+
 import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
+
+import { DatabaseService }
+from '../../services/database.service';
 
 @Component({
   selector: 'app-progreso',
@@ -15,20 +21,47 @@ import { RouterModule } from '@angular/router';
 })
 export class ProgresoPage {
 
-  progreso: number = 0.6;
+  progreso: number = 0;
 
   mensaje: string = '';
 
-  constructor() {
+  constructor(
+    private databaseService: DatabaseService
+  ) {
 
-    if (this.progreso >= 1) {
+    this.cargarProgreso();
+
+  }
+
+  async cargarProgreso() {
+
+    // Inicializar BD
+    await this.databaseService.initDB();
+
+    // Obtener progreso
+    this.progreso =
+    await this.databaseService.obtenerProgreso();
+
+    // Si no existe
+    if (this.progreso === 0) {
+
+      this.progreso = 60;
+
+      await this.databaseService.guardarProgreso(
+        this.progreso
+      );
+
+    }
+
+    // Mensajes
+    if (this.progreso >= 100) {
 
       this.mensaje =
       '🎉 Has completado todo el curso';
 
     }
 
-    else if (this.progreso >= 0.5) {
+    else if (this.progreso >= 50) {
 
       this.mensaje =
       '👍 Vas muy bien, sigue así';
@@ -45,3 +78,4 @@ export class ProgresoPage {
   }
 
 }
+``
