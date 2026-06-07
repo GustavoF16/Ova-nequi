@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Configuración</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Título -->
+  <h2>Opciones de accesibilidad</h2>
+
+  <!-- MODO OSCURO -->
+  <ion-item>
+
+    <ion-label>
+      Modo oscuro
+    </ion-label>
+
+    <ion-toggle
+      [(ngModel)]="modoOscuro"
+      (ionChange)="cambiarModo()">
+
+    </ion-toggle>
+
+  </ion-item>
+
+  <br>
+
+  <!-- TAMAÑO TEXTO -->
+  <ion-item>
+
+    <ion-label>
+      Tamaño de texto
+    </ion-label>
+
+  </ion-item>
+
+  <ion-segment
+    [(ngModel)]="tamanoTexto"
+    (ionChange)="cambiarTexto()">
+
+    <ion-segment-button value="pequeno">
+      Pequeño
+    </ion-segment-button>
+
+    <ion-segment-button value="medio">
+      Medio
+    </ion-segment-button>
+
+    <ion-segment-button value="grande">
+      Grande
+    </ion-segment-button>
+
+  </ion-segment>
+
+  <br>
+
+  <!-- MENSAJE -->
+  <h3 *ngIf="mensaje">
+    {{mensaje}}
+  </h3>
+
+  <br><br>
+
+  <!-- BOTÓN VOLVER -->
+  <ion-button
+    expand="block"
+    color="dark"
+    routerLink="/home">
+
+    ⬅ Volver al menú
+
+  </ion-button>
+
+</ion-content>

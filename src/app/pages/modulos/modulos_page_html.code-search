@@ -1,0 +1,22 @@
+# Query: modulos.page.html
+# ContextLines: 1
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Módulos educativos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <h2>¿Qué es Nequi?</h2>
+  <p>Nequi es una aplicación financiera que permite enviar dinero, pagar servicios y recibir pagos desde tu celular.</p>
+
+  <h3>¿Para qué sirve?</h3>
+  <ul>
+    <li>Enviar dinero</li>
+    <li>Recibir pagos</li>
+    <li>Pagar servicios</li>
+  </ul>
+
+</ion-content>

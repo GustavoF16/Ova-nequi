@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Encuesta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Título -->
+  <h2>Encuesta de uso de Nequi</h2>
+
+  <!-- Pregunta 1 -->
+  <h3>¿Te pareció fácil usar Nequi?</h3>
+
+  <ion-radio-group [(ngModel)]="respuesta1">
+
+    <ion-item>
+      <ion-radio
+        slot="start"
+        value="si">
+      </ion-radio>
+
+      <ion-label>Sí</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-radio
+        slot="start"
+        value="no">
+      </ion-radio>
+
+      <ion-label>No</ion-label>
+    </ion-item>
+
+  </ion-radio-group>
+
+  <br>
+
+  <!-- Pregunta 2 -->
+  <h3>¿Recomendarías esta aplicación?</h3>
+
+  <ion-radio-group [(ngModel)]="respuesta2">
+
+    <ion-item>
+      <ion-radio
+        slot="start"
+        value="si">
+      </ion-radio>
+
+      <ion-label>Sí</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-radio
+        slot="start"
+        value="no">
+      </ion-radio>
+
+      <ion-label>No</ion-label>
+    </ion-item>
+
+  </ion-radio-group>
+
+  <br>
+
+  <!-- Botón enviar -->
+  <ion-button
+    expand="full"
+    color="success"
+    (click)="enviarEncuesta()">
+
+    Enviar Encuesta
+
+  </ion-button>
+
+  <br>
+
+  <!-- Mensaje -->
+  <h3 *ngIf="mensaje">
+    {{mensaje}}
+  </h3>
+
+  <br><br>
+
+  <!-- BOTÓN VOLVER -->
+  <ion-button
+    expand="block"
+    color="dark"
+    routerLink="/home">
+
+    ⬅ Volver al menú
+
+  </ion-button>
+
+</ion-content>

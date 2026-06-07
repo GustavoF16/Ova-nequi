@@ -2,12 +2,40 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
+  {
+    path: 'home',
+    loadComponent: () => import('./home/home.page').then(m => m.HomePage)
+  },
+  {
+    path: 'modulos',
+    loadComponent: () => import('./pages/modulos/modulos.page').then( m => m.ModulosPage)
+  },
+  {
+    path: 'simulaciones',
+    loadComponent: () => import('./pages/simulaciones/simulaciones.page').then( m => m.SimulacionesPage)
+  },
+  {
+    path: 'encuestas',
+    loadComponent: () => import('./pages/encuestas/encuestas.page').then( m => m.EncuestasPage)
+  },
+  {
+    path: 'configuracion',
+    loadComponent: () => import('./pages/configuracion/configuracion.page').then( m => m.ConfiguracionPage)
+  },
+  {
+    path: 'progreso',
+    loadComponent: () => import('./pages/progreso/progreso.page').then( m => m.ProgresoPage)
+  },
+  {
+    path: 'certificados',
+    loadComponent: () => import('./pages/certificados/certificados.page').then( m => m.CertificadosPage)
+  }
 ];

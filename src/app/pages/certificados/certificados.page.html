@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Certificado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Título -->
+  <h2>🎓 Certificado de finalización</h2>
+
+  <!-- Texto -->
+  <p>
+    Este certificado reconoce que:
+  </p>
+
+  <!-- Nombre -->
+  <h3>
+    {{nombre}}
+  </h3>
+
+  <!-- Curso -->
+  <p>
+    Ha completado exitosamente el curso:
+  </p>
+
+  <h3>
+    Uso básico de Nequi
+  </h3>
+
+  <!-- Fecha -->
+  <p>
+    Fecha: {{fecha}}
+  </p>
+
+  <br>
+
+  <!-- BOTÓN GENERAR -->
+  <ion-button
+    expand="full"
+    color="success"
+    (click)="generarCertificado()">
+
+    Generar certificado
+
+  </ion-button>
+
+  <br>
+
+  <!-- MENSAJE -->
+  <h3 *ngIf="mensaje">
+    {{mensaje}}
+  </h3>
+
+  <br><br>
+
+  <!-- BOTÓN VOLVER -->
+  <ion-button
+    expand="block"
+    color="dark"
+    routerLink="/home">
+
+    ⬅ Volver al menú
+
+  </ion-button>
+
+</ion-content>
