@@ -15,12 +15,35 @@ import { RouterModule } from '@angular/router';
 })
 export class ProgresoPage {
 
-  progreso: number = 0.6;
+  progreso: number = 0;
 
   mensaje: string = '';
 
   constructor() {
 
+    // ✅ Leer progreso guardado
+    const progresoGuardado =
+    localStorage.getItem('progreso');
+
+    if (progresoGuardado) {
+
+      this.progreso =
+      Number(progresoGuardado);
+
+    } else {
+
+      // ✅ Valor inicial
+      this.progreso = 0.6;
+
+      // ✅ Guardar progreso inicial
+      localStorage.setItem(
+        'progreso',
+        this.progreso.toString()
+      );
+
+    }
+
+    // ✅ Mensajes dinámicos
     if (this.progreso >= 1) {
 
       this.mensaje =
