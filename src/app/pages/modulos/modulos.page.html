@@ -11,6 +11,10 @@
       Explora los módulos con explicaciones claras y ejemplos prácticos para usar Nequi con confianza.
     </p>
 
+    <div *ngIf="!isOnline" class="status-note" role="status">
+      No hay conexión. Sigue viendo el contenido disponible, pero el video puede no cargarse hasta que recuperes red.
+    </div>
+
     <ion-list>
       <ion-item lines="none" detail="false">
         <ion-label>

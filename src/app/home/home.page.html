@@ -4,6 +4,10 @@
     Accede a tus módulos, simulaciones, encuestas y certificados desde un menú sencillo y accesible.
   </p>
 
+  <div *ngIf="!isOnline" class="status-note" role="status">
+    Estás sin conexión. La navegación local sigue disponible, pero algunos recursos pueden requerir red.
+  </div>
+
   <div class="home-summary">
     <div>
       <strong>7+ lecciones</strong>
