@@ -12,6 +12,10 @@
         Prueba el flujo de envío con un número y monto para guardar tu simulación.
       </p>
 
+      <div *ngIf="!isOnline" class="status-note" role="status">
+        No hay conexión. La simulación se guarda localmente y se mantendrá en el dispositivo hasta la próxima vez que tengas red.
+      </div>
+
       <form>
         <ion-item>
           <ion-label position="stacked">Número celular</ion-label>

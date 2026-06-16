@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { StorageService } from '../../services/storage.service';
+import { NetworkService } from '../../services/network.service';
 
 @Component({
   selector: 'app-simulaciones',
@@ -17,7 +19,10 @@ import { StorageService } from '../../services/storage.service';
     RouterModule
   ]
 })
-export class SimulacionesPage {
+export class SimulacionesPage implements OnInit, OnDestroy {
+  private networkService = inject(NetworkService);
+  isOnline = true;
+  private networkSubscription!: Subscription;
 
   numero: string = '';
   monto: number = 0;
@@ -25,6 +30,16 @@ export class SimulacionesPage {
 
   constructor(private storageService: StorageService) {
     this.cargarSimulacion();
+  }
+
+  ngOnInit() {
+    this.networkSubscription = this.networkService.online$.subscribe(
+      status => this.isOnline = status
+    );
+  }
+
+  ngOnDestroy() {
+    this.networkSubscription?.unsubscribe();
   }
 
   async cargarSimulacion() {

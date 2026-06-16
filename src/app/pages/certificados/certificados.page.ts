@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { jsPDF } from 'jspdf';
+import { Subscription } from 'rxjs';
 import { StorageService } from '../../services/storage.service';
+import { NetworkService } from '../../services/network.service';
 
 @Component({
   selector: 'app-certificados',
@@ -18,7 +20,10 @@ import { StorageService } from '../../services/storage.service';
     RouterModule
   ]
 })
-export class CertificadosPage {
+export class CertificadosPage implements OnInit, OnDestroy {
+  private networkService = inject(NetworkService);
+  isOnline = true;
+  private networkSubscription!: Subscription;
 
   nombre: string = 'Gustavo Forero';
   fecha: string = new Date().toLocaleDateString();
@@ -26,6 +31,16 @@ export class CertificadosPage {
 
   constructor(private storageService: StorageService) {
     this.cargarCertificado();
+  }
+
+  ngOnInit() {
+    this.networkSubscription = this.networkService.online$.subscribe(
+      status => this.isOnline = status
+    );
+  }
+
+  ngOnDestroy() {
+    this.networkSubscription?.unsubscribe();
   }
 
   async cargarCertificado() {
