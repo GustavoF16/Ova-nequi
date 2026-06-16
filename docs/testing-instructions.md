@@ -1,9 +1,9 @@
-Testing Instructions - ova-nequi
+INSTRUCCIONES DE PRUEBA - ova-nequi
 ================================
 
-This document explains how to test the application locally on web and on Android.
+Este documento explica cómo probar la aplicación localmente en web y en Android.
 
-Prerequisites
+PRERREQUISITOS
 -------------
 - Node.js 18+ / npm
 - Java JDK 11+ (for Android builds)
