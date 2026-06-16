@@ -12,6 +12,20 @@ export interface SurveyAnswers {
   respuesta2: string;
 }
 
+export interface LoginData {
+  email: string;
+}
+
+export interface SimulationData {
+  numero: string;
+  monto: number;
+}
+
+export interface CertificateData {
+  nombre: string;
+  fecha: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -63,6 +77,33 @@ export class StorageService {
   async loadSurvey(): Promise<SurveyAnswers | null> {
     const value = await this.loadValue('survey');
     return value ? JSON.parse(value) as SurveyAnswers : null;
+  }
+
+  async saveSimulation(data: SimulationData) {
+    await this.saveValue('simulation', JSON.stringify(data));
+  }
+
+  async loadSimulation(): Promise<SimulationData | null> {
+    const value = await this.loadValue('simulation');
+    return value ? JSON.parse(value) as SimulationData : null;
+  }
+
+  async saveCertificate(data: CertificateData) {
+    await this.saveValue('certificate', JSON.stringify(data));
+  }
+
+  async loadCertificate(): Promise<CertificateData | null> {
+    const value = await this.loadValue('certificate');
+    return value ? JSON.parse(value) as CertificateData : null;
+  }
+
+  async saveLogin(data: LoginData) {
+    await this.saveValue('login', JSON.stringify(data));
+  }
+
+  async loadLogin(): Promise<LoginData | null> {
+    const value = await this.loadValue('login');
+    return value ? JSON.parse(value) as LoginData : null;
   }
 
   private async saveValue(key: string, value: string) {

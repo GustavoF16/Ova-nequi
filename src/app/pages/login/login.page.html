@@ -12,11 +12,19 @@
   </div>
 
   <ion-item>
-    <ion-input placeholder="Correo electrónico"></ion-input>
+    <ion-input
+      [(ngModel)]="email"
+      placeholder="Correo electrónico"
+      type="email">
+    </ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-input type="password" placeholder="Contraseña"></ion-input>
+    <ion-input
+      [(ngModel)]="password"
+      type="password"
+      placeholder="Contraseña">
+    </ion-input>
   </ion-item>
 
   <br>
@@ -24,5 +32,9 @@
   <ion-button expand="full" (click)="login()">
     Iniciar sesión
   </ion-button>
+
+  <br>
+
+  <h3 *ngIf="mensaje">{{mensaje}}</h3>
 
 </ion-content>

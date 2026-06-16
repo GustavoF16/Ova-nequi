@@ -1,18 +1,45 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: 'login.page.html',
   standalone: true,
-  imports: [IonicModule]
+  imports: [IonicModule, FormsModule]
 })
 export class LoginPage {
 
-  constructor(private router: Router) {}
+  email: string = '';
+  password: string = '';
+  mensaje: string = '';
 
-  login() {
+  constructor(
+    private router: Router,
+    private storageService: StorageService
+  ) {
+    this.cargarLogin();
+  }
+
+  async cargarLogin() {
+    const login = await this.storageService.loadLogin();
+    if (login) {
+      this.email = login.email;
+    }
+  }
+
+  async login() {
+    if (!this.email || !this.password) {
+      this.mensaje = '⚠️ Ingresa correo y contraseña';
+      return;
+    }
+
+    await this.storageService.saveLogin({
+      email: this.email
+    });
+
     this.router.navigate(['/home']);
   }
 
