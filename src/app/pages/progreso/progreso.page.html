@@ -5,59 +5,53 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="page-card" aria-labelledby="progress-title">
+    <h2 id="progress-title">Tu avance en la app</h2>
+    <p class="intro-text">Revisa tu progreso y los pasos siguientes para completar el curso.</p>
 
-  <!-- Título -->
-  <h2>Tu avance en la app</h2>
+    <div class="progress-group">
+      <ion-progress-bar
+        [value]="progreso"
+        aria-label="Nivel de progreso"
+        aria-valuemin="0"
+        aria-valuemax="1"
+        aria-valuenow="{{progreso}}">
+      </ion-progress-bar>
+      <div class="progress-value">{{progreso * 100 | number:'1.0-0'}}%</div>
+    </div>
 
-  <!-- Barra de progreso -->
-  <ion-progress-bar
-    [value]="progreso">
+    <ion-list>
+      <ion-item lines="full">
+        <ion-label>
+          <h3>Módulos educativos</h3>
+          <p>Aprende los conceptos básicos de Nequi.</p>
+        </ion-label>
+        <ion-note slot="end" color="success">Completado</ion-note>
+      </ion-item>
 
-  </ion-progress-bar>
+      <ion-item lines="full">
+        <ion-label>
+          <h3>Simulación</h3>
+          <p>Ejecuta una prueba práctica de envío de dinero.</p>
+        </ion-label>
+        <ion-note slot="end" color="success">Completado</ion-note>
+      </ion-item>
 
-  <br>
+      <ion-item lines="full">
+        <ion-label>
+          <h3>Encuesta</h3>
+          <p>Comparte tu experiencia para continuar.</p>
+        </ion-label>
+        <ion-note slot="end" color="warning">Pendiente</ion-note>
+      </ion-item>
+    </ion-list>
 
-  <!-- Texto porcentaje -->
-  <p>
-    Has completado el {{progreso * 100}} %
-  </p>
+    <div class="status-note" role="status">
+      {{ mensaje }}
+    </div>
+  </div>
 
-  <br>
-
-  <!-- Lista módulos -->
-  <ion-list>
-
-    <ion-item>
-      ✅ Módulos educativos
-    </ion-item>
-
-    <ion-item>
-      ✅ Simulación completada
-    </ion-item>
-
-    <ion-item>
-      ⚠️ Encuesta pendiente
-    </ion-item>
-
-  </ion-list>
-
-  <br>
-
-  <!-- Mensaje -->
-  <h3>
-    {{mensaje}}
-  </h3>
-
-  <br><br>
-
-  <!-- BOTÓN VOLVER -->
-  <ion-button
-    expand="block"
-    color="dark"
-    routerLink="/home">
-
+  <ion-button expand="block" color="dark" routerLink="/home" aria-label="Volver al menú principal">
     ⬅ Volver al menú
-
   </ion-button>
-
 </ion-content>

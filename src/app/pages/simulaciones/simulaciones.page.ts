@@ -8,6 +8,7 @@ import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-simulaciones',
   templateUrl: 'simulaciones.page.html',
+  styleUrls: ['simulaciones.page.scss'],
   standalone: true,
   imports: [
     IonicModule,

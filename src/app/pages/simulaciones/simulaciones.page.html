@@ -5,56 +5,58 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="page-card">
+    <section aria-labelledby="simulation-title">
+      <h2 id="simulation-title">Simular envío de dinero</h2>
+      <p class="intro-text">
+        Prueba el flujo de envío con un número y monto para guardar tu simulación.
+      </p>
 
-  <!-- Título -->
-  <h2>Simular envío de dinero</h2>
+      <form>
+        <ion-item>
+          <ion-label position="stacked">Número celular</ion-label>
+          <ion-input
+            [(ngModel)]="numero"
+            name="numero"
+            placeholder="Número celular"
+            inputmode="numeric"
+            aria-label="Número celular">
+          </ion-input>
+        </ion-item>
 
-  <!-- Campo número -->
-  <ion-item>
-    <ion-input
-      [(ngModel)]="numero"
-      placeholder="Número celular">
-    </ion-input>
-  </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Monto</ion-label>
+          <ion-input
+            [(ngModel)]="monto"
+            name="monto"
+            type="number"
+            placeholder="Monto"
+            aria-label="Monto a enviar">
+          </ion-input>
+        </ion-item>
 
-  <!-- Campo monto -->
-  <ion-item>
-    <ion-input
-      [(ngModel)]="monto"
-      type="number"
-      placeholder="Monto">
-    </ion-input>
-  </ion-item>
+        <div class="button-group">
+          <ion-button
+            expand="full"
+            color="success"
+            (click)="enviar()"
+            aria-label="Enviar simulación de dinero">
+            Enviar dinero
+          </ion-button>
+        </div>
 
-  <br>
+        <div *ngIf="mensaje" class="status-note" role="status">
+          {{ mensaje }}
+        </div>
+      </form>
+    </section>
+  </div>
 
-  <!-- Botón enviar -->
-  <ion-button
-    expand="full"
-    color="success"
-    (click)="enviar()">
-
-    Enviar dinero
-
-  </ion-button>
-
-  <br>
-
-  <!-- Mensaje -->
-  <h3 *ngIf="mensaje">
-    {{mensaje}}
-  </h3>
-
-  <br><br>
-
-  <!-- BOTÓN VOLVER -->
   <ion-button
     expand="block"
     color="dark"
-    routerLink="/home">
-
+    routerLink="/home"
+    aria-label="Volver al menú principal">
     ⬅ Volver al menú
-
   </ion-button>
-
 </ion-content>

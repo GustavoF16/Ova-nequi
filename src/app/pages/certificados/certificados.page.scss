@@ -1,0 +1,105 @@
+:host {
+  display: block;
+}
+
+.page-card {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: var(--ion-border-radius);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+h2 {
+  margin-bottom: 0.5rem;
+}
+
+.intro-text {
+  color: var(--ion-color-medium);
+  margin-bottom: 1rem;
+}
+
+ion-item {
+  --border-radius: 0.85rem;
+  margin-bottom: 0.9rem;
+  background: #f8fafc;
+}
+
+.certificate-preview {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 2px dashed rgba(13, 110, 253, 0.25);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+}
+
+.certificate-header {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  margin-bottom: 1rem;
+}
+
+.certificate-recipient {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: var(--ion-color-medium);
+  text-align: center;
+}
+
+.certificate-preview h3 {
+  margin: 0.7rem 0 0.5rem;
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.certificate-course {
+  text-align: center;
+  color: var(--ion-color-dark);
+  margin-bottom: 1rem;
+}
+
+.certificate-date {
+  text-align: center;
+  color: var(--ion-color-medium);
+  font-size: 0.95rem;
+}
+
+.button-group {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.4rem;
+}
+
+@media print {
+  ion-header,
+  .button-group,
+  ion-button[routerlink],
+  .status-note,
+  ion-item {
+    display: none !important;
+  }
+
+  ion-content {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+  }
+
+  .page-card,
+  .certificate-preview {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0.8rem !important;
+  }
+
+  .certificate-preview {
+    border-style: solid !important;
+    border-width: 2px !important;
+  }
+}

@@ -5,36 +5,44 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <section class="page-card" aria-labelledby="login-title">
+    <div class="login-header">
+      <h2 id="login-title">Bienvenido</h2>
+      <p>Accede a tu aprendizaje con una experiencia clara y accesible.</p>
+    </div>
 
-  <div style="text-align:center">
-    <h2>Bienvenido</h2>
-    <p>Accede a tu aprendizaje</p>
-  </div>
+    <form (ngSubmit)="login()" aria-label="Formulario de inicio de sesión">
+      <ion-item>
+        <ion-label position="stacked">Correo electrónico</ion-label>
+        <ion-input
+          [(ngModel)]="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="name@example.com"
+          aria-label="Correo electrónico">
+        </ion-input>
+      </ion-item>
 
-  <ion-item>
-    <ion-input
-      [(ngModel)]="email"
-      placeholder="Correo electrónico"
-      type="email">
-    </ion-input>
-  </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input
+          [(ngModel)]="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Ingresa tu contraseña"
+          aria-label="Contraseña">
+        </ion-input>
+      </ion-item>
 
-  <ion-item>
-    <ion-input
-      [(ngModel)]="password"
-      type="password"
-      placeholder="Contraseña">
-    </ion-input>
-  </ion-item>
+      <ion-button expand="full" type="submit" class="button-submit" aria-label="Iniciar sesión">
+        Iniciar sesión
+      </ion-button>
+    </form>
 
-  <br>
-
-  <ion-button expand="full" (click)="login()">
-    Iniciar sesión
-  </ion-button>
-
-  <br>
-
-  <h3 *ngIf="mensaje">{{mensaje}}</h3>
-
+    <div *ngIf="mensaje" class="status-note" role="status">
+      {{ mensaje }}
+    </div>
+  </section>
 </ion-content>

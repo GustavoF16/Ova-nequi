@@ -7,6 +7,7 @@ import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-progreso',
   templateUrl: 'progreso.page.html',
+  styleUrls: ['progreso.page.scss'],
   standalone: true,
   imports: [
     IonicModule,
@@ -23,47 +24,28 @@ export class ProgresoPage {
   constructor(
     private storageService: StorageService
   ) {
-
     this.cargarProgreso();
-
   }
 
   async cargarProgreso() {
+    this.progreso = await this.storageService.loadProgress();
 
-    this.progreso =
-    await this.storageService.loadProgress();
+    if (this.progreso > 1) {
+      this.progreso = 1;
+    }
 
     if (this.progreso === 0) {
-
-      this.progreso = 60;
-
-      await this.storageService.saveProgress(
-        this.progreso
-      );
-
+      this.progreso = 0.6;
+      await this.storageService.saveProgress(this.progreso);
     }
 
-    if (this.progreso >= 100) {
-
-      this.mensaje =
-      '🎉 Has completado todo el curso';
-
+    if (this.progreso >= 1) {
+      this.mensaje = '🎉 Has completado todo el curso.';
+    } else if (this.progreso >= 0.5) {
+      this.mensaje = '👍 Vas muy bien, sigue así.';
+    } else {
+      this.mensaje = '🚀 Comienza a aprender con los módulos.';
     }
-
-    else if (this.progreso >= 50) {
-
-      this.mensaje =
-      '👍 Vas muy bien, sigue así';
-
-    }
-
-    else {
-
-      this.mensaje =
-      '🚀 Comienza a aprender con los módulos';
-
-    }
-
   }
 
 }

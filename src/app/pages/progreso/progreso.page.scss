@@ -1,0 +1,59 @@
+:host {
+  display: block;
+}
+
+.page-card {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: var(--ion-border-radius);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  margin-bottom: 1rem;
+}
+
+.intro-text {
+  color: var(--ion-color-medium);
+  margin-bottom: 1rem;
+}
+
+.progress-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.progress-value {
+  width: 4rem;
+  text-align: right;
+  color: var(--ion-color-dark);
+  font-weight: 700;
+}
+
+ion-list {
+  margin-bottom: 1rem;
+}
+
+ion-item {
+  --border-radius: 1rem;
+  --background: #f8fafc;
+  margin-bottom: 0.75rem;
+}
+
+.status-note {
+  margin-top: 1rem;
+}
+
+@media (max-width: 480px) {
+  .page-card {
+    padding: 1.2rem;
+  }
+
+  .progress-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .progress-value {
+    text-align: left;
+  }
+}

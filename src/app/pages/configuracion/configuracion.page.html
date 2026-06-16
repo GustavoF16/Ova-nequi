@@ -5,71 +5,51 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="page-card">
+    <h2>Opciones de accesibilidad</h2>
+    <p class="intro-text">Ajusta la apariencia de la app para leer mejor y navegar con más comodidad.</p>
 
-  <!-- Título -->
-  <h2>Opciones de accesibilidad</h2>
+    <ion-item>
+      <ion-label>Modo oscuro</ion-label>
+      <ion-toggle
+        [(ngModel)]="modoOscuro"
+        (ionChange)="cambiarModo()"
+        aria-label="Activar modo oscuro">
+      </ion-toggle>
+    </ion-item>
 
-  <!-- MODO OSCURO -->
-  <ion-item>
+    <div class="segment-block" aria-labelledby="font-size-label">
+      <div id="font-size-label" class="segment-label">Tamaño de texto</div>
+      <ion-segment
+        [(ngModel)]="tamanoTexto"
+        (ionChange)="cambiarTexto()"
+        aria-label="Seleccionar tamaño de texto">
 
-    <ion-label>
-      Modo oscuro
-    </ion-label>
+        <ion-segment-button value="pequeno">
+          Pequeño
+        </ion-segment-button>
 
-    <ion-toggle
-      [(ngModel)]="modoOscuro"
-      (ionChange)="cambiarModo()">
+        <ion-segment-button value="medio">
+          Medio
+        </ion-segment-button>
 
-    </ion-toggle>
+        <ion-segment-button value="grande">
+          Grande
+        </ion-segment-button>
 
-  </ion-item>
+      </ion-segment>
+    </div>
 
-  <br>
+    <div *ngIf="mensaje" class="status-note" role="status">
+      {{ mensaje }}
+    </div>
+  </div>
 
-  <!-- TAMAÑO TEXTO -->
-  <ion-item>
-
-    <ion-label>
-      Tamaño de texto
-    </ion-label>
-
-  </ion-item>
-
-  <ion-segment
-    [(ngModel)]="tamanoTexto"
-    (ionChange)="cambiarTexto()">
-
-    <ion-segment-button value="pequeno">
-      Pequeño
-    </ion-segment-button>
-
-    <ion-segment-button value="medio">
-      Medio
-    </ion-segment-button>
-
-    <ion-segment-button value="grande">
-      Grande
-    </ion-segment-button>
-
-  </ion-segment>
-
-  <br>
-
-  <!-- MENSAJE -->
-  <h3 *ngIf="mensaje">
-    {{mensaje}}
-  </h3>
-
-  <br><br>
-
-  <!-- BOTÓN VOLVER -->
   <ion-button
     expand="block"
     color="dark"
-    routerLink="/home">
-
+    routerLink="/home"
+    aria-label="Volver al menú principal">
     ⬅ Volver al menú
-
   </ion-button>
-
 </ion-content>

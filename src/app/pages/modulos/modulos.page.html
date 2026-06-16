@@ -5,50 +5,75 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <section class="page-card" aria-labelledby="modulos-title">
+    <h2 id="modulos-title">Módulos educativos de Nequi</h2>
+    <p>
+      Explora los módulos con explicaciones claras y ejemplos prácticos para usar Nequi con confianza.
+    </p>
 
-  <!-- Título -->
-  <h2>¿Qué es Nequi?</h2>
+    <ion-list>
+      <ion-item lines="none" detail="false">
+        <ion-label>
+          <h3>Enviar dinero</h3>
+          <p>Aprende a transferir dinero a tus amigos y familiares de forma rápida.</p>
+        </ion-label>
+      </ion-item>
 
-  <!-- Descripción -->
-  <p>
-    Nequi es una aplicación financiera que permite enviar dinero,
-    pagar servicios y recibir pagos desde tu celular.
-  </p>
+      <ion-item lines="none" detail="false">
+        <ion-label>
+          <h3>Recibir pagos</h3>
+          <p>Descubre cómo recibir dinero de manera segura y gestionarlo desde tu cuenta.</p>
+        </ion-label>
+      </ion-item>
 
-  <!-- Lista -->
-  <h3>¿Para qué sirve?</h3>
+      <ion-item lines="none" detail="false">
+        <ion-label>
+          <h3>Pagar servicios</h3>
+          <p>Conoce cómo pagar facturas, recargas y servicios desde tu celular.</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </section>
 
-  <ul>
-    <li>Enviar dinero</li>
-    <li>Recibir pagos</li>
-    <li>Pagar servicios</li>
-  </ul>
+  <section class="page-card" aria-labelledby="video-title">
+    <div class="section-header">
+      <div>
+        <h3 id="video-title">Video educativo</h3>
+        <p class="hint-text">Activa subtítulos desde el reproductor de YouTube para seguir el contenido.</p>
+      </div>
+    </div>
 
-  <br>
+    <figure class="video-wrapper" aria-label="Video educativo sobre cómo usar Nequi">
+      <iframe
+        src="https://www.youtube.com/embed/PLqZYHQ2XMQ"
+        title="Video educativo sobre cómo usar Nequi"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+      <figcaption>El video incluye subtítulos disponibles en la configuración de YouTube.</figcaption>
+    </figure>
 
-  <!-- VIDEO YOUTUBE -->
-  <h3>Video educativo</h3>
+    <p class="status-note" role="note">
+      Consejo: si no puedes reproducir el video, intenta recargar la página o usar otra red.
+    </p>
+  </section>
 
-  <iframe
-    width="100%"
-    height="220"
-    src="https://www.youtube.com/embed/PLqZYHQ2XMQ"
-    title="Video Nequi"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
+  <section class="page-card" aria-labelledby="accessibility-title">
+    <h3 id="accessibility-title">Consejos de accesibilidad</h3>
+    <ul>
+      <li>Activa el modo oscuro en Configuración si prefieres menos brillo.</li>
+      <li>Usa los subtítulos del video para leer el contenido.</li>
+      <li>Amplía el texto desde los ajustes del sistema si necesitas mayor legibilidad.</li>
+    </ul>
+  </section>
 
-  <br><br>
-
-  <!-- BOTÓN VOLVER -->
   <ion-button
     expand="block"
     color="dark"
-    routerLink="/home">
-
+    routerLink="/home"
+    aria-label="Volver al menú principal">
     ⬅ Volver al menú
-
   </ion-button>
-
 </ion-content>
 ``

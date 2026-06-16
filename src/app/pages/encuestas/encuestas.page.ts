@@ -8,6 +8,7 @@ import { StorageService, SurveyAnswers } from '../../services/storage.service';
 @Component({
   selector: 'app-encuestas',
   templateUrl: 'encuestas.page.html',
+  styleUrls: ['encuestas.page.scss'],
   standalone: true,
   imports: [
     IonicModule,

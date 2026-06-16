@@ -1,25 +1,48 @@
-<h2 *ngIf="bienvenida">{{bienvenida}}</h2>
+<section class="page-card" aria-labelledby="home-title">
+  <h2 id="home-title">{{bienvenida || 'Bienvenido a OVA NEQUI'}}</h2>
+  <p>
+    Accede a tus módulos, simulaciones, encuestas y certificados desde un menú sencillo y accesible.
+  </p>
 
-<ion-button expand="block" color="success" routerLink="/modulos">
-  📚 Módulos educativos
-</ion-button>
+  <div class="home-summary">
+    <div>
+      <strong>7+ lecciones</strong>
+      <span>Explicaciones claras y prácticas.</span>
+    </div>
+    <div>
+      <strong>Modo accesible</strong>
+      <span>Subtítulos, contraste y foco visible.</span>
+    </div>
+  </div>
+</section>
 
-<ion-button expand="block" color="tertiary" routerLink="/simulaciones">
-  💡 Simulaciones
-</ion-button>
+<section class="page-grid" aria-label="Menú principal">
+  <ion-button expand="block" color="success" routerLink="/modulos" aria-label="Ir a los módulos educativos">
+    📚 Módulos educativos
+  </ion-button>
 
-<ion-button expand="block" color="warning" routerLink="/encuestas">
-  📝 Encuestas
-</ion-button>
+  <ion-button expand="block" color="tertiary" routerLink="/simulaciones" aria-label="Ir a las simulaciones">
+    💡 Simulaciones
+  </ion-button>
 
-<ion-button expand="block" color="medium" routerLink="/configuracion">
-  ⚙️ Configuración
-</ion-button>
+  <ion-button expand="block" color="warning" routerLink="/encuestas" aria-label="Ir a la encuesta">
+    📝 Encuestas
+  </ion-button>
 
-<ion-button expand="block" color="primary" routerLink="/progreso">
-  📊 Progreso
-</ion-button>
+  <ion-button expand="block" color="medium" routerLink="/configuracion" aria-label="Ir a configuración">
+    ⚙️ Configuración
+  </ion-button>
 
-<ion-button expand="block" color="danger" routerLink="/certificados">
-  🎓 Certificados
-</ion-button>
+  <ion-button expand="block" color="primary" routerLink="/progreso" aria-label="Ir al progreso">
+    📊 Progreso
+  </ion-button>
+
+  <ion-button expand="block" color="danger" routerLink="/certificados" aria-label="Ir a certificados">
+    🎓 Certificados
+  </ion-button>
+</section>
+
+<section class="page-card home-help" aria-labelledby="help-title">
+  <h3 id="help-title">Consejo rápido</h3>
+  <p>Usa el botón de configuración para activar el modo oscuro y ajustar el tamaño de letra para una mejor lectura.</p>
+</section>

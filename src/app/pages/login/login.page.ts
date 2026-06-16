@@ -7,6 +7,7 @@ import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: 'login.page.html',
+  styleUrls: ['login.page.scss'],
   standalone: true,
   imports: [IonicModule, FormsModule]
 })

@@ -5,91 +5,62 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="page-card">
+    <h2>Encuesta de uso de Nequi</h2>
+    <p class="intro-text">
+      Cuéntanos cómo te fue usando la app para mejorar tu experiencia.
+    </p>
 
-  <!-- Título -->
-  <h2>Encuesta de uso de Nequi</h2>
+    <form>
+      <div class="survey-block" aria-labelledby="pregunta1">
+        <h3 id="pregunta1">¿Te pareció fácil usar Nequi?</h3>
+        <ion-radio-group [(ngModel)]="respuesta1" name="pregunta1" aria-labelledby="pregunta1">
+          <ion-item>
+            <ion-radio slot="start" value="si"></ion-radio>
+            <ion-label>Sí</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-radio slot="start" value="no"></ion-radio>
+            <ion-label>No</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </div>
 
-  <!-- Pregunta 1 -->
-  <h3>¿Te pareció fácil usar Nequi?</h3>
+      <div class="survey-block" aria-labelledby="pregunta2">
+        <h3 id="pregunta2">¿Recomendarías esta aplicación?</h3>
+        <ion-radio-group [(ngModel)]="respuesta2" name="pregunta2" aria-labelledby="pregunta2">
+          <ion-item>
+            <ion-radio slot="start" value="si"></ion-radio>
+            <ion-label>Sí</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-radio slot="start" value="no"></ion-radio>
+            <ion-label>No</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </div>
 
-  <ion-radio-group [(ngModel)]="respuesta1">
+      <div class="button-group">
+        <ion-button
+          expand="full"
+          color="success"
+          (click)="enviarEncuesta()"
+          aria-label="Enviar encuesta">
+          Enviar encuesta
+        </ion-button>
+      </div>
 
-    <ion-item>
-      <ion-radio
-        slot="start"
-        value="si">
-      </ion-radio>
+      <div *ngIf="mensaje" class="status-note" role="status">
+        {{ mensaje }}
+      </div>
+    </form>
+  </div>
 
-      <ion-label>Sí</ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-radio
-        slot="start"
-        value="no">
-      </ion-radio>
-
-      <ion-label>No</ion-label>
-    </ion-item>
-
-  </ion-radio-group>
-
-  <br>
-
-  <!-- Pregunta 2 -->
-  <h3>¿Recomendarías esta aplicación?</h3>
-
-  <ion-radio-group [(ngModel)]="respuesta2">
-
-    <ion-item>
-      <ion-radio
-        slot="start"
-        value="si">
-      </ion-radio>
-
-      <ion-label>Sí</ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-radio
-        slot="start"
-        value="no">
-      </ion-radio>
-
-      <ion-label>No</ion-label>
-    </ion-item>
-
-  </ion-radio-group>
-
-  <br>
-
-  <!-- Botón enviar -->
-  <ion-button
-    expand="full"
-    color="success"
-    (click)="enviarEncuesta()">
-
-    Enviar Encuesta
-
-  </ion-button>
-
-  <br>
-
-  <!-- Mensaje -->
-  <h3 *ngIf="mensaje">
-    {{mensaje}}
-  </h3>
-
-  <br><br>
-
-  <!-- BOTÓN VOLVER -->
   <ion-button
     expand="block"
     color="dark"
-    routerLink="/home">
-
+    routerLink="/home"
+    aria-label="Volver al menú principal">
     ⬅ Volver al menú
-
   </ion-button>
-
 </ion-content>
