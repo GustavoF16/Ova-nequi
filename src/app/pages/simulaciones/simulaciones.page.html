@@ -16,7 +16,7 @@
         No hay conexión. La simulación se guarda localmente y se mantendrá en el dispositivo hasta la próxima vez que tengas red.
       </div>
 
-      <form>
+      <form novalidate>
         <ion-item>
           <ion-label position="stacked">Número celular</ion-label>
           <ion-input
@@ -24,7 +24,9 @@
             name="numero"
             placeholder="Número celular"
             inputmode="numeric"
-            aria-label="Número celular">
+            type="tel"
+            aria-label="Número celular"
+            aria-required="true">
           </ion-input>
         </ion-item>
 
@@ -42,7 +44,7 @@
         <div class="button-group">
           <ion-button
             expand="full"
-            color="success"
+            class="contrast-btn"
             (click)="enviar()"
             aria-label="Enviar simulación de dinero">
             Enviar dinero

@@ -13,15 +13,16 @@
       Estás sin conexión. El progreso mostrado se basa en datos guardados localmente y puede actualizarse cuando recuperes la red.
     </div>
 
-    <div class="progress-group">
+    <div class="progress-group" aria-live="polite">
       <ion-progress-bar
         [value]="progreso"
-        aria-label="Nivel de progreso"
+        role="progressbar"
+        aria-label="Nivel de progreso del curso"
         aria-valuemin="0"
         aria-valuemax="1"
-        [aria-valuenow]="progreso">
+        [attr.aria-valuenow]="progreso">
       </ion-progress-bar>
-      <div class="progress-value">{{progreso * 100 | number:'1.0-0'}}%</div>
+      <div class="progress-value" aria-atomic="true">{{progreso * 100 | number:'1.0-0'}}%</div>
     </div>
 
     <ion-list>
