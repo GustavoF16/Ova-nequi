@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { jsPDF } from 'jspdf';
 import { StorageService } from '../../services/storage.service';
 
 @Component({
@@ -45,12 +46,82 @@ export class CertificadosPage {
     this.mensaje = '✅ Certificado generado correctamente';
   }
 
-  imprimirCertificado() {
-    if (typeof window !== 'undefined' && window.print) {
-      window.print();
-    } else {
-      this.mensaje = '🖨️ La impresión no está disponible en este dispositivo.';
-    }
-  }
+  descargarPDF() {
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
 
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 40;
+    const frameInset = 20;
+    const title = 'Certificado de finalización';
+    const recipient = this.nombre;
+    const course = 'Uso básico de Nequi';
+    const issued = `Emitido el ${this.fecha}`;
+    const body = [
+      'Este certificado acredita que el participante ha completado',
+      `el curso ${course} con éxito.`
+    ];
+
+    // Borde externo
+    doc.setLineWidth(2);
+    doc.setDrawColor('#0d6efd');
+    doc.rect(frameInset, frameInset, pageWidth - frameInset * 2, pageHeight - frameInset * 2, 'S');
+
+    // Header con logo simulado
+    doc.setFillColor('#0d6efd');
+    doc.rect(margin, margin, pageWidth - margin * 2, 70, 'F');
+    doc.setFontSize(16);
+    doc.setTextColor('#ffffff');
+    doc.text('OVA NEQUI', margin + 12, margin + 42);
+    doc.setFontSize(10);
+    doc.text('Aprendizaje financiero accesible', margin + 12, margin + 58);
+
+    // Título centrado
+    doc.setFontSize(24);
+    doc.setTextColor('#111827');
+    doc.text(title, pageWidth / 2, 150, { align: 'center' });
+
+    doc.setFontSize(10);
+    doc.setTextColor('#64748b');
+    doc.text('Documento oficial de finalización', pageWidth / 2, 170, { align: 'center' });
+
+    // Separator line
+    doc.setLineWidth(0.5);
+    doc.setDrawColor('#0d6efd');
+    doc.line(margin, 190, pageWidth - margin, 190);
+
+    doc.setFontSize(14);
+    doc.setTextColor('#212529');
+    doc.text('Otorgado a:', margin + 10, 230);
+
+    doc.setFontSize(28);
+    doc.setTextColor('#0d6efd');
+    doc.text(recipient, margin + 10, 270);
+
+    doc.setFontSize(16);
+    doc.setTextColor('#111827');
+    const splitText = doc.splitTextToSize(body.join(' '), pageWidth - margin * 2 - 20);
+    doc.text(splitText, margin + 10, 320);
+
+    doc.setFontSize(18);
+    doc.setTextColor('#0d6efd');
+    doc.text(course, margin + 10, 380);
+
+    doc.setFontSize(12);
+    doc.setTextColor('#475569');
+    doc.text(issued, margin + 10, 420);
+
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor('#64748b');
+    doc.text('Certificado generado desde OVA NEQUI', margin + 10, pageHeight - 40);
+    doc.text('www.ova-nequi.example', pageWidth - margin - 10, pageHeight - 40, { align: 'right' });
+
+    doc.save('certificado-nequi.pdf');
+    this.mensaje = '📄 PDF descargado correctamente';
+  }
 }
