@@ -15,6 +15,10 @@ export class NetworkService {
     }
   }
 
+  public get isOnline(): boolean {
+    return this.onlineSubject.value;
+  }
+
   private checkConnection(): boolean {
     if (typeof window === 'undefined' || !('navigator' in window)) {
       return true;

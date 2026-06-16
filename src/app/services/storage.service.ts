@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { DatabaseService } from './database.service';
+import { NetworkService } from './network.service';
 
 export interface AppSettings {
   modoOscuro: boolean;
@@ -31,6 +33,15 @@ export interface UserProfile {
   password: string;
 }
 
+export type PendingSyncType = 'survey' | 'simulation' | 'certificate';
+
+export interface PendingSyncItem {
+  id: string;
+  type: PendingSyncType;
+  data: SurveyAnswers | SimulationData | CertificateData;
+  timestamp: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,8 +51,22 @@ export class StorageService {
   private isNative = false;
 
   private databaseService = inject(DatabaseService);
+  private networkService = inject(NetworkService);
 
-  constructor() {}
+  private pendingSyncItemsKey = 'pendingSyncQueue';
+  private pendingSyncSubject = new BehaviorSubject<number>(0);
+  public pendingSyncCount$ = this.pendingSyncSubject.asObservable();
+
+  constructor() {
+    this.networkService.online$.subscribe(async online => {
+      if (online) {
+        const count = await this.flushPendingSyncQueue();
+        if (count > 0) {
+          console.log(`✅ Sincronizados ${count} elementos pendientes`);
+        }
+      }
+    });
+  }
 
   async init() {
     if (this.initialized) {
@@ -52,6 +77,12 @@ export class StorageService {
 
     if (this.isNative) {
       await this.databaseService.initDB();
+    }
+
+    await this.updatePendingSyncCount();
+
+    if (this.networkService.isOnline) {
+      await this.flushPendingSyncQueue();
     }
 
     this.initialized = true;
@@ -99,7 +130,14 @@ export class StorageService {
   }
 
   async saveSurvey(answers: SurveyAnswers) {
-    await this.saveValue('survey', JSON.stringify(answers));
+    await this.saveLocalSurvey(answers);
+
+    if (!this.networkService.isOnline) {
+      await this.enqueuePendingSync('survey', answers);
+      return;
+    }
+
+    await this.flushPendingSyncQueue();
   }
 
   async loadSurvey(): Promise<SurveyAnswers | null> {
@@ -108,7 +146,14 @@ export class StorageService {
   }
 
   async saveSimulation(data: SimulationData) {
-    await this.saveValue('simulation', JSON.stringify(data));
+    await this.saveLocalSimulation(data);
+
+    if (!this.networkService.isOnline) {
+      await this.enqueuePendingSync('simulation', data);
+      return;
+    }
+
+    await this.flushPendingSyncQueue();
   }
 
   async loadSimulation(): Promise<SimulationData | null> {
@@ -117,7 +162,14 @@ export class StorageService {
   }
 
   async saveCertificate(data: CertificateData) {
-    await this.saveValue('certificate', JSON.stringify(data));
+    await this.saveLocalCertificate(data);
+
+    if (!this.networkService.isOnline) {
+      await this.enqueuePendingSync('certificate', data);
+      return;
+    }
+
+    await this.flushPendingSyncQueue();
   }
 
   async loadCertificate(): Promise<CertificateData | null> {
@@ -141,6 +193,86 @@ export class StorageService {
   async loadUserProfile(email: string): Promise<UserProfile | null> {
     const value = await this.loadValue(`user:${email}`);
     return value ? JSON.parse(value) as UserProfile : null;
+  }
+
+  async loadPendingSyncQueue(): Promise<PendingSyncItem[]> {
+    const value = await this.loadValue(this.pendingSyncItemsKey);
+    if (!value) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(value) as PendingSyncItem[];
+    } catch {
+      return [];
+    }
+  }
+
+  private async savePendingSyncQueue(items: PendingSyncItem[]) {
+    await this.saveValue(this.pendingSyncItemsKey, JSON.stringify(items));
+    this.pendingSyncSubject.next(items.length);
+  }
+
+  private async enqueuePendingSync(type: PendingSyncType, data: SurveyAnswers | SimulationData | CertificateData) {
+    const queue = await this.loadPendingSyncQueue();
+    const item: PendingSyncItem = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      type,
+      data,
+      timestamp: Date.now()
+    };
+
+    queue.push(item);
+    await this.savePendingSyncQueue(queue);
+  }
+
+  async flushPendingSyncQueue(): Promise<number> {
+    if (!this.networkService.isOnline) {
+      return 0;
+    }
+
+    const queue = await this.loadPendingSyncQueue();
+    if (!queue.length) {
+      return 0;
+    }
+
+    for (const item of queue) {
+      switch (item.type) {
+        case 'survey':
+          await this.saveLocalSurvey(item.data as SurveyAnswers);
+          break;
+        case 'simulation':
+          await this.saveLocalSimulation(item.data as SimulationData);
+          break;
+        case 'certificate':
+          await this.saveLocalCertificate(item.data as CertificateData);
+          break;
+      }
+    }
+
+    await this.clearPendingSyncQueue();
+    return queue.length;
+  }
+
+  private async clearPendingSyncQueue() {
+    await this.savePendingSyncQueue([]);
+  }
+
+  private async updatePendingSyncCount() {
+    const queue = await this.loadPendingSyncQueue();
+    this.pendingSyncSubject.next(queue.length);
+  }
+
+  private async saveLocalSurvey(answers: SurveyAnswers) {
+    await this.saveValue('survey', JSON.stringify(answers));
+  }
+
+  private async saveLocalSimulation(data: SimulationData) {
+    await this.saveValue('simulation', JSON.stringify(data));
+  }
+
+  private async saveLocalCertificate(data: CertificateData) {
+    await this.saveValue('certificate', JSON.stringify(data));
   }
 
   private async saveValue(key: string, value: string) {
