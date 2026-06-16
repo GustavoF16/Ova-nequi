@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, firstValueFrom, of } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { DatabaseService } from './database.service';
 import { NetworkService } from './network.service';
+import { ApiService } from './api.service';
 
 export interface AppSettings {
   modoOscuro: boolean;
@@ -30,8 +31,15 @@ export interface CertificateData {
 
 export interface UserProfile {
   email: string;
-  password: string;
+  // passwordHash and salt store PBKDF2 results; legacy `password` may exist
+  passwordHash?: string;
+  salt?: string;
+  password?: string;
 }
+
+export type UserProgressMap = Record<string, number | undefined> & {
+  overall?: number;
+};
 
 export type PendingSyncType = 'survey' | 'simulation' | 'certificate';
 
@@ -52,6 +60,7 @@ export class StorageService {
 
   private databaseService = inject(DatabaseService);
   private networkService = inject(NetworkService);
+  private apiService = inject(ApiService);
 
   private pendingSyncItemsKey = 'pendingSyncQueue';
   private pendingSyncSubject = new BehaviorSubject<number>(0);
@@ -89,10 +98,21 @@ export class StorageService {
   }
 
   async saveProgress(progreso: number) {
+    const email = await this.getCurrentUserEmail();
+    if (email) {
+      await this.saveOverallProgressForUser(email, progreso);
+      return;
+    }
+
     await this.saveValue('progress', progreso.toString());
   }
 
   async loadProgress(): Promise<number> {
+    const email = await this.getCurrentUserEmail();
+    if (email) {
+      return await this.loadOverallProgressForUser(email);
+    }
+
     const value = await this.loadValue('progress');
     return value !== null ? parseFloat(value) || 0 : 0;
   }
@@ -127,6 +147,110 @@ export class StorageService {
     }
 
     return null;
+  }
+
+  async getCurrentUserEmail(): Promise<string | null> {
+    const login = await this.loadLogin();
+    return login?.email ?? null;
+  }
+
+  private getProgressKey(email: string): string {
+    return `progress:${email}`;
+  }
+
+  async saveModuleProgressForCurrentUser(moduleId: string, progreso: number) {
+    const email = await this.getCurrentUserEmail();
+    if (!email) {
+      return;
+    }
+
+    await this.saveModuleProgress(email, moduleId, progreso);
+  }
+
+  async loadModuleProgressForCurrentUser(moduleId: string): Promise<number> {
+    const email = await this.getCurrentUserEmail();
+    if (!email) {
+      return 0;
+    }
+
+    return await this.loadModuleProgress(email, moduleId);
+  }
+
+  async loadAllModuleProgressForCurrentUser(): Promise<UserProgressMap> {
+    const email = await this.getCurrentUserEmail();
+    if (!email) {
+      return {};
+    }
+
+    return await this.loadAllModuleProgressForUser(email);
+  }
+
+  async loadOverallProgressForCurrentUser(): Promise<number> {
+    const email = await this.getCurrentUserEmail();
+    if (!email) {
+      const value = await this.loadValue('progress');
+      return value !== null ? parseFloat(value) || 0 : 0;
+    }
+
+    return await this.loadOverallProgressForUser(email);
+  }
+
+  async saveModuleProgress(email: string, moduleId: string, progreso: number) {
+    const progressMap = await this.loadUserProgressMap(email) ?? {};
+    progressMap[moduleId] = Math.max(0, Math.min(1, progreso));
+    await this.saveUserProgressMap(email, progressMap);
+  }
+
+  async loadModuleProgress(email: string, moduleId: string): Promise<number> {
+    const progressMap = await this.loadUserProgressMap(email);
+    return progressMap?.[moduleId] ?? 0;
+  }
+
+  async loadAllModuleProgressForUser(email: string): Promise<UserProgressMap> {
+    const progressMap = await this.loadUserProgressMap(email) ?? {};
+    const moduleIds = ['modulos', 'simulation', 'survey', 'certificate'];
+    const result: UserProgressMap = {};
+
+    for (const key of moduleIds) {
+      result[key] = progressMap[key] ?? 0;
+    }
+
+    return result;
+  }
+
+  async saveUserProgressMap(email: string, progressMap: UserProgressMap) {
+    await this.saveValue(this.getProgressKey(email), JSON.stringify(progressMap));
+  }
+
+  async loadUserProgressMap(email: string): Promise<UserProgressMap | null> {
+    const value = await this.loadValue(this.getProgressKey(email));
+    return value ? JSON.parse(value) as UserProgressMap : null;
+  }
+
+  async saveOverallProgressForUser(email: string, progreso: number) {
+    const progressMap = await this.loadUserProgressMap(email) ?? {};
+    progressMap.overall = Math.max(0, Math.min(1, progreso));
+    await this.saveUserProgressMap(email, progressMap);
+  }
+
+  async loadOverallProgressForUser(email: string): Promise<number> {
+    const progressMap = await this.loadUserProgressMap(email) ?? {};
+    const moduleIds = ['modulos', 'simulation', 'survey', 'certificate'];
+    let sum = 0;
+    let foundAny = false;
+
+    for (const key of moduleIds) {
+      if (typeof progressMap[key] === 'number') {
+        foundAny = true;
+      }
+      sum += progressMap[key] ?? 0;
+    }
+
+    if (foundAny) {
+      return moduleIds.length > 0 ? sum / moduleIds.length : 0;
+    }
+
+    return typeof progressMap.overall === 'number' ? progressMap.overall : 0;
   }
 
   async saveSurvey(answers: SurveyAnswers) {
@@ -178,12 +302,84 @@ export class StorageService {
   }
 
   async saveLogin(data: LoginData) {
-    await this.saveValue('login', JSON.stringify(data));
+    // create session token with expiry
+    const token = Math.random().toString(36).slice(2);
+    const expires = Date.now() + 24 * 60 * 60 * 1000; // 24h
+    const payload = { email: data.email, token, expires };
+    await this.saveValue('login', JSON.stringify(payload));
   }
 
   async loadLogin(): Promise<LoginData | null> {
     const value = await this.loadValue('login');
-    return value ? JSON.parse(value) as LoginData : null;
+    if (!value) return null;
+    try {
+      const parsed = JSON.parse(value) as { email: string; token?: string; expires?: number };
+      if (parsed.expires && Date.now() > parsed.expires) {
+        // session expired
+        await this.logout();
+        return null;
+      }
+      return { email: parsed.email } as LoginData;
+    } catch {
+      return null;
+    }
+  }
+
+  async logout() {
+    await this.saveValue('login', '');
+  }
+
+  // ------------ Password hashing helpers (PBKDF2 via Web Crypto) ------------
+  private async generateSalt(): Promise<string> {
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return this.base64Encode(array.buffer);
+  }
+
+  private base64Encode(buffer: ArrayBuffer): string {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+
+  private base64Decode(str: string): ArrayBuffer {
+    const binary = atob(str);
+    const len = binary.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
+
+  async hashPassword(password: string, saltIn?: string): Promise<{ salt: string; hash: string }> {
+    const salt = saltIn ?? await this.generateSalt();
+    const enc = new TextEncoder();
+    const passKey = enc.encode(password);
+    const saltBuf = this.base64Decode(salt);
+
+    const key = await crypto.subtle.importKey('raw', passKey, { name: 'PBKDF2' }, false, ['deriveBits']);
+    const derived = await crypto.subtle.deriveBits(
+      { name: 'PBKDF2', salt: saltBuf, iterations: 100000, hash: 'SHA-256' },
+      key,
+      256
+    );
+
+    const hash = this.base64Encode(derived);
+    return { salt, hash };
+  }
+
+  async verifyPassword(plain: string, salt: string | undefined, expectedHash: string | undefined): Promise<boolean> {
+    if (!expectedHash) {
+      // no stored hash, fallback false
+      return false;
+    }
+    if (!salt) return false;
+    const { hash } = await this.hashPassword(plain, salt);
+    return hash === expectedHash;
   }
 
   async saveUserProfile(profile: UserProfile) {
@@ -236,18 +432,44 @@ export class StorageService {
       return 0;
     }
 
+    const failedItems: PendingSyncItem[] = [];
+
     for (const item of queue) {
-      switch (item.type) {
-        case 'survey':
-          await this.saveLocalSurvey(item.data as SurveyAnswers);
-          break;
-        case 'simulation':
-          await this.saveLocalSimulation(item.data as SimulationData);
-          break;
-        case 'certificate':
-          await this.saveLocalCertificate(item.data as CertificateData);
-          break;
+      try {
+        switch (item.type) {
+          case 'survey':
+            await firstValueFrom(
+              this.apiService.saveSurvey(item.data as SurveyAnswers).pipe(
+                catchError(() => of(null))
+              )
+            );
+            await this.saveLocalSurvey(item.data as SurveyAnswers);
+            break;
+          case 'simulation':
+            await firstValueFrom(
+              this.apiService.saveSimulation(item.data as SimulationData).pipe(
+                catchError(() => of(null))
+              )
+            );
+            await this.saveLocalSimulation(item.data as SimulationData);
+            break;
+          case 'certificate':
+            await firstValueFrom(
+              this.apiService.saveCertificate(item.data as CertificateData).pipe(
+                catchError(() => of(null))
+              )
+            );
+            await this.saveLocalCertificate(item.data as CertificateData);
+            break;
+        }
+      } catch {
+        failedItems.push(item);
       }
+    }
+
+    if (failedItems.length > 0) {
+      await this.savePendingSyncQueue(failedItems);
+      return queue.length - failedItems.length;
     }
 
     await this.clearPendingSyncQueue();
@@ -279,6 +501,12 @@ export class StorageService {
     await this.init();
 
     if (this.isNative) {
+      // use secure storage for sensitive keys on native platforms
+      if (this.shouldUseSecureStorage(key)) {
+        const ok = await this.secureSet(key, value);
+        if (ok) return;
+      }
+
       await this.databaseService.setItem(key, value);
       return;
     }
@@ -290,10 +518,61 @@ export class StorageService {
     await this.init();
 
     if (this.isNative) {
+      // try secure storage first for sensitive keys
+      if (this.shouldUseSecureStorage(key)) {
+        const v = await this.secureGet(key);
+        if (v !== null) return v;
+      }
+
       return this.databaseService.getItem(key);
     }
 
     return this.getWebItem(key);
+  }
+
+  private shouldUseSecureStorage(key: string): boolean {
+    if (!key) return false;
+    return key === 'login' || key.startsWith('user:') || key.includes('token');
+  }
+
+  private async secureSet(key: string, value: string): Promise<boolean> {
+    try {
+      // dynamic import to avoid hard runtime dependency in web builds
+      // use eval-import to avoid TypeScript resolving the module at compile time
+      const dynamicImport: any = (eval('import') as any);
+      const mod: any = await dynamicImport('@capacitor-community/secure-storage');
+      const plugin = mod?.SecureStoragePlugin ?? mod?.SecureStorage ?? mod;
+      if (!plugin || typeof plugin.set !== 'function') {
+        return false;
+      }
+
+      await plugin.set({ key, value });
+      return true;
+    } catch (e) {
+      // plugin not available or error — fallback to regular DB
+      return false;
+    }
+  }
+
+  private async secureGet(key: string): Promise<string | null> {
+    try {
+      // use eval-import to avoid TypeScript resolving the module at compile time
+      const dynamicImport2: any = (eval('import') as any);
+      const mod: any = await dynamicImport2('@capacitor-community/secure-storage');
+      const plugin = mod?.SecureStoragePlugin ?? mod?.SecureStorage ?? mod;
+      if (!plugin || typeof plugin.get !== 'function') {
+        return null;
+      }
+
+      const res = await plugin.get({ key });
+      // plugin may return { value } or the value directly
+      if (res == null) return null;
+      if (typeof res === 'object' && 'value' in res) return res.value as string;
+      if (typeof res === 'string') return res;
+      return null;
+    } catch {
+      return null;
+    }
   }
 
   private getWebItem(key: string): string | null {

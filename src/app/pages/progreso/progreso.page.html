@@ -26,28 +26,17 @@
     </div>
 
     <ion-list>
-      <ion-item lines="full">
+      <ion-item *ngFor="let key of moduleKeys" lines="full">
         <ion-label>
-          <h3>Módulos educativos</h3>
-          <p>Aprende los conceptos básicos de Nequi.</p>
+          <h3>{{ moduleLabels[key] }}</h3>
+          <p>{{ key === 'modulos' ? 'Aprende los conceptos básicos de Nequi.' : key === 'simulation' ? 'Ejecuta una prueba práctica de envío de dinero.' : key === 'survey' ? 'Comparte tu experiencia para continuar.' : 'Genera tu certificado de cierre.' }}</p>
+          <p class="module-percentage" aria-live="polite">
+            Progreso: {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
+          </p>
         </ion-label>
-        <ion-note slot="end" color="success">Completado</ion-note>
-      </ion-item>
-
-      <ion-item lines="full">
-        <ion-label>
-          <h3>Simulación</h3>
-          <p>Ejecuta una prueba práctica de envío de dinero.</p>
-        </ion-label>
-        <ion-note slot="end" color="success">Completado</ion-note>
-      </ion-item>
-
-      <ion-item lines="full">
-        <ion-label>
-          <h3>Encuesta</h3>
-          <p>Comparte tu experiencia para continuar.</p>
-        </ion-label>
-        <ion-note slot="end" color="warning">Pendiente</ion-note>
+        <ion-note slot="end" [color]="getModuleProgress(key) >= 1 ? 'success' : 'warning'">
+          {{ getModuleProgress(key) >= 1 ? 'Completado' : 'En progreso' }}
+        </ion-note>
       </ion-item>
     </ion-list>
 

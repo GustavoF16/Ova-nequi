@@ -8,6 +8,9 @@
           <ion-icon name="wifi" aria-hidden="true"></ion-icon>
           <ion-label>{{ isOnline ? 'En línea' : 'Sin conexión' }}</ion-label>
         </ion-chip>
+        <ion-button aria-label="Cerrar sesión" (click)="logout()" color="light">
+          <ion-icon name="log-out" slot="icon-only" aria-hidden="true"></ion-icon>
+        </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>

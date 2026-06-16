@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NetworkService } from '../../services/network.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-modulos',
@@ -14,6 +15,7 @@ import { NetworkService } from '../../services/network.service';
 })
 export class ModulosPage implements OnInit, AfterViewInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
   isOnline = true;
   private networkSubscription!: Subscription;
 
@@ -26,6 +28,12 @@ export class ModulosPage implements OnInit, AfterViewInit, OnDestroy {
     this.networkSubscription = this.networkService.online$.subscribe(
       (status: boolean) => this.isOnline = status
     );
+
+    void this.saveModuleCompleted();
+  }
+
+  private async saveModuleCompleted() {
+    await this.storageService.saveModuleProgressForCurrentUser('modulos', 1);
   }
 
   ngAfterViewInit() {

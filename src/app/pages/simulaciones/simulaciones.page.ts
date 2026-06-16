@@ -58,6 +58,7 @@ export class SimulacionesPage implements OnInit, OnDestroy {
         numero: this.numero,
         monto: this.monto
       });
+      await this.storageService.saveModuleProgressForCurrentUser('simulation', 1);
       this.mensaje = '✅ Dinero enviado correctamente';
     } else {
       this.mensaje = '⚠️ Complete todos los campos';

@@ -59,6 +59,7 @@ export class EncuestasPage implements OnInit, OnDestroy {
         respuesta1: this.respuesta1,
         respuesta2: this.respuesta2
       });
+      await this.storageService.saveModuleProgressForCurrentUser('survey', 1);
 
       this.mensaje =
       '✅ Encuesta enviada correctamente';

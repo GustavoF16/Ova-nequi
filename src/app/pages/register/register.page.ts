@@ -31,11 +31,15 @@ export class RegisterPage {
       return;
     }
 
-    await this.storageService.saveLogin({ email: this.email });
+    // Hash password client-side before saving
+    const { salt, hash } = await this.storageService.hashPassword(this.password);
+
     await this.storageService.saveUserProfile({
       email: this.email,
-      password: this.password
+      passwordHash: hash,
+      salt
     });
+    await this.storageService.saveLogin({ email: this.email });
 
     const settings: AppSettings = {
       modoOscuro: this.modoOscuro,

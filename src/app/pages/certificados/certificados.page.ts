@@ -58,6 +58,7 @@ export class CertificadosPage implements OnInit, OnDestroy {
       nombre: this.nombre,
       fecha: this.fecha
     });
+    await this.storageService.saveModuleProgressForCurrentUser('certificate', 1);
 
     this.mensaje = '✅ Certificado generado correctamente';
   }

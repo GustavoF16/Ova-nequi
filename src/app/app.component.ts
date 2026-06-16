@@ -7,6 +7,7 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
+  IonButton,
   IonChip,
   IonIcon,
   IonLabel,
@@ -15,6 +16,8 @@ import {
 } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { NetworkService } from './services/network.service';
+import { StorageService } from './services/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +30,7 @@ import { NetworkService } from './services/network.service';
     IonToolbar,
     IonTitle,
     IonButtons,
+    IonButton,
     IonChip,
     IonIcon,
     IonLabel,
@@ -37,6 +41,8 @@ import { NetworkService } from './services/network.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
+  private router = inject(Router);
   isOnline = true;
   showToast = false;
   toastMessage = '';
@@ -61,5 +67,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.networkSubscription?.unsubscribe();
+  }
+
+  async logout() {
+    await this.storageService.logout();
+    this.toastMessage = 'Sesión cerrada';
+    this.showToast = true;
+    this.router.navigate(['/login']);
   }
 }

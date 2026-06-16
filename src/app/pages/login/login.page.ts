@@ -43,7 +43,21 @@ export class LoginPage {
       return;
     }
 
-    if (profile.password !== this.password) {
+    // Prefer PBKDF2 hash verification if available
+    let ok = false;
+    if (profile.passwordHash && profile.salt) {
+      ok = await this.storageService.verifyPassword(this.password, profile.salt, profile.passwordHash);
+    } else if (profile.password) {
+      // legacy plaintext: compare and migrate to hashed storage
+      if (profile.password === this.password) {
+        // migrate
+        const { salt, hash } = await this.storageService.hashPassword(this.password);
+        await this.storageService.saveUserProfile({ email: this.email, passwordHash: hash, salt });
+        ok = true;
+      }
+    }
+
+    if (!ok) {
       this.mensaje = '⚠️ Contraseña incorrecta. Intenta de nuevo.';
       return;
     }

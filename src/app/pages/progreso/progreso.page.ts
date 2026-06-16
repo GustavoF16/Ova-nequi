@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { StorageService } from '../../services/storage.service';
+import { StorageService, UserProgressMap } from '../../services/storage.service';
 import { NetworkService } from '../../services/network.service';
 import { Subscription } from 'rxjs';
 
@@ -24,6 +24,21 @@ export class ProgresoPage implements OnInit, OnDestroy {
   private networkSubscription!: Subscription;
 
   progreso: number = 0;
+  moduleProgress: UserProgressMap = {
+    modulos: 0,
+    simulation: 0,
+    survey: 0,
+    certificate: 0
+  };
+
+  moduleKeys: Array<keyof UserProgressMap> = ['modulos', 'simulation', 'survey', 'certificate'];
+
+  moduleLabels: Record<string, string> = {
+    modulos: 'Módulos educativos',
+    simulation: 'Simulación',
+    survey: 'Encuesta',
+    certificate: 'Certificado'
+  };
 
   mensaje: string = '';
 
@@ -42,15 +57,11 @@ export class ProgresoPage implements OnInit, OnDestroy {
   }
 
   async cargarProgreso() {
+    this.moduleProgress = await this.storageService.loadAllModuleProgressForCurrentUser();
     this.progreso = await this.storageService.loadProgress();
 
     if (this.progreso > 1) {
       this.progreso = 1;
-    }
-
-    if (this.progreso === 0) {
-      this.progreso = 0.6;
-      await this.storageService.saveProgress(this.progreso);
     }
 
     if (this.progreso >= 1) {
@@ -60,6 +71,10 @@ export class ProgresoPage implements OnInit, OnDestroy {
     } else {
       this.mensaje = '🚀 Comienza a aprender con los módulos.';
     }
+  }
+
+  getModuleProgress(key: keyof UserProgressMap): number {
+    return this.moduleProgress[key] ?? 0;
   }
 
 }
