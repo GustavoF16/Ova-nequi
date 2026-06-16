@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { StorageService } from '../services/storage.service';
+import { StorageService, AppSettings } from '../services/storage.service';
 import { NetworkService } from '../services/network.service';
 
 @Component({
@@ -36,8 +36,34 @@ export class HomePage implements OnInit, OnDestroy {
 
   async cargarBienvenida() {
     const login = await this.storageService.loadLogin();
+
     if (login) {
       this.bienvenida = `Bienvenido de nuevo, ${login.email}`;
+      const settings = await this.storageService.loadSettingsForUser(login.email);
+      if (settings) {
+        this.aplicarConfiguracion(settings);
+      }
+      return;
+    }
+
+    this.bienvenida = 'Bienvenido a OVA NEQUI';
+  }
+
+  private aplicarConfiguracion(settings: AppSettings) {
+    if (settings.modoOscuro) {
+      document.body.style.backgroundColor = '#121212';
+      document.body.style.color = '#f5f5f5';
+    } else {
+      document.body.style.backgroundColor = '#ffffff';
+      document.body.style.color = '#000000';
+    }
+
+    if (settings.tamanoTexto === 'pequeno') {
+      document.body.style.fontSize = '14px';
+    } else if (settings.tamanoTexto === 'medio') {
+      document.body.style.fontSize = '16px';
+    } else {
+      document.body.style.fontSize = '20px';
     }
   }
 

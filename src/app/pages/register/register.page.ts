@@ -32,6 +32,10 @@ export class RegisterPage {
     }
 
     await this.storageService.saveLogin({ email: this.email });
+    await this.storageService.saveUserProfile({
+      email: this.email,
+      password: this.password
+    });
 
     const settings: AppSettings = {
       modoOscuro: this.modoOscuro,

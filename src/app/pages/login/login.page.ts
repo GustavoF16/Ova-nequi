@@ -37,10 +37,19 @@ export class LoginPage {
       return;
     }
 
-    await this.storageService.saveLogin({
-      email: this.email
-    });
+    const profile = await this.storageService.loadUserProfile(this.email);
+    if (!profile) {
+      this.mensaje = '⚠️ Usuario no encontrado. Regístrate primero.';
+      return;
+    }
 
+    if (profile.password !== this.password) {
+      this.mensaje = '⚠️ Contraseña incorrecta. Intenta de nuevo.';
+      return;
+    }
+
+    await this.storageService.saveLogin({ email: this.email });
+    this.mensaje = '✅ Sesión iniciada';
     this.router.navigate(['/home']);
   }
 

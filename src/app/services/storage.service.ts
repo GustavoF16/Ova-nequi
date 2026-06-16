@@ -26,6 +26,11 @@ export interface CertificateData {
   fecha: string;
 }
 
+export interface UserProfile {
+  email: string;
+  password: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -127,6 +132,15 @@ export class StorageService {
   async loadLogin(): Promise<LoginData | null> {
     const value = await this.loadValue('login');
     return value ? JSON.parse(value) as LoginData : null;
+  }
+
+  async saveUserProfile(profile: UserProfile) {
+    await this.saveValue(`user:${profile.email}`, JSON.stringify(profile));
+  }
+
+  async loadUserProfile(email: string): Promise<UserProfile | null> {
+    const value = await this.loadValue(`user:${email}`);
+    return value ? JSON.parse(value) as UserProfile : null;
   }
 
   private async saveValue(key: string, value: string) {
