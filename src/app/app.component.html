@@ -1,3 +1,24 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-header translucent>
+    <ion-toolbar color="primary">
+      <ion-title>Nequi APP</ion-title>
+      <ion-buttons slot="end">
+        <ion-chip [color]="isOnline ? 'success' : 'danger'" aria-live="polite">
+          <ion-icon name="wifi" aria-hidden="true"></ion-icon>
+          <ion-label>{{ isOnline ? 'En línea' : 'Sin conexión' }}</ion-label>
+        </ion-chip>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-router-outlet></ion-router-outlet>
+    <ion-toast
+      [isOpen]="showToast"
+      [message]="toastMessage"
+      duration="2000"
+      position="bottom"
+      (ionDidDismiss)="showToast = false"
+    ></ion-toast>
+  </ion-content>
 </ion-app>

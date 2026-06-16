@@ -64,6 +64,20 @@ ion-app, ion-content {
   background: var(--ion-color-light);
 }
 
+ion-chip {
+  font-weight: 700;
+}
+
+ion-chip[color="danger"] {
+  --background: #f8d7da;
+  --color: #842029;
+}
+
+ion-chip[color="success"] {
+  --background: #d1e7dd;
+  --color: #0f5132;
+}
+
 h1, h2, h3 {
   color: var(--ion-color-dark);
   font-weight: 700;
