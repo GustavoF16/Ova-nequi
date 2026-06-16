@@ -43,23 +43,29 @@
     <div class="section-header">
       <div>
         <h3 id="video-title">Video educativo</h3>
-        <p class="hint-text">Activa subtítulos desde el reproductor de YouTube para seguir el contenido.</p>
+        <p class="hint-text">Usa subtítulos VTT para seguir el contenido o carga tus propios subtítulos.</p>
       </div>
     </div>
 
-    <figure class="video-wrapper" aria-label="Video educativo sobre cómo usar Nequi">
-      <iframe
-        src="https://www.youtube.com/embed/PLqZYHQ2XMQ"
-        title="Video educativo sobre cómo usar Nequi"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
-      <figcaption>El video incluye subtítulos disponibles en la configuración de YouTube.</figcaption>
-    </figure>
+    <div class="video-player-card" role="region" aria-labelledby="video-title">
+      <video #videoPlayer controls crossorigin="anonymous" aria-label="Reproductor de video educativo" class="responsive-video">
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+        <track #subtitleTrack kind="subtitles" src="assets/spanish-subtitles.vtt" srclang="es" label="Español" default>
+        Tu navegador no soporta el elemento de video.
+      </video>
+
+      <div class="subtitle-controls">
+        <label for="subtitles" class="subtitles-label">Cargar subtítulos VTT:</label>
+        <input id="subtitles" type="file" accept=".vtt" (change)="onSubtitleFileSelected($event)" aria-label="Seleccionar archivo de subtítulos VTT" />
+      </div>
+
+      <p class="status-note" role="status" aria-live="polite">
+        {{ captionNotice }}
+      </p>
+    </div>
 
     <p class="status-note" role="note">
-      Consejo: si no puedes reproducir el video, intenta recargar la página o usar otra red.
+      Consejo: si no puedes reproducir el video, intenta ver el contenido en otra red o recargar la página.
     </p>
   </section>
 
