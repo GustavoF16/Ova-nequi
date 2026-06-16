@@ -30,7 +30,17 @@ export class ConfiguracionPage {
   }
 
   async cargarConfiguracion() {
-    const settings = await this.storageService.loadSettings();
+    const login = await this.storageService.loadLogin();
+    let settings = null;
+
+    if (login && login.email) {
+      settings = await this.storageService.loadSettingsForUser(login.email);
+    }
+
+    // Fallback to global settings
+    if (!settings) {
+      settings = await this.storageService.loadSettings();
+    }
 
     if (settings) {
       this.modoOscuro = settings.modoOscuro;
@@ -46,7 +56,13 @@ export class ConfiguracionPage {
       tamanoTexto: this.tamanoTexto
     };
 
-    await this.storageService.saveSettings(settings);
+    const login = await this.storageService.loadLogin();
+    if (login && login.email) {
+      await this.storageService.saveSettingsForUser(login.email, settings);
+    } else {
+      await this.storageService.saveSettings(settings);
+    }
+
     this.aplicarConfiguracion(settings);
     this.mensaje = this.modoOscuro ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado';
   }
@@ -58,7 +74,13 @@ export class ConfiguracionPage {
       tamanoTexto: this.tamanoTexto
     };
 
-    await this.storageService.saveSettings(settings);
+    const login = await this.storageService.loadLogin();
+    if (login && login.email) {
+      await this.storageService.saveSettingsForUser(login.email, settings);
+    } else {
+      await this.storageService.saveSettings(settings);
+    }
+
     this.aplicarConfiguracion(settings);
     this.mensaje = '🔤 Tamaño de texto cambiado';
 

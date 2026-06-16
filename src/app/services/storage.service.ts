@@ -70,6 +70,29 @@ export class StorageService {
     return value ? JSON.parse(value) as AppSettings : null;
   }
 
+  // Per-user settings helpers
+  async saveSettingsForUser(email: string, settings: AppSettings) {
+    if (!email) {
+      await this.saveSettings(settings);
+      return;
+    }
+
+    await this.saveValue(`settings:${email}`, JSON.stringify(settings));
+  }
+
+  async loadSettingsForUser(email: string): Promise<AppSettings | null> {
+    if (!email) {
+      return this.loadSettings();
+    }
+
+    const value = await this.loadValue(`settings:${email}`);
+    if (value) {
+      return JSON.parse(value) as AppSettings;
+    }
+
+    return null;
+  }
+
   async saveSurvey(answers: SurveyAnswers) {
     await this.saveValue('survey', JSON.stringify(answers));
   }
