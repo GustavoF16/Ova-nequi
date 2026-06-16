@@ -5,8 +5,8 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="page-card">
-    <section aria-labelledby="certificate-heading">
+  <div class="page-card" role="region" aria-labelledby="certificate-heading">
+    <section role="form" aria-labelledby="certificate-heading" novalidate>
       <h2 id="certificate-heading">🎓 Certificado de finalización</h2>
       <p class="intro-text">
         Completa tus datos y genera un certificado listo para guardar o imprimir.
@@ -51,6 +51,7 @@
       <div class="button-group">
         <ion-button
           expand="block"
+          class="contrast-btn"
           color="success"
           (click)="generarCertificado()"
           aria-label="Guardar certificado">
@@ -60,14 +61,14 @@
         <ion-button
           expand="block"
           fill="outline"
-          color="primary"
+          class="contrast-btn"
           (click)="descargarPDF()"
           aria-label="Descargar certificado en PDF">
           Descargar PDF
         </ion-button>
       </div>
 
-      <div *ngIf="mensaje" class="status-note" role="status">
+      <div *ngIf="mensaje" class="status-note" role="status" aria-live="polite">
         {{ mensaje }}
       </div>
     </section>

@@ -5,14 +5,14 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="page-card">
-    <h2>Encuesta de uso de Nequi</h2>
+  <div class="page-card" role="region" aria-labelledby="survey-title">
+    <h2 id="survey-title">Encuesta de uso de Nequi</h2>
     <p class="intro-text">
       Cuéntanos cómo te fue usando la app para mejorar tu experiencia.
     </p>
 
-    <form>
-      <div *ngIf="!isOnline" class="status-note" role="status">
+    <form role="form" novalidate>
+      <div *ngIf="!isOnline" class="status-note" role="status" aria-live="polite">
         No hay conexión. Tus respuestas se guardarán localmente y se mantendrán cuando vuelvas a estar en línea.
       </div>
 
@@ -47,7 +47,7 @@
       <div class="button-group">
         <ion-button
           expand="full"
-          color="success"
+          class="contrast-btn"
           (click)="enviarEncuesta()"
           aria-label="Enviar encuesta">
           Enviar encuesta
