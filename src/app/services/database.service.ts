@@ -40,6 +40,14 @@ export class DatabaseService {
       );
     `);
 
+    // Crear tabla de almacenamiento genérico
+    await this.db.execute(`
+      CREATE TABLE IF NOT EXISTS storage (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      );
+    `);
+
     console.log('✅ Base de datos inicializada');
   }
 
@@ -75,6 +83,33 @@ export class DatabaseService {
     }
 
     return 0;
+  }
+
+  async setItem(key: string, value: string) {
+    await this.db.run(
+      `INSERT OR REPLACE INTO storage
+       (key, value)
+       VALUES (?, ?);`,
+      [key, value]
+    );
+  }
+
+  async getItem(key: string): Promise<string | null> {
+    const result = await this.db.query(
+      `SELECT value
+       FROM storage
+       WHERE key = ?;`,
+      [key]
+    );
+
+    if (
+      result.values &&
+      result.values.length > 0
+    ) {
+      return result.values[0].value;
+    }
+
+    return null;
   }
 
 }

@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
-
 import { IonicModule } from '@ionic/angular';
-
 import { CommonModule } from '@angular/common';
-
 import { RouterModule } from '@angular/router';
-
-import { DatabaseService }
-from '../../services/database.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-progreso',
@@ -26,7 +21,7 @@ export class ProgresoPage {
   mensaje: string = '';
 
   constructor(
-    private databaseService: DatabaseService
+    private storageService: StorageService
   ) {
 
     this.cargarProgreso();
@@ -35,25 +30,19 @@ export class ProgresoPage {
 
   async cargarProgreso() {
 
-    // Inicializar BD
-    await this.databaseService.initDB();
-
-    // Obtener progreso
     this.progreso =
-    await this.databaseService.obtenerProgreso();
+    await this.storageService.loadProgress();
 
-    // Si no existe
     if (this.progreso === 0) {
 
       this.progreso = 60;
 
-      await this.databaseService.guardarProgreso(
+      await this.storageService.saveProgress(
         this.progreso
       );
 
     }
 
-    // Mensajes
     if (this.progreso >= 100) {
 
       this.mensaje =
