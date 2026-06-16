@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { StorageService, SurveyAnswers } from '../../services/storage.service';
+import { NetworkService } from '../../services/network.service';
 
 @Component({
   selector: 'app-encuestas',
@@ -17,7 +19,10 @@ import { StorageService, SurveyAnswers } from '../../services/storage.service';
     RouterModule
   ]
 })
-export class EncuestasPage {
+export class EncuestasPage implements OnInit, OnDestroy {
+  private networkService = inject(NetworkService);
+  isOnline = true;
+  private networkSubscription!: Subscription;
 
   respuesta1: string = '';
   respuesta2: string = '';
@@ -27,6 +32,16 @@ export class EncuestasPage {
     private storageService: StorageService
   ) {
     this.cargarEncuesta();
+  }
+
+  ngOnInit() {
+    this.networkSubscription = this.networkService.online$.subscribe(
+      status => this.isOnline = status
+    );
+  }
+
+  ngOnDestroy() {
+    this.networkSubscription?.unsubscribe();
   }
 
   async cargarEncuesta() {

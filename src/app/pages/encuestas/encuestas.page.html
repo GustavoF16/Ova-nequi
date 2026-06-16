@@ -12,6 +12,10 @@
     </p>
 
     <form>
+      <div *ngIf="!isOnline" class="status-note" role="status">
+        No hay conexión. Tus respuestas se guardarán localmente y se mantendrán cuando vuelvas a estar en línea.
+      </div>
+
       <div class="survey-block" aria-labelledby="pregunta1">
         <h3 id="pregunta1">¿Te pareció fácil usar Nequi?</h3>
         <ion-radio-group [(ngModel)]="respuesta1" name="pregunta1" aria-labelledby="pregunta1">

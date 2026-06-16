@@ -9,13 +9,17 @@
     <h2 id="progress-title">Tu avance en la app</h2>
     <p class="intro-text">Revisa tu progreso y los pasos siguientes para completar el curso.</p>
 
+    <div *ngIf="!isOnline" class="status-note" role="status">
+      Estás sin conexión. El progreso mostrado se basa en datos guardados localmente y puede actualizarse cuando recuperes la red.
+    </div>
+
     <div class="progress-group">
       <ion-progress-bar
         [value]="progreso"
         aria-label="Nivel de progreso"
         aria-valuemin="0"
         aria-valuemax="1"
-        aria-valuenow="{{progreso}}">
+        [aria-valuenow]="progreso">
       </ion-progress-bar>
       <div class="progress-value">{{progreso * 100 | number:'1.0-0'}}%</div>
     </div>
