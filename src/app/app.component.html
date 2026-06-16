@@ -1,4 +1,5 @@
 <ion-app>
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
   <ion-header translucent>
     <ion-toolbar color="primary">
       <ion-title>Nequi APP</ion-title>
@@ -11,7 +12,11 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content id="main-content" role="main" tabindex="-1">
+    <div *ngIf="!isOnline" class="offline-banner" role="status" aria-live="polite">
+      <p><strong>Sin conexión:</strong> puedes seguir navegando, pero algunos datos pueden estar desactualizados hasta que recuperes la red.</p>
+    </div>
+
     <ion-router-outlet></ion-router-outlet>
     <ion-toast
       [isOpen]="showToast"

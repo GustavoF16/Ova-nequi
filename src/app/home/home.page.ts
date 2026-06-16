@@ -14,12 +14,13 @@ import { NetworkService } from '../services/network.service';
 })
 export class HomePage implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
   isOnline = true;
   private networkSubscription!: Subscription;
 
   bienvenida: string = '';
 
-  constructor(private storageService: StorageService) {
+  constructor() {
     this.cargarBienvenida();
   }
 

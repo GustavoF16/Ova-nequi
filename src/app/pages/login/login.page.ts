@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { StorageService } from '../../services/storage.service';
 
 @Component({
@@ -9,18 +10,17 @@ import { StorageService } from '../../services/storage.service';
   templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule]
+  imports: [CommonModule, IonicModule, FormsModule]
 })
 export class LoginPage {
+  private router = inject(Router);
+  private storageService = inject(StorageService);
 
   email: string = '';
   password: string = '';
   mensaje: string = '';
 
-  constructor(
-    private router: Router,
-    private storageService: StorageService
-  ) {
+  constructor() {
     this.cargarLogin();
   }
 

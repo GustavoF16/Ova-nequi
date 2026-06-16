@@ -21,6 +21,7 @@ import { NetworkService } from '../../services/network.service';
 })
 export class EncuestasPage implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
   isOnline = true;
   private networkSubscription!: Subscription;
 
@@ -28,9 +29,7 @@ export class EncuestasPage implements OnInit, OnDestroy {
   respuesta2: string = '';
   mensaje: string = '';
 
-  constructor(
-    private storageService: StorageService
-  ) {
+  constructor() {
     this.cargarEncuesta();
   }
 

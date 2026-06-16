@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class ProgresoPage implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
   isOnline = true;
   private networkSubscription!: Subscription;
 
@@ -26,9 +27,7 @@ export class ProgresoPage implements OnInit, OnDestroy {
 
   mensaje: string = '';
 
-  constructor(
-    private storageService: StorageService
-  ) {
+  constructor() {
     this.cargarProgreso();
   }
 

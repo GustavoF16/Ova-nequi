@@ -41,13 +41,20 @@ export class AppComponent implements OnInit, OnDestroy {
   showToast = false;
   toastMessage = '';
   private networkSubscription!: Subscription;
+  private initialStatusSet = false;
 
   ngOnInit() {
     this.networkSubscription = this.networkService.online$.subscribe(
       status => {
+        if (this.initialStatusSet && status !== this.isOnline) {
+          this.toastMessage = status
+            ? 'Conexión restaurada'
+            : 'No hay conexión. Algunas funciones pueden estar limitadas.';
+          this.showToast = true;
+        }
+
         this.isOnline = status;
-        this.toastMessage = status ? 'Conexión restaurada' : 'No hay conexión. Algunas funciones pueden estar limitadas.';
-        this.showToast = true;
+        this.initialStatusSet = true;
       }
     );
   }

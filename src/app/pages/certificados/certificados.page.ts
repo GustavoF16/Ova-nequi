@@ -22,6 +22,7 @@ import { NetworkService } from '../../services/network.service';
 })
 export class CertificadosPage implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
   isOnline = true;
   private networkSubscription!: Subscription;
 
@@ -29,7 +30,7 @@ export class CertificadosPage implements OnInit, OnDestroy {
   fecha: string = new Date().toLocaleDateString();
   mensaje: string = '';
 
-  constructor(private storageService: StorageService) {
+  constructor() {
     this.cargarCertificado();
   }
 

@@ -21,6 +21,7 @@ import { NetworkService } from '../../services/network.service';
 })
 export class SimulacionesPage implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
+  private storageService = inject(StorageService);
   isOnline = true;
   private networkSubscription!: Subscription;
 
@@ -28,7 +29,7 @@ export class SimulacionesPage implements OnInit, OnDestroy {
   monto: number = 0;
   mensaje: string = '';
 
-  constructor(private storageService: StorageService) {
+  constructor() {
     this.cargarSimulacion();
   }
 

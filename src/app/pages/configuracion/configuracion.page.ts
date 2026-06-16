@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ import { StorageService, AppSettings } from '../../services/storage.service';
   ]
 })
 export class ConfiguracionPage {
+  private storageService = inject(StorageService);
 
   modoOscuro: boolean = false;
 
@@ -24,9 +25,7 @@ export class ConfiguracionPage {
 
   mensaje: string = '';
 
-  constructor(
-    private storageService: StorageService
-  ) {
+  constructor() {
     this.cargarConfiguracion();
   }
 

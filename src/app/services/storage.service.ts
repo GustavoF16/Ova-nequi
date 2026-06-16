@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { DatabaseService } from './database.service';
 
@@ -34,9 +34,9 @@ export class StorageService {
   private initialized = false;
   private isNative = false;
 
-  constructor(
-    private databaseService: DatabaseService
-  ) {}
+  private databaseService = inject(DatabaseService);
+
+  constructor() {}
 
   async init() {
     if (this.initialized) {

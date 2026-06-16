@@ -78,6 +78,19 @@ ion-chip[color="success"] {
   --color: #0f5132;
 }
 
+.offline-banner {
+  background: #fff3cd;
+  border-left: 4px solid #ffca2c;
+  color: #664d03;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  text-align: center;
+}
+
+.offline-banner strong {
+  font-weight: 700;
+}
+
 h1, h2, h3 {
   color: var(--ion-color-dark);
   font-weight: 700;
@@ -103,6 +116,30 @@ ion-input:focus-visible,
 ion-segment-button:focus-visible {
   outline: 3px solid var(--ion-color-primary);
   outline-offset: 3px;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.skip-link:focus,
+.skip-link:active {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 0.75rem;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  border-radius: 0.25rem;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.12);
 }
 
 .page-card {
