@@ -1,3 +1,4 @@
+
 :host {
   display: block;
 }
@@ -22,7 +23,19 @@
 ion-item {
   --border-radius: 0.95rem;
   --background: #f8fafc;
+  --color: #111827;
+  --highlight-color-focused: #1677ff;
   margin-bottom: 0.85rem;
+}
+
+ion-input {
+  --color: #111827;
+  --placeholder-color: #64748b;
+  --placeholder-opacity: 1;
+}
+
+ion-label {
+  color: #334155 !important;
 }
 
 .button-submit {

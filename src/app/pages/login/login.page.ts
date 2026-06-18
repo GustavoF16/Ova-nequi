@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StorageService } from '../../services/storage.service';
@@ -10,7 +10,7 @@ import { StorageService } from '../../services/storage.service';
   templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule]
+  imports: [CommonModule, IonicModule, FormsModule, RouterModule]
 })
 export class LoginPage {
   private router = inject(Router);
@@ -43,16 +43,26 @@ export class LoginPage {
       return;
     }
 
-    // Prefer PBKDF2 hash verification if available
     let ok = false;
+
     if (profile.passwordHash && profile.salt) {
-      ok = await this.storageService.verifyPassword(this.password, profile.salt, profile.passwordHash);
+      ok = await this.storageService.verifyPassword(
+        this.password,
+        profile.salt,
+        profile.passwordHash
+      );
     } else if (profile.password) {
-      // legacy plaintext: compare and migrate to hashed storage
       if (profile.password === this.password) {
-        // migrate
         const { salt, hash } = await this.storageService.hashPassword(this.password);
-        await this.storageService.saveUserProfile({ email: this.email, passwordHash: hash, salt });
+
+        await this.storageService.saveUserProfile({
+          ...profile,
+          email: this.email,
+          passwordHash: hash,
+          salt,
+          password: undefined
+        });
+
         ok = true;
       }
     }
@@ -66,5 +76,4 @@ export class LoginPage {
     this.mensaje = '✅ Sesión iniciada';
     this.router.navigate(['/home']);
   }
-
 }

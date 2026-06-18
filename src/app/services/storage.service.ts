@@ -31,7 +31,6 @@ export interface CertificateData {
 
 export interface UserProfile {
   email: string;
-  // passwordHash and salt store PBKDF2 results; legacy `password` may exist
   passwordHash?: string;
   salt?: string;
   password?: string;
@@ -54,8 +53,8 @@ export interface PendingSyncItem {
   providedIn: 'root'
 })
 export class StorageService {
-
   private initialized = false;
+  private initializing = false;
   private isNative = false;
 
   private databaseService = inject(DatabaseService);
@@ -68,7 +67,7 @@ export class StorageService {
 
   constructor() {
     this.networkService.online$.subscribe(async online => {
-      if (online) {
+      if (online && this.initialized) {
         const count = await this.flushPendingSyncQueue();
         if (count > 0) {
           console.log(`✅ Sincronizados ${count} elementos pendientes`);
@@ -78,23 +77,25 @@ export class StorageService {
   }
 
   async init() {
-    if (this.initialized) {
+    if (this.initialized || this.initializing) {
       return;
     }
 
+    this.initializing = true;
     this.isNative = Capacitor.getPlatform() !== 'web';
 
     if (this.isNative) {
       await this.databaseService.initDB();
     }
 
+    this.initialized = true;
+    this.initializing = false;
+
     await this.updatePendingSyncCount();
 
     if (this.networkService.isOnline) {
       await this.flushPendingSyncQueue();
     }
-
-    this.initialized = true;
   }
 
   async saveProgress(progreso: number) {
@@ -126,7 +127,6 @@ export class StorageService {
     return value ? JSON.parse(value) as AppSettings : null;
   }
 
-  // Per-user settings helpers
   async saveSettingsForUser(email: string, settings: AppSettings) {
     if (!email) {
       await this.saveSettings(settings);
@@ -142,11 +142,7 @@ export class StorageService {
     }
 
     const value = await this.loadValue(`settings:${email}`);
-    if (value) {
-      return JSON.parse(value) as AppSettings;
-    }
-
-    return null;
+    return value ? JSON.parse(value) as AppSettings : null;
   }
 
   async getCurrentUserEmail(): Promise<string | null> {
@@ -160,27 +156,21 @@ export class StorageService {
 
   async saveModuleProgressForCurrentUser(moduleId: string, progreso: number) {
     const email = await this.getCurrentUserEmail();
-    if (!email) {
-      return;
-    }
+    if (!email) return;
 
     await this.saveModuleProgress(email, moduleId, progreso);
   }
 
   async loadModuleProgressForCurrentUser(moduleId: string): Promise<number> {
     const email = await this.getCurrentUserEmail();
-    if (!email) {
-      return 0;
-    }
+    if (!email) return 0;
 
     return await this.loadModuleProgress(email, moduleId);
   }
 
   async loadAllModuleProgressForCurrentUser(): Promise<UserProgressMap> {
     const email = await this.getCurrentUserEmail();
-    if (!email) {
-      return {};
-    }
+    if (!email) return {};
 
     return await this.loadAllModuleProgressForUser(email);
   }
@@ -302,24 +292,26 @@ export class StorageService {
   }
 
   async saveLogin(data: LoginData) {
-    // create session token with expiry
     const token = Math.random().toString(36).slice(2);
-    const expires = Date.now() + 24 * 60 * 60 * 1000; // 24h
+    const expires = Date.now() + 24 * 60 * 60 * 1000;
     const payload = { email: data.email, token, expires };
+
     await this.saveValue('login', JSON.stringify(payload));
   }
 
   async loadLogin(): Promise<LoginData | null> {
     const value = await this.loadValue('login');
     if (!value) return null;
+
     try {
       const parsed = JSON.parse(value) as { email: string; token?: string; expires?: number };
+
       if (parsed.expires && Date.now() > parsed.expires) {
-        // session expired
         await this.logout();
         return null;
       }
-      return { email: parsed.email } as LoginData;
+
+      return { email: parsed.email };
     } catch {
       return null;
     }
@@ -329,7 +321,6 @@ export class StorageService {
     await this.saveValue('login', '');
   }
 
-  // ------------ Password hashing helpers (PBKDF2 via Web Crypto) ------------
   private async generateSalt(): Promise<string> {
     const array = new Uint8Array(16);
     crypto.getRandomValues(array);
@@ -339,9 +330,11 @@ export class StorageService {
   private base64Encode(buffer: ArrayBuffer): string {
     const bytes = new Uint8Array(buffer);
     let binary = '';
+
     for (let i = 0; i < bytes.byteLength; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
+
     return btoa(binary);
   }
 
@@ -349,9 +342,11 @@ export class StorageService {
     const binary = atob(str);
     const len = binary.length;
     const bytes = new Uint8Array(len);
+
     for (let i = 0; i < len; i++) {
       bytes[i] = binary.charCodeAt(i);
     }
+
     return bytes.buffer;
   }
 
@@ -361,7 +356,14 @@ export class StorageService {
     const passKey = enc.encode(password);
     const saltBuf = this.base64Decode(salt);
 
-    const key = await crypto.subtle.importKey('raw', passKey, { name: 'PBKDF2' }, false, ['deriveBits']);
+    const key = await crypto.subtle.importKey(
+      'raw',
+      passKey,
+      { name: 'PBKDF2' },
+      false,
+      ['deriveBits']
+    );
+
     const derived = await crypto.subtle.deriveBits(
       { name: 'PBKDF2', salt: saltBuf, iterations: 100000, hash: 'SHA-256' },
       key,
@@ -372,12 +374,13 @@ export class StorageService {
     return { salt, hash };
   }
 
-  async verifyPassword(plain: string, salt: string | undefined, expectedHash: string | undefined): Promise<boolean> {
-    if (!expectedHash) {
-      // no stored hash, fallback false
-      return false;
-    }
-    if (!salt) return false;
+  async verifyPassword(
+    plain: string,
+    salt: string | undefined,
+    expectedHash: string | undefined
+  ): Promise<boolean> {
+    if (!expectedHash || !salt) return false;
+
     const { hash } = await this.hashPassword(plain, salt);
     return hash === expectedHash;
   }
@@ -393,9 +396,7 @@ export class StorageService {
 
   async loadPendingSyncQueue(): Promise<PendingSyncItem[]> {
     const value = await this.loadValue(this.pendingSyncItemsKey);
-    if (!value) {
-      return [];
-    }
+    if (!value) return [];
 
     try {
       return JSON.parse(value) as PendingSyncItem[];
@@ -409,8 +410,12 @@ export class StorageService {
     this.pendingSyncSubject.next(items.length);
   }
 
-  private async enqueuePendingSync(type: PendingSyncType, data: SurveyAnswers | SimulationData | CertificateData) {
+  private async enqueuePendingSync(
+    type: PendingSyncType,
+    data: SurveyAnswers | SimulationData | CertificateData
+  ) {
     const queue = await this.loadPendingSyncQueue();
+
     const item: PendingSyncItem = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       type,
@@ -445,6 +450,7 @@ export class StorageService {
             );
             await this.saveLocalSurvey(item.data as SurveyAnswers);
             break;
+
           case 'simulation':
             await firstValueFrom(
               this.apiService.saveSimulation(item.data as SimulationData).pipe(
@@ -453,6 +459,7 @@ export class StorageService {
             );
             await this.saveLocalSimulation(item.data as SimulationData);
             break;
+
           case 'certificate':
             await firstValueFrom(
               this.apiService.saveCertificate(item.data as CertificateData).pipe(
@@ -501,7 +508,6 @@ export class StorageService {
     await this.init();
 
     if (this.isNative) {
-      // use secure storage for sensitive keys on native platforms
       if (this.shouldUseSecureStorage(key)) {
         const ok = await this.secureSet(key, value);
         if (ok) return;
@@ -518,10 +524,9 @@ export class StorageService {
     await this.init();
 
     if (this.isNative) {
-      // try secure storage first for sensitive keys
       if (this.shouldUseSecureStorage(key)) {
-        const v = await this.secureGet(key);
-        if (v !== null) return v;
+        const value = await this.secureGet(key);
+        if (value !== null) return value;
       }
 
       return this.databaseService.getItem(key);
@@ -537,38 +542,37 @@ export class StorageService {
 
   private async secureSet(key: string, value: string): Promise<boolean> {
     try {
-      // dynamic import to avoid hard runtime dependency in web builds
-      // use eval-import to avoid TypeScript resolving the module at compile time
       const dynamicImport: any = (eval('import') as any);
       const mod: any = await dynamicImport('@capacitor-community/secure-storage');
       const plugin = mod?.SecureStoragePlugin ?? mod?.SecureStorage ?? mod;
+
       if (!plugin || typeof plugin.set !== 'function') {
         return false;
       }
 
       await plugin.set({ key, value });
       return true;
-    } catch (e) {
-      // plugin not available or error — fallback to regular DB
+    } catch {
       return false;
     }
   }
 
   private async secureGet(key: string): Promise<string | null> {
     try {
-      // use eval-import to avoid TypeScript resolving the module at compile time
-      const dynamicImport2: any = (eval('import') as any);
-      const mod: any = await dynamicImport2('@capacitor-community/secure-storage');
+      const dynamicImport: any = (eval('import') as any);
+      const mod: any = await dynamicImport('@capacitor-community/secure-storage');
       const plugin = mod?.SecureStoragePlugin ?? mod?.SecureStorage ?? mod;
+
       if (!plugin || typeof plugin.get !== 'function') {
         return null;
       }
 
       const res = await plugin.get({ key });
-      // plugin may return { value } or the value directly
+
       if (res == null) return null;
       if (typeof res === 'object' && 'value' in res) return res.value as string;
       if (typeof res === 'string') return res;
+
       return null;
     } catch {
       return null;
@@ -595,8 +599,7 @@ export class StorageService {
 
       window.localStorage.setItem(key, value);
     } catch {
-      // localStorage puede no estar disponible en algunos entornos.
+      // localStorage puede no estar disponible.
     }
   }
-
 }
