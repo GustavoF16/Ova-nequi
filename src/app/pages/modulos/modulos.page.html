@@ -4,16 +4,47 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <section class="page-card" role="region" aria-labelledby="modulos-title">
-    <h2 id="modulos-title" class="high-contrast">Módulos educativos de Nequi</h2>
+<ion-content class="modules-page ion-padding">
+  <section class="hero-card" role="region" aria-labelledby="modulos-title">
+    <div class="hero-topline">
+      <span class="eyebrow">Centro de aprendizaje</span>
+      <span class="hero-badge">Nequi</span>
+    </div>
 
-    <p>
-      Explora los módulos con explicaciones claras y ejemplos prácticos para usar Nequi con confianza.
-    </p>
+    <div class="hero-copy">
+      <h2 id="modulos-title" class="high-contrast">Módulos educativos de Nequi</h2>
+      <p>
+        Explora contenido práctico, claro y visual para aprender a usar Nequi con confianza desde módulos interactivos.
+      </p>
+    </div>
 
-    <div *ngIf="!isOnline" class="status-note" role="status">
-      No hay conexión. Sigue viendo el contenido disponible, pero el video puede no cargarse hasta que recuperes red.
+    <div class="hero-stats" aria-label="Resumen de la experiencia educativa">
+      <article>
+        <strong>3 módulos</strong>
+        <span>Rutas interactivas listas para tocar</span>
+      </article>
+      <article>
+        <strong>Contenido práctico</strong>
+        <span>Guías, retos y ejercicios guiados</span>
+      </article>
+      <article>
+        <strong>Diseño accesible</strong>
+        <span>Contraste, foco y lectura clara</span>
+      </article>
+    </div>
+
+    <div *ngIf="!isOnline" class="status-note hero-status" role="status">
+      No hay conexión. Puedes seguir navegando; algunos recursos visuales podrían tardar en cargar.
+    </div>
+  </section>
+
+  <section class="page-card" role="region" aria-labelledby="module-list-title">
+    <div class="section-header modules-header">
+      <div>
+        <p class="section-kicker">Rutas disponibles</p>
+        <h3 id="module-list-title">Elige el módulo que quieres abrir</h3>
+      </div>
+      <div class="section-chip">Toca para continuar</div>
     </div>
 
     <ion-list class="module-list">
@@ -22,7 +53,7 @@
           <span class="module-kicker">Guía práctica</span>
           <h3 class="high-contrast">Enviar dinero</h3>
           <p>Aprende a transferir dinero a tus amigos y familiares de forma rápida.</p>
-          <span class="module-cta">Toca para abrir la lección</span>
+          <span class="module-cta">Abrir lección</span>
         </ion-label>
       </ion-item>
 
@@ -31,7 +62,7 @@
           <span class="module-kicker">Actividad interactiva</span>
           <h3 class="high-contrast">Recibir pagos</h3>
           <p>Descubre cómo recibir dinero de manera segura y gestionarlo desde tu cuenta.</p>
-          <span class="module-cta">Toca para abrir el reto</span>
+          <span class="module-cta">Abrir reto</span>
         </ion-label>
       </ion-item>
 
@@ -40,7 +71,7 @@
           <span class="module-kicker">Aprendizaje guiado</span>
           <h3 class="high-contrast">Pagar servicios</h3>
           <p>Conoce cómo pagar facturas, recargas y servicios desde tu celular.</p>
-          <span class="module-cta">Toca para abrir el ejercicio</span>
+          <span class="module-cta">Abrir ejercicio</span>
         </ion-label>
       </ion-item>
     </ion-list>
