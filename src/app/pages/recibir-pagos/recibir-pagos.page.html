@@ -18,6 +18,21 @@
       Descubre cómo recibir dinero de manera segura y gestionarlo desde tu cuenta con una actividad de arrastrar y soltar.
     </p>
 
+    <div class="hero-summary" aria-label="Resumen del proceso de recibir pagos">
+      <article>
+        <strong>1.</strong>
+        <span>Comparte tu QR o número desde la app.</span>
+      </article>
+      <article>
+        <strong>2.</strong>
+        <span>Revisa el remitente y el valor antes de aceptar.</span>
+      </article>
+      <article>
+        <strong>3.</strong>
+        <span>Confirma el comprobante y el saldo actualizado.</span>
+      </article>
+    </div>
+
     <div class="hero-metrics">
       <article>
         <strong>{{ attempts }}</strong>
@@ -45,6 +60,16 @@
 
     <p class="section-copy">Antes de aceptar o gestionar un pago, confirma el origen, valida el comprobante y mantén el proceso dentro de la app.</p>
 
+    <div class="detail-panel">
+      <h4>Cómo funciona el proceso</h4>
+      <ul>
+        <li>La otra persona te envía el dinero usando tu número o tu QR.</li>
+        <li>La app te muestra una notificación con el valor recibido.</li>
+        <li>Antes de continuar, revisa el nombre del remitente y el monto exacto.</li>
+        <li>Guarda el comprobante y usa el historial de la app como evidencia si la necesitas.</li>
+      </ul>
+    </div>
+
     <div class="steps-grid">
       <article class="step-card" *ngFor="let point of guidePoints; let index = index">
         <div class="step-number">{{ index + 1 }}</div>
@@ -65,7 +90,7 @@
       <div class="section-chip accent">Drag and drop</div>
     </div>
 
-    <p class="section-copy">Solo una acción protege tu cuenta y confirma la operación. Arrástrala al recuadro de validación.</p>
+    <p class="section-copy">Solo una acción protege tu cuenta y confirma la operación. Arrástrala al recuadro de validación para seguir y ver tu historial.</p>
 
     <div class="drag-layout">
       <div class="option-column" aria-label="Opciones arrastrables">
@@ -95,7 +120,7 @@
           (drop)="onDrop($event)">
           <div class="drop-icon">⇣</div>
           <h4>{{ dropMessage }}</h4>
-          <p>Coloca aquí la acción más segura para recibir pagos.</p>
+          <p>Coloca aquí la acción más segura para recibir pagos y confirmar que el dinero sí corresponde.</p>
         </div>
 
         <ion-button expand="block" class="contrast-btn action-btn" (click)="validarRespuesta()">

@@ -35,27 +35,27 @@ export class RecibirPagosPage implements OnInit, OnDestroy {
   readonly correctOptionId = 'verify-sender';
 
   readonly guidePoints = [
-    'Comparte tu número o QR de forma segura.',
-    'Verifica quién envía el pago antes de aceptarlo.',
-    'Revisa el comprobante y el saldo actualizado en tu cuenta.',
-    'Mantén la operación dentro de la app y evita capturas sueltas como única prueba.'
+    'Comparte tu número o QR solo desde la app y con personas de confianza para que te envíen el dinero correcto.',
+    'Antes de aceptar, revisa el nombre del remitente, la referencia del pago y el valor esperado.',
+    'Cuando el dinero llegue, confirma el saldo y abre el comprobante para verificar que la operación sí quedó registrada.',
+    'Si algo no coincide, no compartas datos adicionales y conserva la operación dentro de la app como respaldo.'
   ];
 
   readonly options: DraggableOption[] = [
     {
       id: 'verify-sender',
       label: 'Verificar nombre y referencia del remitente',
-      hint: 'Esta es la acción segura antes de aceptar.'
+      hint: 'Es el paso correcto porque protege tu cuenta y confirma quién envía el pago.'
     },
     {
       id: 'share-password',
       label: 'Compartir tu clave para recibir el pago más rápido',
-      hint: 'Nunca debes hacerlo.'
+      hint: 'Nunca debes hacerlo, porque tu clave no se comparte para recibir dinero.'
     },
     {
       id: 'ignore-proof',
       label: 'Ignorar el comprobante y confiar solo en el mensaje',
-      hint: 'No confirma la operación.'
+      hint: 'No confirma la operación ni te asegura que el dinero haya llegado.'
     }
   ];
 

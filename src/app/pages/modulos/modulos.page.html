@@ -16,25 +16,31 @@
       No hay conexión. Sigue viendo el contenido disponible, pero el video puede no cargarse hasta que recuperes red.
     </div>
 
-    <ion-list>
-      <ion-item lines="none" detail="true" button="true" routerLink="/enviar-dinero" aria-label="Abrir el módulo de enviar dinero">
+    <ion-list class="module-list">
+      <ion-item class="module-card module-send" lines="none" detail="true" button="true" routerLink="/enviar-dinero" aria-label="Abrir el módulo de enviar dinero">
         <ion-label>
+          <span class="module-kicker">Guía práctica</span>
           <h3 class="high-contrast">Enviar dinero</h3>
           <p>Aprende a transferir dinero a tus amigos y familiares de forma rápida.</p>
+          <span class="module-cta">Toca para abrir la lección</span>
         </ion-label>
       </ion-item>
 
-      <ion-item lines="none" detail="true" button="true" routerLink="/recibir-pagos" aria-label="Abrir el módulo de recibir pagos">
+      <ion-item class="module-card module-receive" lines="none" detail="true" button="true" routerLink="/recibir-pagos" aria-label="Abrir el módulo de recibir pagos">
         <ion-label>
+          <span class="module-kicker">Actividad interactiva</span>
           <h3 class="high-contrast">Recibir pagos</h3>
           <p>Descubre cómo recibir dinero de manera segura y gestionarlo desde tu cuenta.</p>
+          <span class="module-cta">Toca para abrir el reto</span>
         </ion-label>
       </ion-item>
 
-      <ion-item lines="none" detail="true" button="true" routerLink="/pagar-servicios" aria-label="Abrir el módulo de pagar servicios">
+      <ion-item class="module-card module-pay" lines="none" detail="true" button="true" routerLink="/pagar-servicios" aria-label="Abrir el módulo de pagar servicios">
         <ion-label>
+          <span class="module-kicker">Aprendizaje guiado</span>
           <h3 class="high-contrast">Pagar servicios</h3>
           <p>Conoce cómo pagar facturas, recargas y servicios desde tu celular.</p>
+          <span class="module-cta">Toca para abrir el ejercicio</span>
         </ion-label>
       </ion-item>
     </ion-list>
