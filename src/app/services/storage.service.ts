@@ -30,12 +30,14 @@ export interface CertificateData {
 }
 
 export interface UserProfile {
+  nombre?: string;
+  apellido?: string;
+  cedula?: string;
   email: string;
   passwordHash?: string;
   salt?: string;
   password?: string;
 }
-
 export type UserProgressMap = Record<string, number | undefined> & {
   overall?: number;
 };

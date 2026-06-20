@@ -1,3 +1,4 @@
+
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Certificado</ion-title>
@@ -42,6 +43,10 @@
         <div class="certificate-recipient">Otorgado a</div>
 
         <h3>{{ nombre }}</h3>
+
+        <p class="certificate-id" *ngIf="cedula">
+          C.C. {{ cedula }}
+        </p>
 
         <p class="certificate-course">
           por completar el curso <strong>Uso básico de Nequi</strong>

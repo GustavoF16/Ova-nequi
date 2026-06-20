@@ -9,6 +9,45 @@
     <h2 id="register-title">Registro de usuario</h2>
 
     <form (ngSubmit)="register()" aria-label="Formulario de registro" novalidate>
+
+      <!-- Nombre -->
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input
+          [(ngModel)]="nombre"
+          name="nombre"
+          type="text"
+          placeholder="Ingresa tu nombre"
+          aria-label="Nombre">
+        </ion-input>
+      </ion-item>
+
+      <!-- Apellido -->
+      <ion-item>
+        <ion-label position="stacked">Apellido</ion-label>
+        <ion-input
+          [(ngModel)]="apellido"
+          name="apellido"
+          type="text"
+          placeholder="Ingresa tu apellido"
+          aria-label="Apellido">
+        </ion-input>
+      </ion-item>
+
+      <!-- Cédula -->
+      <ion-item>
+        <ion-label position="stacked">Cédula</ion-label>
+        <ion-input
+          [(ngModel)]="cedula"
+          name="cedula"
+          type="text"
+          inputmode="numeric"
+          placeholder="Ingresa tu cédula"
+          aria-label="Cédula">
+        </ion-input>
+      </ion-item>
+
+      <!-- Correo -->
       <ion-item>
         <ion-label position="stacked">Correo electrónico</ion-label>
         <ion-input
@@ -20,6 +59,7 @@
         </ion-input>
       </ion-item>
 
+      <!-- Contraseña -->
       <ion-item>
         <ion-label position="stacked">Contraseña</ion-label>
         <ion-input
@@ -31,27 +71,65 @@
         </ion-input>
       </ion-item>
 
+      <!-- Modo oscuro -->
       <ion-item>
         <ion-label>Modo oscuro</ion-label>
-        <ion-toggle [(ngModel)]="modoOscuro" name="modoOscuro" aria-label="Activar modo oscuro"></ion-toggle>
+        <ion-toggle
+          [(ngModel)]="modoOscuro"
+          name="modoOscuro"
+          aria-label="Activar modo oscuro">
+        </ion-toggle>
       </ion-item>
 
+      <!-- Tamaño de texto -->
       <ion-item>
         <ion-label position="stacked">Tamaño de texto</ion-label>
-        <ion-segment [(ngModel)]="tamanoTexto" name="tamanoTexto" aria-label="Tamaño de texto">
-          <ion-segment-button value="pequeno">Pequeño</ion-segment-button>
-          <ion-segment-button value="medio">Medio</ion-segment-button>
-          <ion-segment-button value="grande">Grande</ion-segment-button>
+
+        <ion-segment
+          [(ngModel)]="tamanoTexto"
+          name="tamanoTexto"
+          aria-label="Tamaño de texto">
+
+          <ion-segment-button value="pequeno">
+            Pequeño
+          </ion-segment-button>
+
+          <ion-segment-button value="medio">
+            Medio
+          </ion-segment-button>
+
+          <ion-segment-button value="grande">
+            Grande
+          </ion-segment-button>
+
         </ion-segment>
       </ion-item>
 
-      <ion-button expand="full" type="submit" class="contrast-btn" aria-label="Crear cuenta">
+      <ion-button
+        expand="full"
+        type="submit"
+        class="contrast-btn"
+        aria-label="Crear cuenta">
         Crear cuenta
       </ion-button>
 
-      <div *ngIf="mensaje" class="status-note" role="status" aria-live="polite">{{ mensaje }}</div>
+      <div
+        *ngIf="mensaje"
+        class="status-note"
+        role="status"
+        aria-live="polite">
+        {{ mensaje }}
+      </div>
+
     </form>
   </section>
 
-  <ion-button expand="block" routerLink="/login" color="medium" aria-label="Volver al inicio">⬅ Volver</ion-button>
+  <ion-button
+    expand="block"
+    routerLink="/login"
+    color="medium"
+    aria-label="Volver al inicio">
+    ⬅ Volver
+  </ion-button>
+
 </ion-content>

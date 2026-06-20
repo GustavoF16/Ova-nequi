@@ -1,4 +1,3 @@
-
 import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -17,8 +16,12 @@ export class RegisterPage {
   private router = inject(Router);
   private storageService = inject(StorageService);
 
+  nombre: string = '';
+  apellido: string = '';
+  cedula: string = '';
   email: string = '';
   password: string = '';
+
   modoOscuro: boolean = false;
   tamanoTexto: 'pequeno' | 'medio' | 'grande' = 'medio';
   mensaje: string = '';
@@ -27,8 +30,16 @@ export class RegisterPage {
     console.log('ENTRO AL REGISTER');
 
     try {
+      const nombre = this.nombre.trim();
+      const apellido = this.apellido.trim();
+      const cedula = this.cedula.trim();
       const email = this.email.trim().toLowerCase();
       const password = this.password.trim();
+
+      if (!nombre || !apellido || !cedula) {
+        this.mensaje = '⚠️ Ingresa nombre, apellido y cédula';
+        return;
+      }
 
       if (!email || !password) {
         this.mensaje = '⚠️ Ingresa correo y contraseña';
@@ -50,6 +61,9 @@ export class RegisterPage {
       const { salt, hash } = await this.storageService.hashPassword(password);
 
       await this.storageService.saveUserProfile({
+        nombre,
+        apellido,
+        cedula,
         email,
         passwordHash: hash,
         salt

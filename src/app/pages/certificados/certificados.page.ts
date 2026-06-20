@@ -23,16 +23,16 @@ import { NetworkService } from '../../services/network.service';
 export class CertificadosPage implements OnInit, OnDestroy {
   private networkService = inject(NetworkService);
   private storageService = inject(StorageService);
+
   isOnline = true;
   private networkSubscription!: Subscription;
 
-  nombre: string = 'Gustavo Forero';
+  nombre: string = '';
+  cedula: string = '';
   fecha: string = new Date().toLocaleDateString();
   mensaje: string = '';
 
-  constructor() {
-    this.cargarCertificado();
-  }
+  constructor() {}
 
   ngOnInit() {
     this.networkSubscription = this.networkService.online$.subscribe(
@@ -40,15 +40,32 @@ export class CertificadosPage implements OnInit, OnDestroy {
     );
   }
 
+  ionViewWillEnter() {
+    this.cargarCertificado();
+  }
+
   ngOnDestroy() {
     this.networkSubscription?.unsubscribe();
   }
 
   async cargarCertificado() {
+    this.nombre = '';
+    this.cedula = '';
+
+    const login = await this.storageService.loadLogin();
+
+    if (login?.email) {
+      const user = await this.storageService.loadUserProfile(login.email);
+
+      if (user) {
+        this.nombre = `${user.nombre ?? ''} ${user.apellido ?? ''}`.trim();
+        this.cedula = user.cedula ?? '';
+      }
+    }
+
     const saved = await this.storageService.loadCertificate();
 
     if (saved) {
-      this.nombre = saved.nombre;
       this.fecha = saved.fecha;
     }
   }
@@ -58,6 +75,7 @@ export class CertificadosPage implements OnInit, OnDestroy {
       nombre: this.nombre,
       fecha: this.fecha
     });
+
     await this.storageService.saveModuleProgressForCurrentUser('certificate', 1);
 
     this.mensaje = '✅ Certificado generado correctamente';
@@ -75,7 +93,8 @@ export class CertificadosPage implements OnInit, OnDestroy {
     const margin = 40;
     const frameInset = 20;
     const title = 'Certificado de finalización';
-    const recipient = this.nombre;
+    const recipient = this.nombre || 'Participante';
+    const documentNumber = this.cedula ? `C.C. ${this.cedula}` : '';
     const course = 'Uso básico de Nequi';
     const issued = `Emitido el ${this.fecha}`;
     const body = [
@@ -83,21 +102,20 @@ export class CertificadosPage implements OnInit, OnDestroy {
       `el curso ${course} con éxito.`
     ];
 
-    // Borde externo
     doc.setLineWidth(2);
     doc.setDrawColor('#0d6efd');
     doc.rect(frameInset, frameInset, pageWidth - frameInset * 2, pageHeight - frameInset * 2, 'S');
 
-    // Header con logo simulado
     doc.setFillColor('#0d6efd');
     doc.rect(margin, margin, pageWidth - margin * 2, 70, 'F');
+
     doc.setFontSize(16);
     doc.setTextColor('#ffffff');
     doc.text('OVA NEQUI', margin + 12, margin + 42);
+
     doc.setFontSize(10);
     doc.text('Aprendizaje financiero accesible', margin + 12, margin + 58);
 
-    // Título centrado
     doc.setFontSize(24);
     doc.setTextColor('#111827');
     doc.text(title, pageWidth / 2, 150, { align: 'center' });
@@ -106,7 +124,6 @@ export class CertificadosPage implements OnInit, OnDestroy {
     doc.setTextColor('#64748b');
     doc.text('Documento oficial de finalización', pageWidth / 2, 170, { align: 'center' });
 
-    // Separator line
     doc.setLineWidth(0.5);
     doc.setDrawColor('#0d6efd');
     doc.line(margin, 190, pageWidth - margin, 190);
@@ -119,26 +136,32 @@ export class CertificadosPage implements OnInit, OnDestroy {
     doc.setTextColor('#0d6efd');
     doc.text(recipient, margin + 10, 270);
 
+    if (documentNumber) {
+      doc.setFontSize(14);
+      doc.setTextColor('#475569');
+      doc.text(documentNumber, margin + 10, 295);
+    }
+
     doc.setFontSize(16);
     doc.setTextColor('#111827');
     const splitText = doc.splitTextToSize(body.join(' '), pageWidth - margin * 2 - 20);
-    doc.text(splitText, margin + 10, 320);
+    doc.text(splitText, margin + 10, 330);
 
     doc.setFontSize(18);
     doc.setTextColor('#0d6efd');
-    doc.text(course, margin + 10, 380);
+    doc.text(course, margin + 10, 390);
 
     doc.setFontSize(12);
     doc.setTextColor('#475569');
-    doc.text(issued, margin + 10, 420);
+    doc.text(issued, margin + 10, 430);
 
-    // Footer
     doc.setFontSize(10);
     doc.setTextColor('#64748b');
     doc.text('Certificado generado desde OVA NEQUI', margin + 10, pageHeight - 40);
     doc.text('www.ova-nequi.example', pageWidth - margin - 10, pageHeight - 40, { align: 'right' });
 
     doc.save('certificado-nequi.pdf');
+
     this.mensaje = '📄 PDF descargado correctamente';
   }
 }
