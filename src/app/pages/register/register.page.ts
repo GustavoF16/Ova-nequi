@@ -1,3 +1,4 @@
+
 import { Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -60,15 +61,14 @@ export class RegisterPage {
       };
 
       await this.storageService.saveSettingsForUser(email, settings);
-      await this.storageService.saveLogin({ email });
 
       console.log('USUARIO GUARDADO:', email);
 
-      this.mensaje = '✅ Cuenta creada correctamente';
+      this.mensaje = '✅ Cuenta creada correctamente. Ahora inicia sesión.';
 
       setTimeout(() => {
-        this.router.navigate(['/home']);
-      }, 700);
+        this.router.navigate(['/login']);
+      }, 1500);
 
     } catch (error) {
       console.error('ERROR REGISTER:', error);

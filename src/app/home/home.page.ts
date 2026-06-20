@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { StorageService, AppSettings } from '../services/storage.service';
 import { NetworkService } from '../services/network.service';
@@ -13,8 +13,10 @@ import { NetworkService } from '../services/network.service';
   imports: [IonicModule, CommonModule, RouterModule]
 })
 export class HomePage implements OnInit, OnDestroy {
+  private router = inject(Router);
   private networkService = inject(NetworkService);
   private storageService = inject(StorageService);
+
   isOnline = true;
   private networkSubscription!: Subscription;
 
@@ -49,6 +51,11 @@ export class HomePage implements OnInit, OnDestroy {
     this.bienvenida = 'Bienvenido a OVA NEQUI';
   }
 
+  async logout() {
+    await this.storageService.logout();
+    this.router.navigate(['/login']);
+  }
+
   private aplicarConfiguracion(settings: AppSettings) {
     if (settings.modoOscuro) {
       document.body.style.backgroundColor = '#121212';
@@ -66,6 +73,4 @@ export class HomePage implements OnInit, OnDestroy {
       document.body.style.fontSize = '20px';
     }
   }
-
 }
-``

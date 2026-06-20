@@ -8,6 +8,7 @@
   <div class="page-card" role="region" aria-labelledby="certificate-heading">
     <section role="form" aria-labelledby="certificate-heading" novalidate>
       <h2 id="certificate-heading">🎓 Certificado de finalización</h2>
+
       <p class="intro-text">
         Completa tus datos y genera un certificado listo para guardar o imprimir.
       </p>
@@ -39,10 +40,13 @@
       <div class="certificate-preview" aria-label="Vista previa del certificado">
         <div class="certificate-header">Certificado de finalización</div>
         <div class="certificate-recipient">Otorgado a</div>
+
         <h3>{{ nombre }}</h3>
+
         <p class="certificate-course">
           por completar el curso <strong>Uso básico de Nequi</strong>
         </p>
+
         <p class="certificate-date">
           Emitido el {{ fecha }}
         </p>
@@ -76,7 +80,7 @@
 
   <ion-button
     expand="block"
-    color="dark"
+    class="contrast-btn back-button"
     routerLink="/home"
     aria-label="Volver al menú principal">
     ⬅ Volver al menú

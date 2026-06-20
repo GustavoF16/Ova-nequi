@@ -2,6 +2,10 @@
   display: block;
 }
 
+ion-content {
+  --padding-bottom: 5rem;
+}
+
 .page-card {
   padding: 1.5rem;
   background: #ffffff;
@@ -29,8 +33,17 @@ ion-item {
   margin-top: 1rem;
 }
 
+.back-button {
+  margin-top: 1rem;
+  margin-bottom: 4rem;
+}
+
 @media (max-width: 480px) {
   .page-card {
     padding: 1.2rem;
+  }
+
+  .back-button {
+    margin-bottom: 5rem;
   }
 }

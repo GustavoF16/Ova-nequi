@@ -2,6 +2,10 @@
   display: block;
 }
 
+ion-content {
+  --padding-bottom: 5rem;
+}
+
 .page-card {
   padding: 1.5rem;
   background: #ffffff;
@@ -42,8 +46,18 @@ ion-segment {
   margin-top: 1rem;
 }
 
+/* MISMA CORRECCIÓN USADA EN LOS DEMÁS MÓDULOS */
+.back-button {
+  margin-top: 1rem;
+  margin-bottom: 4rem;
+}
+
 @media (max-width: 480px) {
   .page-card {
     padding: 1.2rem;
+  }
+
+  .back-button {
+    margin-bottom: 5rem;
   }
 }

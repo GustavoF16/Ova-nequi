@@ -7,7 +7,10 @@
 <ion-content class="ion-padding">
   <div class="page-card">
     <h2>Opciones de accesibilidad</h2>
-    <p class="intro-text">Ajusta la apariencia de la app para leer mejor y navegar con más comodidad.</p>
+
+    <p class="intro-text">
+      Ajusta la apariencia de la app para leer mejor y navegar con más comodidad.
+    </p>
 
     <ion-item>
       <ion-label>Modo oscuro</ion-label>
@@ -19,7 +22,10 @@
     </ion-item>
 
     <div class="segment-block" aria-labelledby="font-size-label">
-      <div id="font-size-label" class="segment-label">Tamaño de texto</div>
+      <div id="font-size-label" class="segment-label">
+        Tamaño de texto
+      </div>
+
       <ion-segment
         [(ngModel)]="tamanoTexto"
         (ionChange)="cambiarTexto()"
@@ -47,9 +53,10 @@
 
   <ion-button
     expand="block"
-    color="dark"
+    class="contrast-btn back-button"
     routerLink="/home"
     aria-label="Volver al menú principal">
     ⬅ Volver al menú
   </ion-button>
+
 </ion-content>

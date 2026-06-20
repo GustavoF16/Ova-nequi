@@ -22,7 +22,10 @@
         aria-valuemax="1"
         [attr.aria-valuenow]="progreso">
       </ion-progress-bar>
-      <div class="progress-value" aria-atomic="true">{{progreso * 100 | number:'1.0-0'}}%</div>
+
+      <div class="progress-value" aria-atomic="true">
+        {{progreso * 100 | number:'1.0-0'}}%
+      </div>
     </div>
 
     <ion-list>
@@ -34,6 +37,7 @@
             Progreso: {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
           </p>
         </ion-label>
+
         <ion-note slot="end" [color]="getModuleProgress(key) >= 1 ? 'success' : 'warning'">
           {{ getModuleProgress(key) >= 1 ? 'Completado' : 'En progreso' }}
         </ion-note>
@@ -45,7 +49,11 @@
     </div>
   </div>
 
-  <ion-button expand="block" color="dark" routerLink="/home" aria-label="Volver al menú principal">
+  <ion-button
+    expand="block"
+    class="contrast-btn back-button"
+    routerLink="/home"
+    aria-label="Volver al menú principal">
     ⬅ Volver al menú
   </ion-button>
 </ion-content>

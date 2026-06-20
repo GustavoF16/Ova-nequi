@@ -2,11 +2,16 @@
   display: block;
 }
 
+ion-content {
+  --padding-bottom: 5rem;
+}
+
 .page-card {
   padding: 1.5rem;
   background: #ffffff;
   border-radius: var(--ion-border-radius);
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  margin-bottom: 1rem;
 }
 
 h2 {
@@ -72,6 +77,21 @@ ion-item {
   display: grid;
   gap: 0.85rem;
   margin-top: 1.4rem;
+}
+
+.back-button {
+  margin-top: 1rem;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 480px) {
+  .page-card {
+    padding: 1.2rem;
+  }
+
+  .back-button {
+    margin-bottom: 5rem;
+  }
 }
 
 @media print {
