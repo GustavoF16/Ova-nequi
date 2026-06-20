@@ -15,6 +15,18 @@ export interface SurveyAnswers {
   respuesta2: string;
 }
 
+export interface SendMoneyLessonAnswers {
+  pregunta1: string;
+  pregunta2: string;
+  pregunta3: string;
+}
+
+export interface SendMoneyLessonRecord extends SendMoneyLessonAnswers {
+  score: number;
+  completed: boolean;
+  savedAt: string;
+}
+
 export interface LoginData {
   email: string;
 }
@@ -200,7 +212,7 @@ export class StorageService {
 
   async loadAllModuleProgressForUser(email: string): Promise<UserProgressMap> {
     const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'simulation', 'survey', 'certificate'];
+    const moduleIds = ['modulos', 'sendMoney', 'simulation', 'survey', 'certificate'];
     const result: UserProgressMap = {};
 
     for (const key of moduleIds) {
@@ -227,7 +239,7 @@ export class StorageService {
 
   async loadOverallProgressForUser(email: string): Promise<number> {
     const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'simulation', 'survey', 'certificate'];
+    const moduleIds = ['modulos', 'sendMoney', 'simulation', 'survey', 'certificate'];
     let sum = 0;
     let foundAny = false;
 
@@ -259,6 +271,15 @@ export class StorageService {
   async loadSurvey(): Promise<SurveyAnswers | null> {
     const value = await this.loadValue('survey');
     return value ? JSON.parse(value) as SurveyAnswers : null;
+  }
+
+  async saveSendMoneyLesson(record: SendMoneyLessonRecord) {
+    await this.saveValue('send-money-lesson', JSON.stringify(record));
+  }
+
+  async loadSendMoneyLesson(): Promise<SendMoneyLessonRecord | null> {
+    const value = await this.loadValue('send-money-lesson');
+    return value ? JSON.parse(value) as SendMoneyLessonRecord : null;
   }
 
   async saveSimulation(data: SimulationData) {

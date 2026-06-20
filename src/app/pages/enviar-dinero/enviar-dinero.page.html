@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Enviar dinero</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="send-money-page ion-padding">
+  <section class="hero-card" role="region" aria-labelledby="send-money-title">
+    <div class="hero-topline">
+      <span class="eyebrow">Módulo interactivo</span>
+      <span class="status-badge" [class.offline]="!isOnline" role="status" aria-live="polite">
+        {{ isOnline ? 'En línea y guardando progreso' : 'Sin conexión, progreso local activo' }}
+      </span>
+    </div>
+
+    <h2 id="send-money-title">Enviar dinero con seguridad</h2>
+    <p class="intro-text">
+      Sigue una guía clara, evita errores comunes y confirma lo aprendido con una práctica rápida que queda guardada en tu dispositivo.
+    </p>
+
+    <div class="hero-metrics" aria-label="Resumen del módulo">
+      <article>
+        <strong>4 pasos</strong>
+        <span>Guía breve y práctica</span>
+      </article>
+      <article>
+        <strong>3 preguntas</strong>
+        <span>Validación inmediata</span>
+      </article>
+      <article>
+        <strong>100%</strong>
+        <span>Rango para dominio total</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-card" role="region" aria-labelledby="guide-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Paso a paso</p>
+        <h3 id="guide-title">Guía para enviar dinero</h3>
+      </div>
+      <div class="section-chip">Lectura rápida</div>
+    </div>
+
+    <p class="section-copy">
+      Antes de confirmar una transferencia, revisa el destino, el monto y el comprobante final. Esa secuencia reduce errores y mejora la seguridad.
+    </p>
+
+    <div *ngIf="!isOnline" class="status-note soft" role="status" aria-live="polite">
+      Estás sin conexión, pero igual puedes leer la guía y responder el ejercicio. Las respuestas se guardarán localmente.
+    </div>
+
+    <div class="steps-grid">
+      <article class="step-card" *ngFor="let paso of pasos; let index = index">
+        <div class="step-number">{{ index + 1 }}</div>
+        <div class="step-copy">
+          <span class="step-label">Paso {{ index + 1 }}</span>
+          <p>{{ paso }}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-card quiz-card" role="region" aria-labelledby="quiz-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Evaluación</p>
+        <h3 id="quiz-title">Pon a prueba lo aprendido</h3>
+      </div>
+      <div class="section-chip accent">Interacción guardada</div>
+    </div>
+
+    <p class="section-copy">Responde las preguntas y registra tu progreso en el almacenamiento local de la app.</p>
+
+    <form novalidate>
+      <div class="quiz-block" aria-labelledby="pregunta1">
+        <h4 id="pregunta1">1. ¿Qué debes hacer antes de continuar con el envío?</h4>
+        <ion-radio-group [(ngModel)]="respuesta1" name="pregunta1" aria-labelledby="pregunta1">
+          <ion-item *ngFor="let opcion of opcionesPregunta1" class="option-item">
+            <ion-radio slot="start" [value]="opcion.value"></ion-radio>
+            <ion-label>{{ opcion.label }}</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </div>
+
+      <div class="quiz-block" aria-labelledby="pregunta2">
+        <h4 id="pregunta2">2. ¿Qué conviene revisar al ingresar el monto?</h4>
+        <ion-radio-group [(ngModel)]="respuesta2" name="pregunta2" aria-labelledby="pregunta2">
+          <ion-item *ngFor="let opcion of opcionesPregunta2" class="option-item">
+            <ion-radio slot="start" [value]="opcion.value"></ion-radio>
+            <ion-label>{{ opcion.label }}</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </div>
+
+      <div class="quiz-block" aria-labelledby="pregunta3">
+        <h4 id="pregunta3">3. ¿Qué es recomendable hacer al terminar?</h4>
+        <ion-radio-group [(ngModel)]="respuesta3" name="pregunta3" aria-labelledby="pregunta3">
+          <ion-item *ngFor="let opcion of opcionesPregunta3" class="option-item">
+            <ion-radio slot="start" [value]="opcion.value"></ion-radio>
+            <ion-label>{{ opcion.label }}</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </div>
+
+      <div class="button-group">
+        <ion-button expand="full" class="contrast-btn action-btn" (click)="calificarRespuestas()" aria-label="Calificar respuestas del módulo enviar dinero">
+          Calificar respuestas
+        </ion-button>
+      </div>
+    </form>
+
+    <div *ngIf="mensaje" class="feedback-card" role="status" aria-live="polite">
+      <div class="feedback-icon">✓</div>
+      <div>
+        <p class="feedback-message">{{ mensaje }}</p>
+        <p *ngIf="puntaje" class="feedback-score">Puntaje: {{ puntaje }}%</p>
+        <p *ngIf="ultimaActualizacion" class="feedback-time">Guardado: {{ ultimaActualizacion | date:'medium' }}</p>
+      </div>
+    </div>
+  </section>
+
+  <ion-button
+    expand="block"
+    class="contrast-btn back-button"
+    routerLink="/modulos"
+    aria-label="Volver a los módulos educativos">
+    ⬅ Volver a módulos
+  </ion-button>
+</ion-content>

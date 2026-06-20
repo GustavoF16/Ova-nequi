@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/modulos/modulos.page').then( m => m.ModulosPage)
   },
   {
+    path: 'enviar-dinero',
+    loadComponent: () => import('./pages/enviar-dinero/enviar-dinero.page').then(m => m.EnviarDineroPage)
+  },
+  {
     path: 'simulaciones',
     loadComponent: () => import('./pages/simulaciones/simulaciones.page').then( m => m.SimulacionesPage)
   },
