@@ -28,17 +28,19 @@ export class ProgresoPage implements OnInit, OnDestroy {
     modulos: 0,
     sendMoney: 0,
     receivePayments: 0,
+    payServices: 0,
     simulation: 0,
     survey: 0,
     certificate: 0
   };
 
-  moduleKeys: Array<keyof UserProgressMap> = ['modulos', 'sendMoney', 'receivePayments', 'simulation', 'survey', 'certificate'];
+  moduleKeys: Array<keyof UserProgressMap> = ['modulos', 'sendMoney', 'receivePayments', 'payServices', 'simulation', 'survey', 'certificate'];
 
   moduleLabels: Record<string, string> = {
     modulos: 'Módulos educativos',
     sendMoney: 'Enviar dinero',
     receivePayments: 'Recibir pagos',
+    payServices: 'Pagar servicios',
     simulation: 'Simulación',
     survey: 'Encuesta',
     certificate: 'Certificado'

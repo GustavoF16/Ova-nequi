@@ -32,7 +32,7 @@
       <ion-item *ngFor="let key of moduleKeys" lines="full">
         <ion-label>
           <h3>{{ moduleLabels[key] }}</h3>
-          <p>{{ key === 'modulos' ? 'Aprende los conceptos básicos de Nequi.' : key === 'sendMoney' ? 'Sigue la guía práctica y valida lo aprendido enviando dinero de forma segura.' : key === 'receivePayments' ? 'Practica cómo recibir dinero con una actividad interactiva.' : key === 'simulation' ? 'Ejecuta una prueba práctica de envío de dinero.' : key === 'survey' ? 'Comparte tu experiencia para continuar.' : 'Genera tu certificado de cierre.' }}</p>
+          <p>{{ key === 'modulos' ? 'Aprende los conceptos básicos de Nequi.' : key === 'sendMoney' ? 'Sigue la guía práctica y valida lo aprendido enviando dinero de forma segura.' : key === 'receivePayments' ? 'Practica cómo recibir dinero con una actividad interactiva.' : key === 'payServices' ? 'Resuelve crucigrama y sopa de letras para dominar los pagos de servicios.' : key === 'simulation' ? 'Ejecuta una prueba práctica de envío de dinero.' : key === 'survey' ? 'Comparte tu experiencia para continuar.' : 'Genera tu certificado de cierre.' }}</p>
           <p class="module-percentage" aria-live="polite">
             Progreso: {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
           </p>

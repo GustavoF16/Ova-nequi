@@ -1,0 +1,172 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Pagar servicios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="pay-services-page ion-padding">
+  <section class="hero-card" role="region" aria-labelledby="pay-services-title">
+    <div class="hero-topline">
+      <span class="eyebrow">Módulo interactivo</span>
+      <span class="status-badge" [class.offline]="!isOnline" role="status" aria-live="polite">
+        {{ isOnline ? 'Historial listo para guardar' : 'Sin conexión, progreso local activo' }}
+      </span>
+    </div>
+
+    <h2 id="pay-services-title">Pagar servicios de forma segura</h2>
+    <p class="intro-text">
+      Aprende cómo pagar facturas, recargas y servicios desde tu celular con una guía detallada, un crucigrama y una sopa de letras.
+    </p>
+
+    <div class="hero-badges">
+      <article>
+        <strong>{{ attempts }}</strong>
+        <span>Intentos guardados</span>
+      </article>
+      <article>
+        <strong>{{ correctAttempts }}</strong>
+        <span>Completados</span>
+      </article>
+      <article>
+        <strong>2 retos</strong>
+        <span>Crucigrama y sopa de letras</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-card" role="region" aria-labelledby="guide-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Guía detallada</p>
+        <h3 id="guide-title">Cómo pagar un servicio paso a paso</h3>
+      </div>
+      <div class="section-chip">Pago seguro</div>
+    </div>
+
+    <p class="section-copy">Pagar servicios significa enviar dinero a una empresa o proveedor usando los datos correctos de la factura y confirmando el total antes de finalizar.</p>
+
+    <div class="detail-panel">
+      <h4>Antes de pagar revisa esto</h4>
+      <ul>
+        <li>El servicio correcto y el nombre del titular de la factura.</li>
+        <li>El número de referencia o código de pago exacto.</li>
+        <li>El valor total, incluyendo cargos o fechas límite.</li>
+        <li>El comprobante después del pago para confirmar que quedó registrado.</li>
+      </ul>
+    </div>
+
+    <div class="steps-grid">
+      <article class="step-card" *ngFor="let step of guideSteps; let index = index">
+        <div class="step-number">{{ index + 1 }}</div>
+        <div class="step-copy">
+          <span class="step-label">Paso {{ index + 1 }}</span>
+          <p>{{ step }}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-card puzzle-card" role="region" aria-labelledby="crossword-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Crucigrama</p>
+        <h3 id="crossword-title">Completa las palabras clave</h3>
+      </div>
+      <div class="section-chip accent">4 pistas</div>
+    </div>
+
+    <div class="crossword-grid">
+      <label *ngFor="let clue of crosswordClues" class="crossword-item">
+        <span>{{ clue.clue }}</span>
+        <ion-input [(ngModel)]="crosswordAnswers[clue.key]" [name]="clue.key" placeholder="Escribe aquí"></ion-input>
+      </label>
+    </div>
+
+    <div class="button-row">
+      <ion-button expand="block" class="contrast-btn action-btn" (click)="validateCrossword()">
+        Validar crucigrama
+      </ion-button>
+    </div>
+
+    <div *ngIf="crosswordFeedback" class="feedback-card" role="status" aria-live="polite">
+      <div class="feedback-icon">✎</div>
+      <div>
+        <p class="feedback-message">{{ crosswordFeedback }}</p>
+        <p class="feedback-score">Puntaje del crucigrama: {{ crosswordScore }}%</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-card puzzle-card" role="region" aria-labelledby="wordsearch-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Sopa de letras</p>
+        <h3 id="wordsearch-title">Busca las palabras del pago</h3>
+      </div>
+      <div class="section-chip">Encuentra 4</div>
+    </div>
+
+    <p class="section-copy">Haz clic en las palabras correctas para descubrir los términos que aparecen cuando pagas un servicio.</p>
+
+    <div class="word-search-wrapper">
+      <div class="word-list">
+        <button
+          *ngFor="let word of wordSearchWords"
+          type="button"
+          class="word-chip"
+          [class.found]="word.found"
+          (click)="toggleWord(word)">
+          {{ word.word }}
+        </button>
+      </div>
+
+      <div class="word-grid" aria-label="Sopa de letras">
+        <button *ngFor="let row of wordSearchGrid; let rowIndex = index" type="button" class="grid-row">
+          <span *ngFor="let letter of row; let columnIndex = index" class="grid-cell">{{ letter }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <ion-button expand="block" class="contrast-btn action-btn secondary" (click)="finishWordSearch()">
+        Confirmar sopa de letras
+      </ion-button>
+    </div>
+
+    <p *ngIf="wordSearchFeedback" class="status-note" role="status">{{ wordSearchFeedback }}</p>
+  </section>
+
+  <section class="page-card history-card" role="region" aria-labelledby="history-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Historial</p>
+        <h3 id="history-title">Últimos intentos guardados</h3>
+      </div>
+      <div class="section-chip">Últimos 10</div>
+    </div>
+
+    <div *ngIf="history.length; else emptyHistory" class="history-list">
+      <article class="history-item" *ngFor="let item of history">
+        <div class="history-state" [class.correct]="item.completed">
+          {{ item.completed ? 'Completo' : 'En progreso' }}
+        </div>
+        <div>
+          <strong>{{ item.score }}%</strong>
+          <p>{{ item.savedAt | date:'medium' }}</p>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyHistory>
+      <p class="empty-history">Todavía no hay intentos guardados. Resuelve el crucigrama y la sopa de letras para crear el historial.</p>
+    </ng-template>
+  </section>
+
+  <ion-button
+    expand="block"
+    class="contrast-btn back-button"
+    routerLink="/modulos"
+    aria-label="Volver a los módulos educativos">
+    ⬅ Volver a módulos
+  </ion-button>
+</ion-content>

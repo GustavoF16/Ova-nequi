@@ -33,6 +33,14 @@ export interface ReceivePaymentsAttempt {
   savedAt: string;
 }
 
+export interface PayServicesAttempt {
+  crosswordAnswers: Record<string, string>;
+  foundWords: string[];
+  score: number;
+  completed: boolean;
+  savedAt: string;
+}
+
 export interface LoginData {
   email: string;
 }
@@ -218,7 +226,7 @@ export class StorageService {
 
   async loadAllModuleProgressForUser(email: string): Promise<UserProgressMap> {
     const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'simulation', 'survey', 'certificate'];
+    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'payServices', 'simulation', 'survey', 'certificate'];
     const result: UserProgressMap = {};
 
     for (const key of moduleIds) {
@@ -245,7 +253,7 @@ export class StorageService {
 
   async loadOverallProgressForUser(email: string): Promise<number> {
     const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'simulation', 'survey', 'certificate'];
+    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'payServices', 'simulation', 'survey', 'certificate'];
     let sum = 0;
     let foundAny = false;
 
@@ -307,6 +315,30 @@ export class StorageService {
 
     try {
       return JSON.parse(value) as ReceivePaymentsAttempt[];
+    } catch {
+      return [];
+    }
+  }
+
+  async savePayServicesAttempt(attempt: PayServicesAttempt) {
+    const email = await this.getCurrentUserEmail();
+    const key = email ? `pay-services-history:${email}` : 'pay-services-history';
+    const history = await this.loadPayServicesHistory();
+    history.unshift(attempt);
+    await this.saveValue(key, JSON.stringify(history.slice(0, 10)));
+  }
+
+  async loadPayServicesHistory(): Promise<PayServicesAttempt[]> {
+    const email = await this.getCurrentUserEmail();
+    const key = email ? `pay-services-history:${email}` : 'pay-services-history';
+    const value = await this.loadValue(key);
+
+    if (!value) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(value) as PayServicesAttempt[];
     } catch {
       return [];
     }
