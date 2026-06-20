@@ -1,66 +1,84 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>OVA NEQUI</ion-title>
+<ion-content class="home-content ion-padding">
 
-    <ion-buttons slot="end">
-      <ion-button color="light" aria-label="Cerrar sesión" (click)="logout()">
-        Salir
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+  <section class="hero-card">
 
-<ion-content class="ion-padding">
-  <section class="page-card" aria-labelledby="home-title">
-    <h2 id="home-title">{{bienvenida || 'Bienvenido a OVA NEQUI'}}</h2>
+    <div class="hero-text">
+
+      <h1>👋 Bienvenido de nuevo</h1>
+
+      <h2>Plataforma de Aprendizaje Nequi</h2>
+
+    </div>
+
     <p>
-      Accede a tus módulos, simulaciones, encuestas y certificados desde un menú sencillo y accesible.
+      Educación financiera digital al alcance de todos.
     </p>
 
-    <div *ngIf="!isOnline" class="status-note" role="status">
-      Estás sin conexión. La navegación local sigue disponible, pero algunos recursos pueden requerir red.
-    </div>
-
-    <div class="home-summary">
-      <div>
-        <strong>7+ lecciones</strong>
-        <span>Explicaciones claras y prácticas.</span>
-      </div>
-      <div>
-        <strong>Modo accesible</strong>
-        <span>Subtítulos, contraste y foco visible.</span>
-      </div>
-    </div>
   </section>
 
-  <nav class="page-grid" role="navigation" aria-label="Menú principal">
-    <ion-button expand="block" class="contrast-btn" routerLink="/modulos" aria-label="Ir a los módulos educativos">
-      📚 Módulos educativos
-    </ion-button>
+  <div class="cards-grid">
 
-    <ion-button expand="block" class="contrast-btn" routerLink="/simulaciones" aria-label="Ir a las simulaciones">
-      💡 Simulaciones
-    </ion-button>
+    <ion-card class="feature-card" routerLink="/modulos">
+      <ion-card-content>
+        <div class="feature-icon">📚</div>
+        <h3>Módulos</h3>
+        <p>Contenido educativo</p>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-button expand="block" color="warning" routerLink="/encuestas" aria-label="Ir a la encuesta">
-      📝 Encuestas
-    </ion-button>
+    <ion-card class="feature-card" routerLink="/simulaciones">
+      <ion-card-content>
+        <div class="feature-icon">💡</div>
+        <h3>Simulaciones</h3>
+        <p>Aprende practicando</p>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-button expand="block" color="medium" routerLink="/configuracion" aria-label="Ir a configuración">
-      ⚙️ Configuración
-    </ion-button>
+    <ion-card class="feature-card" routerLink="/encuestas">
+      <ion-card-content>
+        <div class="feature-icon">📝</div>
+        <h3>Encuestas</h3>
+        <p>Comparte tu opinión</p>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-button expand="block" class="contrast-btn" routerLink="/progreso" aria-label="Ir al progreso">
-      📊 Progreso
-    </ion-button>
+    <ion-card class="feature-card" routerLink="/configuracion">
+      <ion-card-content>
+        <div class="feature-icon">⚙️</div>
+        <h3>Configuración</h3>
+        <p>Personaliza la aplicación</p>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-button expand="block" color="danger" routerLink="/certificados" aria-label="Ir a certificados">
-      🎓 Certificados
-    </ion-button>
-  </nav>
+    <ion-card class="feature-card" routerLink="/progreso">
+      <ion-card-content>
+        <div class="feature-icon">📊</div>
+        <h3>Progreso</h3>
+        <p>Seguimiento académico</p>
+      </ion-card-content>
+    </ion-card>
 
-  <section class="page-card home-help" aria-labelledby="help-title">
-    <h3 id="help-title">Consejo rápido</h3>
-    <p>Usa el botón de configuración para activar el modo oscuro y ajustar el tamaño de letra para una mejor lectura.</p>
-  </section>
+    <ion-card class="feature-card" routerLink="/certificados">
+      <ion-card-content>
+        <div class="feature-icon">🎓</div>
+        <h3>Certificados</h3>
+        <p>Logros obtenidos</p>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <ion-card class="help-card">
+    <ion-card-content>
+
+      <h3>💡 Consejo rápido</h3>
+
+      <p>
+        Personaliza la plataforma desde Configuración para activar
+        el modo oscuro y ajustar el tamaño del texto.
+      </p>
+
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

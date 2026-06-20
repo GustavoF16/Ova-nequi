@@ -1,32 +1,85 @@
 <ion-app>
-  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+  <a class="skip-link" href="#main-content">
+    Saltar al contenido
+  </a>
+
   <ion-header translucent>
+
     <ion-toolbar color="primary">
-      <ion-title>Nequi APP</ion-title>
+
+      <ion-title>
+        Nequi APP
+      </ion-title>
+
       <ion-buttons slot="end">
-        <ion-chip [color]="isOnline ? 'success' : 'danger'" aria-live="polite">
-          <ion-icon name="wifi" aria-hidden="true"></ion-icon>
-          <ion-label>{{ isOnline ? 'En línea' : 'Sin conexión' }}</ion-label>
+
+        <ion-chip
+          [color]="isOnline ? 'success' : 'danger'"
+          aria-live="polite">
+
+          <ion-icon
+            name="wifi"
+            aria-hidden="true">
+          </ion-icon>
+
+          <ion-label>
+            {{ isOnline ? 'En línea' : 'Sin conexión' }}
+          </ion-label>
+
         </ion-chip>
-        <ion-button aria-label="Cerrar sesión" (click)="logout()" color="light">
-          <ion-icon name="log-out" slot="icon-only" aria-hidden="true"></ion-icon>
+
+        <ion-button
+          aria-label="Cerrar sesión"
+          color="light"
+          fill="clear"
+          size="small"
+          (click)="logout()">
+
+          <ion-icon
+            name="log-out-outline"
+            slot="start">
+          </ion-icon>
+
+          Salir
+
         </ion-button>
+
       </ion-buttons>
+
     </ion-toolbar>
+
   </ion-header>
 
-  <ion-content id="main-content" role="main" tabindex="-1">
-    <div *ngIf="!isOnline" class="offline-banner" role="status" aria-live="polite">
-      <p><strong>Sin conexión:</strong> puedes seguir navegando, pero algunos datos pueden estar desactualizados hasta que recuperes la red.</p>
+  <ion-content
+    id="main-content"
+    role="main"
+    tabindex="-1">
+
+    <div
+      *ngIf="!isOnline"
+      class="offline-banner"
+      role="status"
+      aria-live="polite">
+
+      <p>
+        <strong>Sin conexión:</strong>
+        puedes seguir navegando, pero algunos datos pueden estar
+        desactualizados hasta que recuperes la red.
+      </p>
+
     </div>
 
     <ion-router-outlet></ion-router-outlet>
+
     <ion-toast
       [isOpen]="showToast"
       [message]="toastMessage"
       duration="2000"
       position="bottom"
-      (ionDidDismiss)="showToast = false"
-    ></ion-toast>
+      (ionDidDismiss)="showToast = false">
+    </ion-toast>
+
   </ion-content>
+
 </ion-app>
