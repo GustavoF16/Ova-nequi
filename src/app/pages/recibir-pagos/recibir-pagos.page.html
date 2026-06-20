@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Recibir pagos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="receive-payments-page ion-padding">
+  <section class="hero-card" role="region" aria-labelledby="receive-payments-title">
+    <div class="hero-topline">
+      <span class="eyebrow">Módulo interactivo</span>
+      <span class="status-badge" [class.offline]="!isOnline" role="status" aria-live="polite">
+        {{ isOnline ? 'Historial sincronizado localmente' : 'Sin conexión, guardado local activo' }}
+      </span>
+    </div>
+
+    <h2 id="receive-payments-title">Recibir pagos de forma segura</h2>
+    <p class="intro-text">
+      Descubre cómo recibir dinero de manera segura y gestionarlo desde tu cuenta con una actividad de arrastrar y soltar.
+    </p>
+
+    <div class="hero-metrics">
+      <article>
+        <strong>{{ attempts }}</strong>
+        <span>Intentos guardados</span>
+      </article>
+      <article>
+        <strong>{{ correctAttempts }}</strong>
+        <span>Respuestas correctas</span>
+      </article>
+      <article>
+        <strong>1 tarea</strong>
+        <span>Arrastra la opción segura</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-card" role="region" aria-labelledby="guide-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Guía breve</p>
+        <h3 id="guide-title">Qué debes revisar antes de aceptar dinero</h3>
+      </div>
+      <div class="section-chip">Seguridad</div>
+    </div>
+
+    <p class="section-copy">Antes de aceptar o gestionar un pago, confirma el origen, valida el comprobante y mantén el proceso dentro de la app.</p>
+
+    <div class="steps-grid">
+      <article class="step-card" *ngFor="let point of guidePoints; let index = index">
+        <div class="step-number">{{ index + 1 }}</div>
+        <div class="step-copy">
+          <span class="step-label">Paso {{ index + 1 }}</span>
+          <p>{{ point }}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-card challenge-card" role="region" aria-labelledby="challenge-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Reto interactivo</p>
+        <h3 id="challenge-title">Arrastra la opción correcta al cuadro</h3>
+      </div>
+      <div class="section-chip accent">Drag and drop</div>
+    </div>
+
+    <p class="section-copy">Solo una acción protege tu cuenta y confirma la operación. Arrástrala al recuadro de validación.</p>
+
+    <div class="drag-layout">
+      <div class="option-column" aria-label="Opciones arrastrables">
+        <button
+          *ngFor="let option of options"
+          type="button"
+          class="draggable-option"
+          draggable="true"
+          (dragstart)="onDragStart($event, option.id)"
+          (click)="selectedOptionId = option.id"
+          [class.selected]="selectedOptionId === option.id">
+          <span class="option-dot"></span>
+          <span class="option-text">
+            <strong>{{ option.label }}</strong>
+            <small>{{ option.hint }}</small>
+          </span>
+        </button>
+      </div>
+
+      <div class="drop-column">
+        <div
+          class="drop-zone"
+          role="button"
+          tabindex="0"
+          aria-label="Zona para soltar la respuesta correcta"
+          (dragover)="onDragOver($event)"
+          (drop)="onDrop($event)">
+          <div class="drop-icon">⇣</div>
+          <h4>{{ dropMessage }}</h4>
+          <p>Coloca aquí la acción más segura para recibir pagos.</p>
+        </div>
+
+        <ion-button expand="block" class="contrast-btn action-btn" (click)="validarRespuesta()">
+          Validar respuesta
+        </ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="feedback" class="feedback-card" role="status" aria-live="polite">
+      <div class="feedback-icon">✓</div>
+      <div>
+        <p class="feedback-message">{{ feedback }}</p>
+        <p class="feedback-score">Historia guardada con tus intentos recientes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-card history-card" role="region" aria-labelledby="history-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Historial</p>
+        <h3 id="history-title">Tus intentos recientes</h3>
+      </div>
+      <div class="section-chip">Últimos 10</div>
+    </div>
+
+    <div *ngIf="history.length; else emptyHistory" class="history-list">
+      <article class="history-item" *ngFor="let item of history">
+        <div class="history-state" [class.correct]="item.isCorrect">
+          {{ item.isCorrect ? 'Correcto' : 'Incorrecto' }}
+        </div>
+        <div>
+          <strong>{{ item.selectedOption }}</strong>
+          <p>{{ item.savedAt | date:'medium' }}</p>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyHistory>
+      <p class="empty-history">Aún no has guardado intentos. Arrastra una opción y valida para crear el historial.</p>
+    </ng-template>
+  </section>
+
+  <ion-button
+    expand="block"
+    class="contrast-btn back-button"
+    routerLink="/modulos"
+    aria-label="Volver a los módulos educativos">
+    ⬅ Volver a módulos
+  </ion-button>
+</ion-content>

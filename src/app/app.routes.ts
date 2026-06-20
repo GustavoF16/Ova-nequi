@@ -23,6 +23,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/enviar-dinero/enviar-dinero.page').then(m => m.EnviarDineroPage)
   },
   {
+    path: 'recibir-pagos',
+    loadComponent: () => import('./pages/recibir-pagos/recibir-pagos.page').then(m => m.RecibirPagosPage)
+  },
+  {
     path: 'simulaciones',
     loadComponent: () => import('./pages/simulaciones/simulaciones.page').then( m => m.SimulacionesPage)
   },

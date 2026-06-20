@@ -27,6 +27,12 @@ export interface SendMoneyLessonRecord extends SendMoneyLessonAnswers {
   savedAt: string;
 }
 
+export interface ReceivePaymentsAttempt {
+  selectedOption: string;
+  isCorrect: boolean;
+  savedAt: string;
+}
+
 export interface LoginData {
   email: string;
 }
@@ -212,7 +218,7 @@ export class StorageService {
 
   async loadAllModuleProgressForUser(email: string): Promise<UserProgressMap> {
     const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'sendMoney', 'simulation', 'survey', 'certificate'];
+    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'simulation', 'survey', 'certificate'];
     const result: UserProgressMap = {};
 
     for (const key of moduleIds) {
@@ -239,7 +245,7 @@ export class StorageService {
 
   async loadOverallProgressForUser(email: string): Promise<number> {
     const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'sendMoney', 'simulation', 'survey', 'certificate'];
+    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'simulation', 'survey', 'certificate'];
     let sum = 0;
     let foundAny = false;
 
@@ -280,6 +286,30 @@ export class StorageService {
   async loadSendMoneyLesson(): Promise<SendMoneyLessonRecord | null> {
     const value = await this.loadValue('send-money-lesson');
     return value ? JSON.parse(value) as SendMoneyLessonRecord : null;
+  }
+
+  async saveReceivePaymentsAttempt(attempt: ReceivePaymentsAttempt) {
+    const email = await this.getCurrentUserEmail();
+    const key = email ? `receive-payments-history:${email}` : 'receive-payments-history';
+    const history = await this.loadReceivePaymentsHistory();
+    history.unshift(attempt);
+    await this.saveValue(key, JSON.stringify(history.slice(0, 10)));
+  }
+
+  async loadReceivePaymentsHistory(): Promise<ReceivePaymentsAttempt[]> {
+    const email = await this.getCurrentUserEmail();
+    const key = email ? `receive-payments-history:${email}` : 'receive-payments-history';
+    const value = await this.loadValue(key);
+
+    if (!value) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(value) as ReceivePaymentsAttempt[];
+    } catch {
+      return [];
+    }
   }
 
   async saveSimulation(data: SimulationData) {
