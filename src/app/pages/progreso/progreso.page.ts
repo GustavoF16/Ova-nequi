@@ -18,12 +18,15 @@ import { Subscription } from 'rxjs';
   ]
 })
 export class ProgresoPage implements OnInit, OnDestroy {
+
   private networkService = inject(NetworkService);
   private storageService = inject(StorageService);
+
   isOnline = true;
   private networkSubscription!: Subscription;
 
   progreso: number = 0;
+
   moduleProgress: UserProgressMap = {
     modulos: 0,
     sendMoney: 0,
@@ -34,7 +37,15 @@ export class ProgresoPage implements OnInit, OnDestroy {
     certificate: 0
   };
 
-  moduleKeys: Array<keyof UserProgressMap> = ['modulos', 'sendMoney', 'receivePayments', 'payServices', 'simulation', 'survey', 'certificate'];
+  moduleKeys: Array<keyof UserProgressMap> = [
+    'modulos',
+    'sendMoney',
+    'receivePayments',
+    'payServices',
+    'simulation',
+    'survey',
+    'certificate'
+  ];
 
   moduleLabels: Record<string, string> = {
     modulos: 'Módulos educativos',
@@ -53,9 +64,10 @@ export class ProgresoPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.networkSubscription = this.networkService.online$.subscribe(
-      status => this.isOnline = status
-    );
+    this.networkSubscription =
+      this.networkService.online$.subscribe(
+        status => this.isOnline = status
+      );
   }
 
   ngOnDestroy() {
@@ -63,19 +75,31 @@ export class ProgresoPage implements OnInit, OnDestroy {
   }
 
   async cargarProgreso() {
-    this.moduleProgress = await this.storageService.loadAllModuleProgressForCurrentUser();
-    this.progreso = await this.storageService.loadProgress();
+
+    this.moduleProgress =
+      await this.storageService.loadAllModuleProgressForCurrentUser();
+
+    this.progreso =
+      await this.storageService.loadOverallProgressForCurrentUser();
 
     if (this.progreso > 1) {
       this.progreso = 1;
     }
 
     if (this.progreso >= 1) {
-      this.mensaje = '🎉 Has completado todo el curso.';
+
+      this.mensaje =
+        '🎉 Has completado todo el curso.';
+
     } else if (this.progreso >= 0.5) {
-      this.mensaje = '👍 Vas muy bien, sigue así.';
+
+      this.mensaje =
+        '👍 Vas muy bien, sigue así.';
+
     } else {
-      this.mensaje = '🚀 Comienza a aprender con los módulos.';
+
+      this.mensaje =
+        '🚀 Comienza a aprender con los módulos.';
     }
   }
 
@@ -84,4 +108,3 @@ export class ProgresoPage implements OnInit, OnDestroy {
   }
 
 }
-``

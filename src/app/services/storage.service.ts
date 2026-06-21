@@ -252,24 +252,51 @@ export class StorageService {
   }
 
   async loadOverallProgressForUser(email: string): Promise<number> {
-    const progressMap = await this.loadUserProgressMap(email) ?? {};
-    const moduleIds = ['modulos', 'sendMoney', 'receivePayments', 'payServices', 'simulation', 'survey', 'certificate'];
-    let sum = 0;
-    let foundAny = false;
 
-    for (const key of moduleIds) {
-      if (typeof progressMap[key] === 'number') {
-        foundAny = true;
-      }
-      sum += progressMap[key] ?? 0;
+  const progressMap =
+    await this.loadUserProgressMap(email) ?? {};
+
+  /**
+   * NO incluimos "modulos" porque ya es
+   * un promedio de:
+   *
+   * sendMoney
+   * receivePayments
+   * payServices
+   *
+   * Si se incluye aquí se cuenta dos veces.
+   */
+  const moduleIds = [
+    'sendMoney',
+    'receivePayments',
+    'payServices',
+    'simulation',
+    'survey',
+    'certificate'
+  ];
+
+  let sum = 0;
+  let foundAny = false;
+
+  for (const key of moduleIds) {
+
+    if (typeof progressMap[key] === 'number') {
+      foundAny = true;
     }
 
-    if (foundAny) {
-      return moduleIds.length > 0 ? sum / moduleIds.length : 0;
-    }
-
-    return typeof progressMap.overall === 'number' ? progressMap.overall : 0;
+    sum += progressMap[key] ?? 0;
   }
+
+  if (foundAny) {
+    return moduleIds.length > 0
+      ? sum / moduleIds.length
+      : 0;
+  }
+
+  return typeof progressMap.overall === 'number'
+    ? progressMap.overall
+    : 0;
+}
 
   async saveSurvey(answers: SurveyAnswers) {
     await this.saveLocalSurvey(answers);
