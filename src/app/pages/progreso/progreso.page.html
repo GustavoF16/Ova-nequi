@@ -6,8 +6,12 @@
 
 <ion-content class="ion-padding">
   <div class="page-card" aria-labelledby="progress-title">
+
     <h2 id="progress-title">Tu avance en la app</h2>
-    <p class="intro-text">Revisa tu progreso y los pasos siguientes para completar el curso.</p>
+
+    <p class="intro-text">
+      Revisa tu progreso y los pasos siguientes para completar el curso.
+    </p>
 
     <div *ngIf="!isOnline" class="status-note" role="status">
       Estás sin conexión. El progreso mostrado se basa en datos guardados localmente y puede actualizarse cuando recuperes la red.
@@ -24,29 +28,81 @@
       </ion-progress-bar>
 
       <div class="progress-value" aria-atomic="true">
-        {{progreso * 100 | number:'1.0-0'}}%
+        {{ progreso * 100 | number:'1.0-0' }}%
       </div>
     </div>
 
     <ion-list>
+
       <ion-item *ngFor="let key of moduleKeys" lines="full">
+
         <ion-label>
+
           <h3>{{ moduleLabels[key] }}</h3>
-          <p>{{ key === 'modulos' ? 'Aprende los conceptos básicos de Nequi.' : key === 'sendMoney' ? 'Sigue la guía práctica y valida lo aprendido enviando dinero de forma segura.' : key === 'receivePayments' ? 'Practica cómo recibir dinero con una actividad interactiva.' : key === 'payServices' ? 'Resuelve crucigrama y sopa de letras para dominar los pagos de servicios.' : key === 'simulation' ? 'Ejecuta una prueba práctica de envío de dinero.' : key === 'survey' ? 'Comparte tu experiencia para continuar.' : 'Genera tu certificado de cierre.' }}</p>
-          <p class="module-percentage" aria-live="polite">
-            Progreso: {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
+
+          <p>
+            {{
+              key === 'modulos'
+                ? 'Aprende los conceptos básicos de Nequi.'
+                : key === 'sendMoney'
+                ? 'Sigue la guía práctica y valida lo aprendido enviando dinero de forma segura.'
+                : key === 'receivePayments'
+                ? 'Practica cómo recibir dinero con una actividad interactiva.'
+                : key === 'payServices'
+                ? 'Resuelve crucigrama y sopa de letras para dominar los pagos de servicios.'
+                : key === 'simulation'
+                ? 'Ejecuta una prueba práctica de envío de dinero.'
+                : key === 'survey'
+                ? 'Comparte tu experiencia para continuar.'
+                : 'Genera tu certificado de cierre.'
+            }}
           </p>
+
+          <p class="module-percentage" aria-live="polite">
+            Progreso:
+            {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
+          </p>
+
         </ion-label>
 
-        <ion-note slot="end" [color]="getModuleProgress(key) >= 1 ? 'success' : 'warning'">
-          {{ getModuleProgress(key) >= 1 ? 'Completado' : 'En progreso' }}
+        <!-- NO INICIADO -->
+        <ion-note
+          *ngIf="getModuleProgress(key) === 0"
+          slot="end"
+          color="medium">
+
+          No iniciado
+
         </ion-note>
+
+        <!-- EN PROGRESO -->
+        <ion-note
+          *ngIf="getModuleProgress(key) > 0 && getModuleProgress(key) < 1"
+          slot="end"
+          color="warning">
+
+          En progreso
+
+        </ion-note>
+
+        <!-- COMPLETADO -->
+        <ion-note
+          *ngIf="getModuleProgress(key) >= 1"
+          slot="end"
+          color="success">
+
+          Completado
+
+        </ion-note>
+
       </ion-item>
+
     </ion-list>
 
     <div class="status-note" role="status">
       {{ mensaje }}
     </div>
+
   </div>
 
   <ion-button
@@ -54,6 +110,9 @@
     class="contrast-btn back-button"
     routerLink="/home"
     aria-label="Volver al menú principal">
+
     ⬅ Volver al menú
+
   </ion-button>
+
 </ion-content>
