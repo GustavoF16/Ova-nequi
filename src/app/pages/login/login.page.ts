@@ -26,18 +26,23 @@ export class LoginPage {
 
   async cargarLogin() {
     const login = await this.storageService.loadLogin();
+
     if (login) {
       this.email = login.email;
     }
   }
 
   async login() {
-    if (!this.email || !this.password) {
+    const email = this.email.trim().toLowerCase();
+    const password = this.password.trim();
+
+    if (!email || !password) {
       this.mensaje = '⚠️ Ingresa correo y contraseña';
       return;
     }
 
-    const profile = await this.storageService.loadUserProfile(this.email);
+    const profile = await this.storageService.loadUserProfile(email);
+
     if (!profile) {
       this.mensaje = '⚠️ Usuario no encontrado. Regístrate primero.';
       return;
@@ -47,17 +52,18 @@ export class LoginPage {
 
     if (profile.passwordHash && profile.salt) {
       ok = await this.storageService.verifyPassword(
-        this.password,
+        password,
         profile.salt,
         profile.passwordHash
       );
     } else if (profile.password) {
-      if (profile.password === this.password) {
-        const { salt, hash } = await this.storageService.hashPassword(this.password);
+      if (profile.password === password) {
+        const { salt, hash } =
+          await this.storageService.hashPassword(password);
 
         await this.storageService.saveUserProfile({
           ...profile,
-          email: this.email,
+          email,
           passwordHash: hash,
           salt,
           password: undefined
@@ -72,8 +78,10 @@ export class LoginPage {
       return;
     }
 
-    await this.storageService.saveLogin({ email: this.email });
+    await this.storageService.saveLogin({ email });
+
     this.mensaje = '✅ Sesión iniciada';
+
     this.router.navigate(['/home']);
   }
 }
