@@ -233,14 +233,19 @@ ion-content {
   font-weight: 600;
 }
 
-ion-input {
-  --background: #fff;
-  --border-radius: 0.9rem;
+.crossword-item ion-input {
+  width: 100%;
+  min-height: 48px;
+  --background: #ffffff;
+  --color: #0f172a;
+  --placeholder-color: #64748b;
+  --placeholder-opacity: 1;
   --padding-start: 0.8rem;
   --padding-end: 0.8rem;
   --highlight-height: 0;
   border: 1px solid rgba(148, 163, 184, 0.22);
   border-radius: 0.9rem;
+  display: block;
 }
 
 .button-row {
@@ -427,4 +432,25 @@ ion-input {
   .back-button {
     margin-bottom: 5rem;
   }
+  .crossword-native-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 0.9rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 16px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
+}
+
+.crossword-native-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
 }

@@ -76,10 +76,20 @@
     </div>
 
     <div class="crossword-grid">
-      <label *ngFor="let clue of crosswordClues" class="crossword-item">
+      <div *ngFor="let clue of crosswordClues" class="crossword-item">
         <span>{{ clue.clue }}</span>
-        <ion-input [(ngModel)]="crosswordAnswers[clue.key]" [name]="clue.key" placeholder="Escribe aquí"></ion-input>
-      </label>
+
+        <input
+          class="crossword-native-input"
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          [(ngModel)]="crosswordAnswers[clue.key]"
+          [name]="clue.key"
+          [attr.aria-label]="clue.clue"
+          placeholder="Escribe aquí">
+      </div>
     </div>
 
     <div class="button-row">
