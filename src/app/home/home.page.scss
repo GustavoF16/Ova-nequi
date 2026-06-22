@@ -2,27 +2,16 @@
   --background: #f4f6fa;
 }
 
-/* ====================
-   TARJETA DE BIENVENIDA
-==================== */
+/* ==================== TARJETA DE BIENVENIDA ==================== */
 
 .hero-card {
-  background: linear-gradient(
-    135deg,
-    #2563eb,
-    #1d4ed8
-  );
-
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
-
   padding: 1.25rem;
   padding-top: 1rem;
-
   border-radius: 20px;
-
   margin-top: -10px;
   margin-bottom: 1.5rem;
-
   box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
 }
 
@@ -32,71 +21,48 @@
 
 .hero-text h1 {
   margin: 0;
-
   color: white;
-
   font-size: 1.8rem;
-
   font-weight: 700;
 }
 
 .hero-text h2 {
   margin-top: 0.5rem;
-
   margin-bottom: 1rem;
-
   color: rgba(255, 255, 255, 0.9);
-
   font-size: 1rem;
-
   font-weight: 500;
-
   line-height: 1.4;
-
   text-align: center;
 }
 
 .subtitle-line {
   display: block;
-
   text-align: center;
 }
 
 .hero-card p {
   margin: 0;
-
   color: rgba(255, 255, 255, 0.95);
-
   line-height: 1.7;
-
   text-align: center;
 }
 
-/* ====================
-   GRID DE TARJETAS
-==================== */
+/* ==================== GRID DE TARJETAS ==================== */
 
 .cards-grid {
   display: grid;
-
   gap: 1rem;
 }
 
-/* ====================
-   TARJETAS DE MENÚ
-==================== */
+/* ==================== TARJETAS DE MENÚ ==================== */
 
 .feature-card {
   cursor: pointer;
-
   border-radius: 18px;
-
   margin: 0;
-
   overflow: hidden;
-
   transition: all 0.25s ease;
-
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.08),
     0 2px 4px rgba(0, 0, 0, 0.04);
@@ -104,7 +70,6 @@
 
 .feature-card:hover {
   transform: translateY(-4px);
-
   box-shadow:
     0 12px 25px rgba(0, 0, 0, 0.12),
     0 4px 8px rgba(0, 0, 0, 0.06);
@@ -116,39 +81,28 @@
 
 .feature-icon {
   font-size: 2rem;
-
   margin-bottom: 0.5rem;
 }
 
 .feature-card h3 {
   margin: 0;
-
   color: #111827;
-
   font-size: 1.1rem;
-
   font-weight: 700;
 }
 
 .feature-card p {
   margin-top: 0.45rem;
-
   color: #64748b;
-
   font-size: 0.95rem;
 }
 
-/* ====================
-   TARJETA CONSEJO
-==================== */
+/* ==================== TARJETA CONSEJO ==================== */
 
 .help-card {
   margin-top: 1.5rem;
-
   border-radius: 18px;
-
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .help-card h3 {
@@ -157,17 +111,13 @@
 
 .help-card p {
   color: #64748b;
-
   line-height: 1.6;
 }
 
-/* ====================
-   RESPONSIVE
-==================== */
+/* ==================== RESPONSIVE ==================== */
 
 @media (min-width: 768px) {
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-``

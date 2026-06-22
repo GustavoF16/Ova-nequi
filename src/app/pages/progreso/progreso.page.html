@@ -4,9 +4,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding progreso-page">
   <div class="page-card" aria-labelledby="progress-title">
-
     <h2 id="progress-title">Tu avance en la app</h2>
 
     <p class="intro-text">
@@ -18,26 +17,21 @@
     </div>
 
     <div class="progress-group" aria-live="polite">
-      <ion-progress-bar
-        [value]="progreso"
-        role="progressbar"
-        aria-label="Nivel de progreso del curso"
-        aria-valuemin="0"
-        aria-valuemax="1"
-        [attr.aria-valuenow]="progreso">
-      </ion-progress-bar>
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          [style.width.%]="progreso * 100">
+        </div>
+      </div>
 
       <div class="progress-value" aria-atomic="true">
         {{ progreso * 100 | number:'1.0-0' }}%
       </div>
     </div>
 
-    <ion-list>
-
-      <ion-item *ngFor="let key of moduleKeys" lines="full">
-
-        <ion-label>
-
+    <div class="modules-list">
+      <div class="module-card" *ngFor="let key of moduleKeys">
+        <div class="module-info">
           <h3>{{ moduleLabels[key] }}</h3>
 
           <p>
@@ -58,61 +52,43 @@
             }}
           </p>
 
-          <p class="module-percentage" aria-live="polite">
-            Progreso:
-            {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
+          <p class="module-percentage">
+            Progreso: {{ getModuleProgress(key) * 100 | number:'1.0-0' }}%
           </p>
+        </div>
 
-        </ion-label>
-
-        <!-- NO INICIADO -->
-        <ion-note
-          *ngIf="getModuleProgress(key) === 0"
-          slot="end"
-          color="medium">
-
+        <span
+          class="module-status not-started"
+          *ngIf="getModuleProgress(key) === 0">
           No iniciado
+        </span>
 
-        </ion-note>
-
-        <!-- EN PROGRESO -->
-        <ion-note
-          *ngIf="getModuleProgress(key) > 0 && getModuleProgress(key) < 1"
-          slot="end"
-          color="warning">
-
+        <span
+          class="module-status in-progress"
+          *ngIf="getModuleProgress(key) > 0 && getModuleProgress(key) < 1">
           En progreso
+        </span>
 
-        </ion-note>
-
-        <!-- COMPLETADO -->
-        <ion-note
-          *ngIf="getModuleProgress(key) >= 1"
-          slot="end"
-          color="success">
-
+        <span
+          class="module-status completed"
+          *ngIf="getModuleProgress(key) >= 1">
           Completado
-
-        </ion-note>
-
-      </ion-item>
-
-    </ion-list>
+        </span>
+      </div>
+    </div>
 
     <div class="status-note" role="status">
       {{ mensaje }}
     </div>
 
+    <div class="back-button-wrapper">
+      <ion-button
+        expand="block"
+        class="contrast-btn back-button"
+        routerLink="/home"
+        aria-label="Volver al menú principal">
+        ⬅ Volver al menú
+      </ion-button>
+    </div>
   </div>
-
-  <ion-button
-    expand="block"
-    class="contrast-btn back-button"
-    routerLink="/home"
-    aria-label="Volver al menú principal">
-
-    ⬅ Volver al menú
-
-  </ion-button>
-
 </ion-content>

@@ -8,6 +8,7 @@
   <div class="page-card">
     <section aria-labelledby="simulation-title">
       <h2 id="simulation-title">Simular envío de dinero</h2>
+
       <p class="intro-text">
         Prueba el flujo de envío con un número y monto para guardar tu simulación.
       </p>
@@ -17,33 +18,35 @@
       </div>
 
       <form novalidate>
-        <ion-item>
-          <ion-label position="stacked">Número celular</ion-label>
-          <ion-input
+        <div class="input-box">
+          <label for="numero">Número celular</label>
+          <input
+            id="numero"
             [(ngModel)]="numero"
             name="numero"
             placeholder="Número celular"
             inputmode="numeric"
             type="tel"
             aria-label="Número celular"
-            aria-required="true">
-          </ion-input>
-        </ion-item>
+            aria-required="true"
+          />
+        </div>
 
-        <ion-item>
-          <ion-label position="stacked">Monto</ion-label>
-          <ion-input
+        <div class="input-box">
+          <label for="monto">Monto</label>
+          <input
+            id="monto"
             [(ngModel)]="monto"
             name="monto"
             type="number"
             placeholder="Monto"
-            aria-label="Monto a enviar">
-          </ion-input>
-        </ion-item>
+            aria-label="Monto a enviar"
+          />
+        </div>
 
         <div class="button-group">
           <ion-button
-            expand="full"
+            expand="block"
             class="contrast-btn"
             (click)="enviar()"
             aria-label="Enviar simulación de dinero">
@@ -55,14 +58,14 @@
           {{ mensaje }}
         </div>
       </form>
+
+      <ion-button
+        expand="block"
+        class="contrast-btn back-button"
+        routerLink="/home"
+        aria-label="Volver al menú principal">
+        ⬅ Volver al menú
+      </ion-button>
     </section>
   </div>
-
-  <ion-button
-    expand="block"
-    class="contrast-btn back-button"
-    routerLink="/home"
-    aria-label="Volver al menú principal">
-    ⬅ Volver al menú
-  </ion-button>
 </ion-content>

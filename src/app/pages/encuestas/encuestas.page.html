@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding encuesta-page">
   <div class="page-card" role="region" aria-labelledby="survey-title">
     <h2 id="survey-title">Encuesta de uso de Nequi</h2>
 
@@ -20,33 +20,45 @@
       <div class="survey-block" aria-labelledby="pregunta1">
         <h3 id="pregunta1">¿Te pareció fácil usar Nequi?</h3>
 
-        <ion-radio-group [(ngModel)]="respuesta1" name="pregunta1" aria-labelledby="pregunta1">
-          <ion-item>
-            <ion-radio slot="start" value="si"></ion-radio>
-            <ion-label>Sí</ion-label>
-          </ion-item>
+        <label class="survey-option">
+          <input
+            type="radio"
+            name="pregunta1"
+            value="si"
+            [(ngModel)]="respuesta1">
+          <span>Sí</span>
+        </label>
 
-          <ion-item>
-            <ion-radio slot="start" value="no"></ion-radio>
-            <ion-label>No</ion-label>
-          </ion-item>
-        </ion-radio-group>
+        <label class="survey-option">
+          <input
+            type="radio"
+            name="pregunta1"
+            value="no"
+            [(ngModel)]="respuesta1">
+          <span>No</span>
+        </label>
       </div>
 
       <div class="survey-block" aria-labelledby="pregunta2">
         <h3 id="pregunta2">¿Recomendarías esta aplicación?</h3>
 
-        <ion-radio-group [(ngModel)]="respuesta2" name="pregunta2" aria-labelledby="pregunta2">
-          <ion-item>
-            <ion-radio slot="start" value="si"></ion-radio>
-            <ion-label>Sí</ion-label>
-          </ion-item>
+        <label class="survey-option">
+          <input
+            type="radio"
+            name="pregunta2"
+            value="si"
+            [(ngModel)]="respuesta2">
+          <span>Sí</span>
+        </label>
 
-          <ion-item>
-            <ion-radio slot="start" value="no"></ion-radio>
-            <ion-label>No</ion-label>
-          </ion-item>
-        </ion-radio-group>
+        <label class="survey-option">
+          <input
+            type="radio"
+            name="pregunta2"
+            value="no"
+            [(ngModel)]="respuesta2">
+          <span>No</span>
+        </label>
       </div>
 
       <div class="button-group">
@@ -62,14 +74,14 @@
       <div *ngIf="mensaje" class="status-note" role="status">
         {{ mensaje }}
       </div>
+
+      <ion-button
+        expand="block"
+        class="contrast-btn back-button"
+        routerLink="/home"
+        aria-label="Volver al menú principal">
+        ⬅ Volver al menú
+      </ion-button>
     </form>
   </div>
-
-  <ion-button
-    expand="block"
-    class="contrast-btn back-button"
-    routerLink="/home"
-    aria-label="Volver al menú principal">
-    ⬅ Volver al menú
-  </ion-button>
 </ion-content>

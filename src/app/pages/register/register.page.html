@@ -11,99 +11,92 @@
     <form (ngSubmit)="register()" aria-label="Formulario de registro" novalidate>
 
       <!-- Nombre -->
-      <ion-item>
-        <ion-label position="stacked">Nombre</ion-label>
-        <ion-input
+      <div class="form-field">
+        <label for="nombre">Nombre</label>
+        <input
+          id="nombre"
           [(ngModel)]="nombre"
           name="nombre"
           type="text"
           placeholder="Ingresa tu nombre"
           aria-label="Nombre">
-        </ion-input>
-      </ion-item>
+      </div>
 
       <!-- Apellido -->
-      <ion-item>
-        <ion-label position="stacked">Apellido</ion-label>
-        <ion-input
+      <div class="form-field">
+        <label for="apellido">Apellido</label>
+        <input
+          id="apellido"
           [(ngModel)]="apellido"
           name="apellido"
           type="text"
           placeholder="Ingresa tu apellido"
           aria-label="Apellido">
-        </ion-input>
-      </ion-item>
+      </div>
 
       <!-- Cédula -->
-      <ion-item>
-        <ion-label position="stacked">Cédula</ion-label>
-        <ion-input
+      <div class="form-field">
+        <label for="cedula">Cédula</label>
+        <input
+          id="cedula"
           [(ngModel)]="cedula"
           name="cedula"
           type="text"
           inputmode="numeric"
           placeholder="Ingresa tu cédula"
           aria-label="Cédula">
-        </ion-input>
-      </ion-item>
+      </div>
 
       <!-- Correo -->
-      <ion-item>
-        <ion-label position="stacked">Correo electrónico</ion-label>
-        <ion-input
+      <div class="form-field">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
           [(ngModel)]="email"
           name="email"
           type="email"
           placeholder="name@example.com"
           aria-label="Correo electrónico">
-        </ion-input>
-      </ion-item>
+      </div>
 
       <!-- Contraseña -->
-      <ion-item>
-        <ion-label position="stacked">Contraseña</ion-label>
-        <ion-input
+      <div class="form-field">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
           [(ngModel)]="password"
           name="password"
           type="password"
           placeholder="Crea una contraseña"
           aria-label="Contraseña">
-        </ion-input>
-      </ion-item>
+      </div>
 
       <!-- Modo oscuro -->
-      <ion-item>
-        <ion-label>Modo oscuro</ion-label>
-        <ion-toggle
-          [(ngModel)]="modoOscuro"
-          name="modoOscuro"
-          aria-label="Activar modo oscuro">
-        </ion-toggle>
-      </ion-item>
+      <div class="form-field checkbox-field">
+        <label>
+          <input
+            type="checkbox"
+            [(ngModel)]="modoOscuro"
+            name="modoOscuro">
+          Modo oscuro
+        </label>
+      </div>
 
-      <!-- Tamaño de texto -->
-      <ion-item>
-        <ion-label position="stacked">Tamaño de texto</ion-label>
+      <!-- Tamaño texto -->
+      <div class="form-field">
+        <label for="tamanoTexto">Tamaño de texto</label>
 
-        <ion-segment
+        <select
+          id="tamanoTexto"
           [(ngModel)]="tamanoTexto"
-          name="tamanoTexto"
-          aria-label="Tamaño de texto">
+          name="tamanoTexto">
 
-          <ion-segment-button value="pequeno">
-            Pequeño
-          </ion-segment-button>
+          <option value="pequeno">Pequeño</option>
+          <option value="medio">Medio</option>
+          <option value="grande">Grande</option>
 
-          <ion-segment-button value="medio">
-            Medio
-          </ion-segment-button>
-
-          <ion-segment-button value="grande">
-            Grande
-          </ion-segment-button>
-
-        </ion-segment>
-      </ion-item>
+        </select>
+      </div>
 
       <ion-button
         expand="full"
