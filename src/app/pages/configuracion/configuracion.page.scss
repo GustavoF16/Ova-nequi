@@ -19,6 +19,29 @@ ion-content {
   color: var(--ion-color-medium);
 }
 
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 0.95rem;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  margin-bottom: 0.85rem;
+}
+
+.setting-row strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+.setting-row p {
+  margin: 0.25rem 0 0;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
 .segment-block {
   margin-top: 1.2rem;
 }
@@ -28,12 +51,6 @@ ion-content {
   margin-bottom: 0.5rem;
   color: var(--ion-color-dark);
   font-weight: 600;
-}
-
-ion-item {
-  --border-radius: 0.95rem;
-  --background: #f8fafc;
-  margin-bottom: 0.85rem;
 }
 
 ion-segment {
@@ -46,7 +63,6 @@ ion-segment {
   margin-top: 1rem;
 }
 
-/* MISMA CORRECCIÓN USADA EN LOS DEMÁS MÓDULOS */
 .back-button {
   margin-top: 1rem;
   margin-bottom: 4rem;
@@ -55,6 +71,10 @@ ion-segment {
 @media (max-width: 480px) {
   .page-card {
     padding: 1.2rem;
+  }
+
+  .setting-row {
+    align-items: flex-start;
   }
 
   .back-button {

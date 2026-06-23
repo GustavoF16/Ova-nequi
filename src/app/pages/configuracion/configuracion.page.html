@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding configuracion-page">
   <div class="page-card">
     <h2>Opciones de accesibilidad</h2>
 
@@ -12,14 +12,18 @@
       Ajusta la apariencia de la app para leer mejor y navegar con más comodidad.
     </p>
 
-    <ion-item>
-      <ion-label>Modo oscuro</ion-label>
+    <div class="setting-row">
+      <div>
+        <strong>Modo oscuro</strong>
+        <p>Cambia el color de toda la aplicación.</p>
+      </div>
+
       <ion-toggle
         [(ngModel)]="modoOscuro"
         (ionChange)="cambiarModo()"
         aria-label="Activar modo oscuro">
       </ion-toggle>
-    </ion-item>
+    </div>
 
     <div class="segment-block" aria-labelledby="font-size-label">
       <div id="font-size-label" class="segment-label">

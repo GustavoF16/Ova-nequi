@@ -21,7 +21,7 @@
 
 .hero-text h1 {
   margin: 0;
-  color: white;
+  color: white !important;
   font-size: 1.8rem;
   font-weight: 700;
 }
@@ -29,7 +29,7 @@
 .hero-text h2 {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9) !important;
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.4;
@@ -43,7 +43,7 @@
 
 .hero-card p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.95) !important;
   line-height: 1.7;
   text-align: center;
 }
@@ -52,16 +52,23 @@
 
 .cards-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
 }
 
 /* ==================== TARJETAS DE MENÚ ==================== */
 
 .feature-card {
+  display: block;
+  width: 100%;
+  min-height: 135px;
   cursor: pointer;
   border-radius: 18px;
   margin: 0;
   overflow: hidden;
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e2e8f0;
   transition: all 0.25s ease;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.08),
@@ -86,31 +93,41 @@
 
 .feature-card h3 {
   margin: 0;
-  color: #111827;
+  color: #111827 !important;
   font-size: 1.1rem;
   font-weight: 700;
 }
 
 .feature-card p {
   margin-top: 0.45rem;
-  color: #64748b;
+  color: #64748b !important;
   font-size: 0.95rem;
 }
 
 /* ==================== TARJETA CONSEJO ==================== */
 
 .help-card {
+  width: 100%;
   margin-top: 1.5rem;
+  margin-bottom: 2rem;
   border-radius: 18px;
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e2e8f0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.help-card ion-card-content {
+  padding: 1.25rem;
 }
 
 .help-card h3 {
   margin-top: 0;
+  color: #111827 !important;
 }
 
 .help-card p {
-  color: #64748b;
+  color: #64748b !important;
   line-height: 1.6;
 }
 
@@ -119,5 +136,19 @@
 @media (min-width: 768px) {
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    min-height: 125px;
+  }
+
+  .hero-card {
+    margin-top: 0;
   }
 }

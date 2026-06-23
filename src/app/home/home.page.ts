@@ -9,10 +9,12 @@ import { NetworkService } from '../services/network.service';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'], // <-- ESTA ES LA CORRECCIÓN
   standalone: true,
   imports: [IonicModule, CommonModule, RouterModule]
 })
 export class HomePage implements OnInit, OnDestroy {
+
   private router = inject(Router);
   private networkService = inject(NetworkService);
   private storageService = inject(StorageService);
@@ -37,40 +39,74 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async cargarBienvenida() {
+
     const login = await this.storageService.loadLogin();
 
     if (login) {
-      this.bienvenida = `Bienvenido de nuevo, ${login.email}`;
-      const settings = await this.storageService.loadSettingsForUser(login.email);
+
+      this.bienvenida =
+        `Bienvenido de nuevo, ${login.email}`;
+
+      const settings =
+        await this.storageService.loadSettingsForUser(
+          login.email
+        );
+
       if (settings) {
         this.aplicarConfiguracion(settings);
       }
+
       return;
     }
 
-    this.bienvenida = 'Bienvenido a OVA NEQUI';
+    this.bienvenida =
+      'Bienvenido a OVA NEQUI';
   }
 
   async logout() {
+
     await this.storageService.logout();
+
     this.router.navigate(['/login']);
   }
 
-  private aplicarConfiguracion(settings: AppSettings) {
+  private aplicarConfiguracion(
+    settings: AppSettings
+  ) {
+
     if (settings.modoOscuro) {
-      document.body.style.backgroundColor = '#121212';
-      document.body.style.color = '#f5f5f5';
+
+      document.body.style.backgroundColor =
+        '#121212';
+
+      document.body.style.color =
+        '#f5f5f5';
+
     } else {
-      document.body.style.backgroundColor = '#ffffff';
-      document.body.style.color = '#000000';
+
+      document.body.style.backgroundColor =
+        '#ffffff';
+
+      document.body.style.color =
+        '#000000';
     }
 
     if (settings.tamanoTexto === 'pequeno') {
-      document.body.style.fontSize = '14px';
-    } else if (settings.tamanoTexto === 'medio') {
-      document.body.style.fontSize = '16px';
+
+      document.body.style.fontSize =
+        '14px';
+
+    } else if (
+      settings.tamanoTexto === 'medio'
+    ) {
+
+      document.body.style.fontSize =
+        '16px';
+
     } else {
-      document.body.style.fontSize = '20px';
+
+      document.body.style.fontSize =
+        '20px';
     }
   }
 }
