@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { StorageService } from '../../services/storage.service';
 import { NetworkService } from '../../services/network.service';
 
@@ -327,10 +329,41 @@ export class CertificadosPage implements OnInit, OnDestroy {
       { align: 'right' }
     );
 
-    doc.save('certificado-nequi.pdf');
+    const fileName = 'certificado-nequi.pdf';
 
-    this.mensaje =
-      '📄 PDF descargado correctamente';
+    if (Capacitor.isNativePlatform()) {
+
+      try {
+
+        const base64 =
+          doc.output('datauristring').split(',')[1];
+
+        const result = await Filesystem.writeFile({
+          path: fileName,
+          data: base64,
+          directory: Directory.Documents
+        });
+
+        console.log('PDF RESULT:', result);
+
+        this.mensaje =
+          '📄 PDF guardado correctamente en Documentos';
+
+      } catch (error) {
+
+        console.error('ERROR PDF:', error);
+
+        this.mensaje =
+          '❌ Error guardando PDF';
+      }
+
+    } else {
+
+      doc.save(fileName);
+
+      this.mensaje =
+        '📄 PDF descargado correctamente';
+    }
   }
 
 }
