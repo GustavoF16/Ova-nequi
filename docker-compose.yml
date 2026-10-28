@@ -1,0 +1,13 @@
+services:
+  ova-nequi:
+    build: .
+    container_name: ova-nequi-app
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  nginx-helper:
+    image: nginx:alpine
+    container_name: ova-nequi-helper
+    ports:
+      - "8081:80"
