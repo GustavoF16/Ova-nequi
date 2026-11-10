@@ -1,105 +1,474 @@
-# Ova-nequi
+# OVA Nequi
 
-Aplicación híbrida Ionic/Angular para el proyecto Ova Nequi.
+## Descripción General
 
-## Resumen
+OVA Nequi es un Objeto Virtual de Aprendizaje (OVA) accesible, interactivo y multimedia diseñado para facilitar el aprendizaje y uso autónomo de la aplicación financiera Nequi por parte de personas adultas mayores con discapacidad auditiva.
 
-Esta aplicación implementa:
+El proyecto fue concebido como una herramienta de inclusión digital y financiera que busca reducir barreras tecnológicas mediante actividades prácticas, recursos visuales, simulaciones, contenido accesible y mecanismos de seguimiento académico.
 
-- Registro y login local con persistencia en `localStorage` (web) o SQLite (nativo).
-- Logout y sesión con expiración automática (24h).
-- Hashing de contraseñas cliente mediante PBKDF2 + SHA-256.
-- Progreso por usuario y por módulo.
-- Cola de sincronización offline para encuestas, simulaciones y certificados.
-- PWA con service worker y manifiesto web.
-- Generación de certificados/PDF.
+Aunque el público objetivo principal corresponde a personas adultas mayores con discapacidad auditiva, la plataforma puede ser utilizada por cualquier persona interesada en aprender el uso seguro de Nequi a través de una experiencia guiada y accesible.
 
-## Estado actual
+---
 
-### Implementado
+# Objetivo General
 
-- Persistencia local unificada: `StorageService` abstrae `localStorage` en web y SQLite en nativo.
-- Login/logout: `StorageService` guarda sesión y expira automáticamente tras 24 horas.
-- Hashing de contraseñas: `hashPassword()` y `verifyPassword()` usan Web Crypto PBKDF2.
-- Migración de contraseñas legadas: si un usuario existente tiene contraseña en texto plano, se migra al primer login exitoso.
-- Progreso por módulo: `saveModuleProgressForCurrentUser()` y `loadAllModuleProgressForCurrentUser()`.
-- Botón de logout en el header global.
-- PWA: `@angular/service-worker`, `ngsw-config.json`, y `manifest.webmanifest`.
+Diseñar e implementar un Objeto Virtual de Aprendizaje accesible, interactivo y multimedia que facilite a la población adulta mayor con discapacidad auditiva el aprendizaje y uso autónomo de la aplicación financiera Nequi mediante recursos visuales, actividades prácticas, simulaciones y mecanismos de evaluación adaptados a sus necesidades de accesibilidad.
 
-### Pendiente / por mejorar
+---
 
-- Integración nativa de almacenamiento seguro en móvil: el plugin aún no se instaló en este entorno porque el paquete npm no estaba disponible.
-- Autenticación server-side y gestión de tokens remotos.
-- Pruebas E2E completas.
-- Validación de contraseñas (requisitos de fuerza, confirmación, recuperación).
-- Implementación de subtítulos VTT completa.
+# Público Objetivo
 
-## Archivos clave
+## Público Principal
 
-- `src/app/services/storage.service.ts`
-- `src/app/pages/register/register.page.ts`
-- `src/app/pages/login/login.page.ts`
-- `src/app/app.component.ts`
-- `docs/implementation-gap-report.md`
-- `docs/testing-instructions.md`
+Personas adultas mayores con discapacidad auditiva interesadas en aprender el uso de Nequi de manera autónoma.
 
-## Cómo probar
+## Público Secundario
 
-### Web
+La plataforma también puede ser utilizada por:
 
-1. Instalar dependencias:
+- Usuarios generales de Nequi.
+- Personas interesadas en educación financiera digital.
+- Instituciones educativas.
+- Centros de apoyo a población con discapacidad.
+- Familiares y cuidadores.
+
+
+
+# Funcionalidades Principales
+
+## Gestión de Usuarios
+
+- Registro.
+- Login.
+- Logout.
+- Expiración automática de sesión.
+- Persistencia de sesión.
+
+## Seguridad
+
+- Hashing PBKDF2.
+- SHA-256.
+- Salt Aleatorio.
+- Migración de contraseñas heredadas.
+
+## Configuración
+
+- Modo oscuro.
+- Ajuste de tamaño de texto.
+- Preferencias persistentes.
+
+## Formación
+
+- Enviar Dinero.
+- Recibir Pagos.
+- Pagar Servicios.
+- Simulación práctica.
+- Encuesta.
+- Seguimiento de progreso.
+- Certificados PDF.
+
+## Persistencia
+
+- LocalStorage.
+- SQLite.
+- Arquitectura preparada para Secure Storage.
+
+## Offline First
+
+- Cola de sincronización.
+- Persistencia local.
+- Recuperación tras reconexión.
+
+## Plataformas
+
+- Web.
+- Android.
+- Docker.
+
+---
+
+# Tecnologías
+
+## Frontend
+
+- Angular 20
+- Ionic 8
+- TypeScript 5.9
+- RxJS
+
+## Móvil
+
+- Capacitor 8
+- Android
+
+## Persistencia
+
+- SQLite
+- LocalStorage
+
+## Seguridad
+
+- PBKDF2
+- SHA-256
+- Web Crypto API
+
+## Infraestructura
+
+- Docker
+- Docker Compose
+- Nginx
+
+## Testing
+
+- Jasmine
+- Karma
+- Angular TestBed
+
+---
+
+# Inclusión y Accesibilidad
+
+OVA Nequi incorpora mecanismos de accesibilidad orientados principalmente a personas adultas mayores con discapacidad auditiva.
+
+Características implementadas:
+
+- Subtítulos VTT.
+- Ajuste de tamaño de texto.
+- Modo oscuro.
+- Alto contraste.
+- Etiquetas ARIA.
+- Skip Links.
+- Diseño responsive.
+- Navegación accesible.
+
+Estos elementos buscan reducir la dependencia de contenido exclusivamente auditivo durante el aprendizaje.
+
+
+
+# Arquitectura General
+
+```text
+Usuario
+    │
+    ▼
+Angular + Ionic
+    │
+    ▼
+StorageService
+    │
+    ├── LocalStorage
+    ├── SQLite
+    └── Secure Storage (Preparado)
+    │
+    ▼
+Offline Queue
+    │
+    ▼
+ApiService
+    │
+    ▼
+Backend (Pendiente)
+```
+
+---
+
+# Documentación del Proyecto
+
+Toda la documentación técnica se encuentra en:
+
+```text
+docs/
+```
+
+## Punto de Inicio
+
+```text
+docs/00-documentation-index.md
+```
+
+## Resumen Ejecutivo
+
+```text
+docs/01-executive-summary.md
+```
+
+## Contexto del Negocio
+
+```text
+docs/02-business-context.md
+```
+
+## Requisitos Funcionales
+
+```text
+docs/03-functional-requirements.md
+```
+
+## Arquitectura
+
+```text
+docs/04-system-architecture.md
+```
+
+## Inventario del Repositorio
+
+```text
+docs/05-repository-inventory.md
+```
+
+## Arquitectura Frontend
+
+```text
+docs/06-frontend-architecture.md
+```
+
+## Arquitectura de Servicios
+
+```text
+docs/07-services-architecture.md
+```
+
+## Persistencia
+
+```text
+docs/08-storage-and-database.md
+```
+
+## Offline First
+
+```text
+docs/09-offline-first-strategy.md
+```
+
+## Seguridad
+
+```text
+docs/10-security-architecture.md
+```
+
+## Módulos Funcionales
+
+```text
+docs/11-modules-detailed.md
+```
+
+## Flujos de Usuario
+
+```text
+docs/12-user-flows.md
+```
+
+## PWA
+
+```text
+docs/13-pwa-architecture.md
+```
+
+## Android
+
+```text
+docs/14-android-platform.md
+```
+
+## Docker
+
+```text
+docs/15-docker-deployment.md
+```
+
+## Testing
+
+```text
+docs/16-testing-strategy.md
+```
+
+## Deuda Técnica
+
+```text
+docs/17-known-issues-and-tech-debt.md
+```
+
+## Roadmap
+
+```text
+docs/18-roadmap.md
+```
+
+## Historial de Cambios
+
+```text
+docs/19-change-history.md
+```
+
+## Desarrollo
+
+```text
+docs/20-development-guide.md
+```
+
+## API
+
+```text
+docs/21-api-reference.md
+```
+
+## Referencia de Persistencia
+
+```text
+docs/22-storage-reference.md
+```
+
+## Mantenimiento
+
+```text
+docs/23-maintenance-guide.md
+```
+
+## CI/CD
+
+```text
+docs/24-ci-cd-strategy.md
+```
+
+## Auditoría
+
+```text
+docs/25-audit-report.md
+```
+
+---
+
+# Ejecución Local
+
+## Instalar Dependencias
 
 ```bash
 npm install
 ```
 
-2. Ejecutar en modo desarrollo:
+## Desarrollo
 
 ```bash
 npm run start
 ```
 
-3. Abrir `http://localhost:4200`.
-
-4. Probar los flujos de registro/login, logout y progreso por módulo.
-
-### Producción web
+o
 
 ```bash
-npx ng build --configuration production
+ng serve
 ```
 
-### Android
+---
 
-1. Construir la app web en producción:
+# Producción
 
 ```bash
-npx ng build --configuration production
+ng build --configuration production
 ```
 
-2. Copiar assets a Capacitor:
+---
+
+# Docker
+
+## Build
 
 ```bash
+docker build -t ova-nequi .
+```
+
+## Ejecución
+
+```bash
+docker compose up -d
+```
+
+Acceso:
+
+```text
+http://localhost:8080
+```
+
+---
+
+# Android
+
+```bash
+ng build --configuration production
 npx cap copy android
-```
-
-3. Abrir en Android Studio:
-
-```bash
+npx cap sync
 npx cap open android
 ```
 
-4. Ejecutar en emulador o dispositivo.
+---
 
-## Nota sobre secure storage
+# Estado Actual
 
-El código ya incluye preparación para usar un plugin de almacenamiento seguro en móvil, pero el paquete npm no se consiguió instalar en este entorno. Si deseas finalizarlo, instala un plugin compatible y ejecuta `npx cap sync`.
+## Implementado
 
-## Commits recientes
+✅ Registro
 
-- `feat: add logout UI, session expiry, client PBKDF2 hashing; prepare secure-storage integration`
-- `chore: commit remaining docs change to ensure branch is complete`
+✅ Login
 
-## Git remoto
+✅ Configuración
 
-Se subió la rama `feature/persistence-unificada` al remoto `https://github.com/GustavoF16/Ova-nequi`.
+✅ Accesibilidad
+
+✅ Módulos Educativos
+
+✅ Simulación
+
+✅ Encuesta
+
+✅ Progreso
+
+✅ Certificados PDF
+
+✅ Android
+
+✅ Docker
+
+✅ Offline First
+
+✅ Accesibilidad orientada a personas con discapacidad auditiva.
+
+✅ Subtítulos VTT.
+
+✅ Navegación accesible.
+
+✅ Ajuste de tamaño de texto.
+
+✅ Modo oscuro.
+
+
+
+## Pendiente
+
+⚠️ Backend real
+
+⚠️ Secure Storage operativo
+
+⚠️ PWA completamente habilitada
+
+⚠️ CI/CD
+
+⚠️ SonarQube
+
+⚠️ Pruebas E2E
+
+---
+
+# Autor
+
+**Gustavo Adolfo Forero Forero**
+
+Politécnico Grancolombiano
+
+Proyecto Académico OVA Nequi
+
+---
+
+# Rama de Referencia
+
+```text
+feature/entrega-semana3-docker
+```
