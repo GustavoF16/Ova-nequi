@@ -19,7 +19,10 @@
           name="nombre"
           type="text"
           placeholder="Ingresa tu nombre"
-          aria-label="Nombre">
+          aria-label="Nombre"
+          autocomplete="given-name"
+          required
+          aria-required="true">
       </div>
 
       <!-- Apellido -->
@@ -31,7 +34,10 @@
           name="apellido"
           type="text"
           placeholder="Ingresa tu apellido"
-          aria-label="Apellido">
+          aria-label="Apellido"
+          autocomplete="family-name"
+          required
+          aria-required="true">
       </div>
 
       <!-- Cédula -->
@@ -44,7 +50,10 @@
           type="text"
           inputmode="numeric"
           placeholder="Ingresa tu cédula"
-          aria-label="Cédula">
+          aria-label="Cédula"
+          autocomplete="off"
+          required
+          aria-required="true">
       </div>
 
       <!-- Correo -->
@@ -56,7 +65,10 @@
           name="email"
           type="email"
           placeholder="name@example.com"
-          aria-label="Correo electrónico">
+          aria-label="Correo electrónico"
+          autocomplete="email"
+          required
+          aria-required="true">
       </div>
 
       <!-- Contraseña -->
@@ -68,7 +80,10 @@
           name="password"
           type="password"
           placeholder="Crea una contraseña"
-          aria-label="Contraseña">
+          aria-label="Contraseña"
+          autocomplete="new-password"
+          required
+          aria-required="true">
       </div>
 
       <div class="form-field">
@@ -80,7 +95,9 @@
           type="password"
           autocomplete="new-password"
           placeholder="Repite tu contraseña"
-          aria-label="Confirmar contraseña">
+          aria-label="Confirmar contraseña"
+          required
+          aria-required="true">
       </div>
 
       <!-- Modo oscuro -->

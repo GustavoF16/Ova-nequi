@@ -101,7 +101,9 @@
           draggable="true"
           (dragstart)="onDragStart($event, option.id)"
           (click)="selectedOptionId = option.id"
-          [class.selected]="selectedOptionId === option.id">
+          [class.selected]="selectedOptionId === option.id"
+          [attr.aria-pressed]="selectedOptionId === option.id"
+          [attr.aria-label]="'Seleccionar opción: ' + option.label">
           <span class="option-dot"></span>
           <span class="option-text">
             <strong>{{ option.label }}</strong>
@@ -116,11 +118,14 @@
           role="button"
           tabindex="0"
           aria-label="Zona para soltar la respuesta correcta"
+          aria-describedby="drop-zone-help"
           (dragover)="onDragOver($event)"
-          (drop)="onDrop($event)">
+          (drop)="onDrop($event)"
+          (keydown.enter)="validarRespuesta()"
+          (keydown.space)="validarRespuesta()">
           <div class="drop-icon">⇣</div>
-          <h4>{{ dropMessage }}</h4>
-          <p>Coloca aquí la acción más segura para recibir pagos y confirmar que el dinero sí corresponde.</p>
+          <h4 aria-live="polite">{{ dropMessage }}</h4>
+          <p id="drop-zone-help">Coloca aquí la acción más segura para recibir pagos y confirmar que el dinero sí corresponde.</p>
         </div>
 
         <ion-button expand="block" class="contrast-btn action-btn" (click)="validarRespuesta()">

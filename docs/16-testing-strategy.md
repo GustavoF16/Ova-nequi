@@ -256,6 +256,46 @@ src/test.ts
 
 \## Inicialización
 
+\---
+
+\# Validación de accesibilidad
+
+La fase de accesibilidad se valida junto con las pruebas funcionales y de
+compilación. Los criterios incorporados son:
+
+- Documento HTML con idioma español (`lang="es"`), título descriptivo y
+  viewport que permite ampliar el contenido.
+- Enlace de salto al contenido principal y regiones semánticas en las pantallas
+  principales.
+- Campos de login y registro con etiquetas, `required`, `aria-required` y
+  valores `autocomplete` apropiados.
+- Foco visible consistente para teclado y objetivos táctiles de tamaño
+  suficiente.
+- Alternativa de teclado para el reto de arrastrar y soltar.
+- Preferencia de tamaño de texto, modo oscuro y reducción de movimiento.
+
+La verificación manual en navegador debe comprobar:
+
+1. Recorrido completo con `Tab`, `Shift+Tab`, `Enter` y `Espacio`.
+2. Zoom del navegador sin pérdida de contenido ni desplazamiento horizontal
+   innecesario.
+3. Contraste y legibilidad en modo claro, modo oscuro y tamaños de texto
+   disponibles.
+4. Mensajes de error y éxito comprensibles sin depender únicamente del color.
+
+Resultado de la fase actual:
+
+- Tests unitarios: 14/14 exitosos.
+- Lint: correcto.
+- Build de producción: correcto.
+- Contenedor Docker: `HTTP 200`.
+- Revisión de la página de login en navegador: estructura semántica y nombres
+  accesibles verificados.
+
+La auditoría automatizada WCAG/axe y la revisión visual completa en Android
+quedan como actividad posterior; no se deben considerar sustitutos de las
+pruebas funcionales.
+
 
 
 ```typescript
@@ -1153,4 +1193,3 @@ OVA Nequi posee una infraestructura de pruebas configurada correctamente mediant
 
 
 Aunque actualmente la cobertura funcional es básica, la arquitectura está preparada para evolucionar hacia pruebas unitarias completas, integración continua y pruebas End To End.
-

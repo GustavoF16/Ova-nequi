@@ -6,21 +6,22 @@
 
 <ion-content class="ion-padding configuracion-page">
   <div class="page-card">
-    <h2>Opciones de accesibilidad</h2>
+    <h2 id="accessibility-settings-title">Opciones de accesibilidad</h2>
 
     <p class="intro-text">
       Ajusta la apariencia de la app para leer mejor y navegar con más comodidad.
     </p>
 
-    <div class="setting-row">
+    <div class="setting-row" role="group" aria-labelledby="dark-mode-label">
       <div>
-        <strong>Modo oscuro</strong>
+        <strong id="dark-mode-label">Modo oscuro</strong>
         <p>Cambia el color de toda la aplicación.</p>
       </div>
 
       <ion-toggle
         [(ngModel)]="modoOscuro"
         (ionChange)="cambiarModo()"
+        [attr.aria-checked]="modoOscuro"
         aria-label="Activar modo oscuro">
       </ion-toggle>
     </div>
@@ -30,9 +31,15 @@
         Tamaño de texto
       </div>
 
+      <p id="font-size-help" class="sr-only">
+        Elige un tamaño cómodo para leer el contenido.
+      </p>
+
       <ion-segment
         [(ngModel)]="tamanoTexto"
         (ionChange)="cambiarTexto()"
+        aria-labelledby="font-size-label"
+        aria-describedby="font-size-help"
         aria-label="Seleccionar tamaño de texto">
 
         <ion-segment-button value="pequeno">

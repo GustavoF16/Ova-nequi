@@ -125,13 +125,19 @@
           type="button"
           class="word-chip"
           [class.found]="word.found"
+          [attr.aria-pressed]="word.found"
+          [attr.aria-label]="'Palabra ' + word.word + (word.found ? ', encontrada' : ', no encontrada')"
           (click)="toggleWord(word)">
           {{ word.word }}
         </button>
       </div>
 
       <div class="word-grid" aria-label="Sopa de letras">
-        <button *ngFor="let row of wordSearchGrid; let rowIndex = index" type="button" class="grid-row">
+        <button
+          *ngFor="let row of wordSearchGrid; let rowIndex = index"
+          type="button"
+          class="grid-row"
+          [attr.aria-label]="'Fila ' + (rowIndex + 1) + ' de la sopa de letras'">
           <span *ngFor="let letter of row; let columnIndex = index" class="grid-cell">{{ letter }}</span>
         </button>
       </div>

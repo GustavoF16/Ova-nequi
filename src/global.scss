@@ -44,6 +44,13 @@
   --ion-color-light: #f8fafc;
   --ion-color-medium: #64748b;
   --ion-border-radius: 18px;
+  --app-background: #f4f7fb;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f8fafc;
+  --app-text: #111827;
+  --app-text-muted: #475569;
+  --app-border: #cbd5e1;
+  --app-focus: #0b5ed7;
 }
 
 html {
@@ -52,20 +59,21 @@ html {
 
 body {
   min-height: 100vh;
-  background: #f4f7fb !important;
-  color: #111827 !important;
+  background: var(--app-background) !important;
+  color: var(--app-text) !important;
   font-family: var(--ion-font-family);
   line-height: 1.6;
+  text-rendering: optimizeLegibility;
 }
 
 ion-app,
 ion-content {
-  background: #f4f7fb !important;
-  color: #111827 !important;
+  background: var(--app-background) !important;
+  color: var(--app-text) !important;
 }
 
 ion-content {
-  --background: #f4f7fb !important;
+  --background: var(--app-background) !important;
 }
 
 ion-chip {
@@ -99,7 +107,7 @@ h1,
 h2,
 h3,
 h4 {
-  color: #111827 !important;
+  color: var(--app-text) !important;
   font-weight: 700;
 }
 
@@ -116,7 +124,7 @@ p,
 span,
 label,
 strong {
-  color: #111827;
+  color: var(--app-text);
 }
 
 a {
@@ -126,14 +134,37 @@ a {
 ion-button {
   min-height: 44px;
   font-weight: 600;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
 }
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
 ion-button:focus-visible,
 ion-toggle:focus-visible,
 ion-input:focus-visible,
-ion-segment-button:focus-visible {
-  outline: 3px solid var(--ion-color-primary);
+ion-segment-button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--app-focus);
   outline-offset: 3px;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 /* Skip link for keyboard users */
@@ -162,13 +193,13 @@ ion-segment-button:focus-visible {
 
 /* Tarjetas generales sin afectar tarjetas del menú principal */
 .page-card {
-  background: #ffffff !important;
-  color: #111827 !important;
+  background: var(--app-surface) !important;
+  color: var(--app-text) !important;
   border-radius: var(--ion-border-radius) !important;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08) !important;
   padding: 1.5rem;
   margin: 1rem 0;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--app-border);
 }
 
 ion-card {
@@ -183,8 +214,8 @@ ion-card {
 }
 
 .status-note {
-  color: #111827 !important;
-  background: #f8fafc !important;
+  color: var(--app-text) !important;
+  background: var(--app-surface-muted) !important;
   border-left: 4px solid var(--ion-color-primary);
   padding: 0.85rem 1rem;
   border-radius: 0.75rem;
@@ -193,7 +224,7 @@ ion-card {
 .card-list ion-item {
   border-radius: 1rem;
   margin: 0.4rem 0;
-  background: #f8fafc;
+  background: var(--app-surface-muted);
 }
 
 video,
@@ -216,6 +247,75 @@ iframe {
 .contrast-btn {
   background-color: #0b5ed7 !important;
   color: #ffffff !important;
+}
+
+.text-small {
+  font-size: 0.9375rem;
+}
+
+.text-medium {
+  font-size: 1rem;
+}
+
+.text-large {
+  font-size: 1.25rem;
+}
+
+.text-large ion-button,
+.text-large input,
+.text-large select,
+.text-large textarea {
+  min-height: 52px;
+}
+
+body.dark {
+  --app-background: #101827;
+  --app-surface: #182235;
+  --app-surface-muted: #22304a;
+  --app-text: #f8fafc;
+  --app-text-muted: #cbd5e1;
+  --app-border: #64748b;
+  --app-focus: #7dd3fc;
+  --ion-color-medium: #cbd5e1;
+  color-scheme: dark;
+}
+
+body.dark .page-card,
+body.dark ion-card {
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28) !important;
+}
+
+body.dark .offline-banner {
+  background: #3b2f0b;
+  color: #fef3c7;
+}
+
+body.dark a {
+  color: #7dd3fc !important;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #22304a;
+  border-color: #94a3b8;
+  color: #f8fafc;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #cbd5e1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .sr-only {
@@ -267,4 +367,3 @@ ion-toolbar ion-button::part(native) {
   gap: 0.8rem;
   margin-top: 1rem;
 }
-

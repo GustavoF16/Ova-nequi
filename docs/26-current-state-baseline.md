@@ -3,7 +3,7 @@
 ## Propósito
 
 Este documento es el punto de partida oficial para las siguientes fases de
-desarrollo. Describe el estado verificado del proyecto al 13 de noviembre de
+desarrollo. Describe el estado verificado del proyecto al 14 de noviembre de
 2026 y debe actualizarse cuando cambien el código, la configuración, la
 arquitectura o los resultados de validación.
 
@@ -47,6 +47,28 @@ debug más reciente:
 
 El mensaje offline de la encuesta informa que los datos se guardaron
 localmente y se enviarán al recuperar la conexión.
+
+## Estado de accesibilidad e interfaz
+
+La rama `feat/accessibility-ui-improvements` contiene una fase aislada de
+mejoras que no modifica la rama estable remota. Se verificaron los siguientes
+cambios:
+
+- `lang="es"`, título descriptivo, `theme-color` y zoom permitido.
+- Enlace “Saltar al contenido” y estructura semántica para el login.
+- Etiquetas y estados requeridos para login, registro y configuración.
+- Foco visible, contraste base, modo oscuro y escalas de texto globales.
+- Soporte de `prefers-reduced-motion`.
+- Alternativa de teclado para el reto de arrastrar y soltar de recibir pagos.
+
+La página de login fue cargada desde el contenedor Docker actualizado y
+respondió `HTTP 200`. El árbol de accesibilidad mostró un formulario nombrado,
+campos de correo y contraseña etiquetados, botón “Iniciar sesión” y enlace de
+registro.
+
+Estas mejoras aún no se han fusionado en
+`feature/entrega-semana3-docker`; primero deben revisarse visualmente en
+Android y completar una auditoría automatizada WCAG/axe.
 
 ## Persistencia y aislamiento
 

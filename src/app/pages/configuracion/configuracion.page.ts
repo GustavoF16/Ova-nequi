@@ -97,13 +97,8 @@ export class ConfiguracionPage {
       this.mensaje = '☀️ Modo claro activado';
     }
 
-    if (settings.tamanoTexto === 'pequeno') {
-      document.body.style.fontSize = '14px';
-    } else if (settings.tamanoTexto === 'medio') {
-      document.body.style.fontSize = '16px';
-    } else {
-      document.body.style.fontSize = '20px';
-    }
+    document.body.classList.remove('text-small', 'text-medium', 'text-large');
+    document.body.classList.add(`text-${settings.tamanoTexto}`);
   }
 
 }
