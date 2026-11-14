@@ -610,6 +610,10 @@ Backend pendiente.
 
 \# Seguridad
 
+> **Actualización posterior a la auditoría:** el almacenamiento seguro nativo
+> ya fue implementado y validado. Para el estado vigente consultar
+> [`26-current-state-baseline.md`](./26-current-state-baseline.md).
+
 
 
 \## Hashing
@@ -680,19 +684,17 @@ Expiración:
 
 Resultado:
 
+✅ Implementado y validado en Android.
 
-
-⚠️ Preparado
-
-
-
-Estado:
-
-
+Tecnología:
 
 ```text
 
-No operativo
+@aparajita/capacitor-secure-storage 8.0.1
+
+Android Keystore / AES-GCM
+
+iOS Keychain
 
 ```
 
@@ -1325,4 +1327,3 @@ La auditoría determinó que el proyecto se encuentra funcionalmente completo pa
 
 
 La documentación generada constituye la línea base oficial para futuras modificaciones del sistema.
-

@@ -35,6 +35,7 @@ export class CertificadosPage implements OnInit, OnDestroy {
   fecha: string = new Date().toLocaleDateString();
 
   mensaje: string = '';
+  generando = false;
 
   constructor() {}
 
@@ -105,6 +106,9 @@ export class CertificadosPage implements OnInit, OnDestroy {
   }
 
   async generarCertificado() {
+    if (this.generando) {
+      return;
+    }
 
     const completed =
       await this.cursoCompletado();
@@ -117,19 +121,25 @@ export class CertificadosPage implements OnInit, OnDestroy {
       return;
     }
 
-    await this.storageService.saveCertificate({
-      nombre: this.nombre,
-      fecha: this.fecha
-    });
+    this.generando = true;
 
-    await this.storageService
-      .saveModuleProgressForCurrentUser(
-        'certificate',
-        1
-      );
+    try {
+      await this.storageService.saveCertificate({
+        nombre: this.nombre,
+        fecha: this.fecha
+      });
 
-    this.mensaje =
-      '✅ Certificado generado correctamente';
+      await this.storageService
+        .saveModuleProgressForCurrentUser(
+          'certificate',
+          1
+        );
+
+      this.mensaje =
+        '✅ Certificado generado correctamente';
+    } finally {
+      this.generando = false;
+    }
   }
 
   async descargarPDF() {

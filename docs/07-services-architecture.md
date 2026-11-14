@@ -2,6 +2,10 @@
 
 # Arquitectura de Servicios
 
+> **Estado vigente:** [`26-current-state-baseline.md`](./26-current-state-baseline.md)
+> documenta la implementación actual de Secure Storage, conectividad nativa y
+> sincronización Supabase con fallback offline.
+
 ## Introducción
 
 Los servicios constituyen la capa principal de lógica de negocio de OVA Nequi.
@@ -623,7 +627,7 @@ Backend real pendiente.
 ### Entorno actual
 
 ```text
-https://example.com/api
+Supabase REST mediante `environment.apiUrl`, con fallback a la cola offline
 ```
 
 ---

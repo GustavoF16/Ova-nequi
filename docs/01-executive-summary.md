@@ -209,7 +209,7 @@ StorageService
     │
     ├── LocalStorage (Web)
     ├── SQLite (Android)
-    └── Secure Storage (Preparado)
+    └── Secure Storage (Android/iOS)
     │
     ▼
 Offline Queue
@@ -218,7 +218,7 @@ Offline Queue
 ApiService
     │
     ▼
-Backend (Pendiente de implementación)
+Supabase REST (Free, configurado y validado)
 ```
 
 ---
@@ -269,11 +269,11 @@ Backend (Pendiente de implementación)
 
 ## Implementado Parcialmente
 
-⚠️ Secure Storage móvil.
+✅ Secure Storage móvil.
 
-⚠️ PWA completa.
+✅ PWA habilitada en producción.
 
-⚠️ Sincronización con backend real.
+✅ Sincronización con un proyecto Supabase real.
 
 ⚠️ CI/CD.
 
@@ -305,9 +305,9 @@ Backend (Pendiente de implementación)
 | Android | ✅ Completo |
 | Docker | ✅ Completo |
 | Offline First | ✅ Completo |
-| Backend real | ⚠️ Pendiente |
-| Secure Storage | ⚠️ Parcial |
-| PWA completa | ⚠️ Parcial |
+| Backend Supabase real | ✅ Configurado y validado |
+| Secure Storage | ✅ Operativo |
+| PWA | ✅ Habilitada |
 | CI/CD | ⚠️ Pendiente |
 
 ---

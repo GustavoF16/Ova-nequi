@@ -71,6 +71,18 @@
           aria-label="Contraseña">
       </div>
 
+      <div class="form-field">
+        <label for="confirmPassword">Confirmar contraseña</label>
+        <input
+          id="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          placeholder="Repite tu contraseña"
+          aria-label="Confirmar contraseña">
+      </div>
+
       <!-- Modo oscuro -->
       <div class="form-field checkbox-field">
         <label>

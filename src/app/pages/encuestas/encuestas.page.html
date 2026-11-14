@@ -65,9 +65,10 @@
         <ion-button
           expand="full"
           class="contrast-btn"
+          [disabled]="enviando"
           (click)="enviarEncuesta()"
           aria-label="Enviar encuesta">
-          Enviar encuesta
+          {{ enviando ? 'Enviando...' : 'Enviar encuesta' }}
         </ion-button>
       </div>
 

@@ -4,6 +4,28 @@
 
 \# Historial de Cambios
 
+## Actualización 13 de noviembre de 2026
+
+Se consolidó la línea base técnica en
+[`26-current-state-baseline.md`](./26-current-state-baseline.md). Se
+documentaron como implementados y verificados:
+
+- Tests unitarios, lint, build web y build Android.
+- Registro, login, logout y protección de rutas.
+- Aislamiento de progreso entre usuarios.
+- Cola offline y conectividad nativa Android.
+- Secure Storage con Keychain/Keystore.
+- PWA habilitada en producción.
+- Integración Supabase REST con proyecto gratuito configurado y validado.
+
+Se añadió [`supabase/schema.sql`](../supabase/schema.sql), incluyendo permisos
+SQL para los roles de inserción, y se actualizaron las instrucciones
+reproducibles de prueba. Se validaron encuestas, simulaciones y certificados
+online/offline. También se corrigieron duplicados mediante bloqueo de botones,
+guardados protegidos y sincronización serializada. La autenticación remota,
+autorización basada en identidad, idempotencia persistente, E2E y firma release
+permanecen como trabajo futuro.
+
 
 
 \## Introducción
@@ -1433,4 +1455,3 @@ OVA Nequi evolucionó desde una aplicación Ionic básica hacia una plataforma e
 
 
 La auditoría realizada permitió documentar completamente la solución, proporcionando una base sólida para futuras mejoras, mantenimiento y evolución técnica del proyecto.
-

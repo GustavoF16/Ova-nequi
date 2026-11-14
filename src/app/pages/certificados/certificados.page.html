@@ -84,10 +84,11 @@
           expand="block"
           class="contrast-btn"
           color="success"
+          [disabled]="generando"
           (click)="generarCertificado()"
           aria-label="Guardar certificado">
 
-          Guardar certificado
+          {{ generando ? 'Guardando...' : 'Guardar certificado' }}
 
         </ion-button>
 

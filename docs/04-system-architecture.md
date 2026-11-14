@@ -2,6 +2,10 @@
 
 # Arquitectura del Sistema OVA Nequi
 
+> **Estado vigente:** consultar [`26-current-state-baseline.md`](./26-current-state-baseline.md)
+> para la configuración actual. En este documento, “preparado” o
+> “pendiente” puede referirse a una fotografía histórica de la auditoría.
+
 ## Introducción
 
 Este documento describe la arquitectura técnica completa del proyecto OVA Nequi, incluyendo los componentes de frontend, persistencia, seguridad, sincronización offline, infraestructura móvil y despliegue.
@@ -44,13 +48,13 @@ Persistencia
     │
     ├── LocalStorage
     ├── SQLite
-    └── Secure Storage (Preparado)
+    └── Secure Storage (Android/iOS)
     │
     ▼
 Offline Sync Queue
     │
     ▼
-Backend API (Pendiente)
+Supabase REST (Free, configurado y validado)
 ```
 
 ---
@@ -171,10 +175,12 @@ Responsabilidades:
 Actualmente utiliza:
 
 ```text
-https://example.com/api
+Supabase REST configurado mediante `environment.apiUrl`
 ```
 
-como endpoint placeholder.
+La configuración vigente apunta a `https://TU_PROYECTO.supabase.co/rest/v1`,
+con `remoteSyncEnabled: true`. La operación local/offline sigue disponible
+cuando el servidor no responde.
 
 ---
 
@@ -218,21 +224,16 @@ utilizando:
 
 ## Secure Storage
 
-Actualmente existe soporte preparado para:
+Actualmente existe soporte operativo para:
 
 ```text
 secureSet()
 secureGet()
 ```
 
-pero todavía no existe un plugin instalado.
+mediante `@aparajita/capacitor-secure-storage` 8.0.1.
 
-### Estado
-
-```text
-Preparado
-No operativo
-```
+En Web se conserva `localStorage`; los datos funcionales nativos usan SQLite.
 
 ---
 

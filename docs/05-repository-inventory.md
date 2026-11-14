@@ -439,7 +439,8 @@ environment.prod.ts
 ## Estado Actual
 
 ```text
-https://example.com/api
+Supabase REST mediante `environment.apiUrl`; configurado y activado en los
+entornos vigentes
 ```
 
 ---

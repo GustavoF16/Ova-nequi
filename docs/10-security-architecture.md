@@ -54,7 +54,7 @@ La arquitectura actual busca:
 
 \- Mantener compatibilidad Web y Android.
 
-\- Preparar integración futura con almacenamiento seguro.
+\- Usar almacenamiento seguro nativo para credenciales y sesiones móviles.
 
 
 
@@ -782,11 +782,12 @@ SQLite
 
 
 
-Preparado.
+Implementado para Android e iOS mediante
+`@aparajita/capacitor-secure-storage` 8.0.1.
 
-
-
-No implementado completamente.
+En Android utiliza Android Keystore con AES-GCM y en iOS utiliza
+Keychain. En Web se mantiene `localStorage`, porque la aplicación web
+no dispone de Keychain/Keystore nativos.
 
 
 
@@ -803,6 +804,10 @@ No implementado completamente.
 secureSet()
 
 secureGet()
+
+SecureStorage.setItem()
+
+SecureStorage.getItem()
 
 ```
 
@@ -956,9 +961,9 @@ Revocación remota de sesiones
 
 \## Secure Storage
 
-
-
-Plugin no instalado.
+El almacenamiento seguro nativo está operativo con
+`@aparajita/capacitor-secure-storage` 8.0.1. El riesgo restante es que la
+autenticación continúa siendo local y no existe revocación remota.
 
 
 
@@ -1180,3 +1185,9 @@ La protección basada en PBKDF2, SHA-256 y Salt aleatorio representa un nivel de
 
 La arquitectura actual además se encuentra preparada para evolucionar hacia mecanismos más robustos basados en autenticación centralizada, Secure Storage y tokens de acceso gestionados por backend.
 
+## Validaciones de registro y sesión
+
+El registro valida correo electrónico, cédula numérica, contraseña robusta y
+confirmación de contraseña antes de guardar el perfil. Las sesiones generan
+tokens con `crypto.getRandomValues`, tienen expiración de 24 horas y se
+rechazan automáticamente cuando han expirado.

@@ -112,4 +112,12 @@ export class DatabaseService {
     return null;
   }
 
+  async removeItem(key: string) {
+    await this.db.run(
+      `DELETE FROM storage
+       WHERE key = ?;`,
+      [key]
+    );
+  }
+
 }

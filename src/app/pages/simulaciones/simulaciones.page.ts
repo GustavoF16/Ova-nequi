@@ -28,6 +28,7 @@ export class SimulacionesPage implements OnInit, OnDestroy {
   numero: string = '';
   monto: number = 0;
   mensaje: string = '';
+  enviando = false;
 
   constructor() {
     this.cargarSimulacion();
@@ -53,15 +54,26 @@ export class SimulacionesPage implements OnInit, OnDestroy {
   }
 
   async enviar() {
-    if (this.numero && this.monto > 0) {
+    if (this.enviando) {
+      return;
+    }
+
+    if (!this.numero || this.monto <= 0) {
+      this.mensaje = '⚠️ Complete todos los campos';
+      return;
+    }
+
+    this.enviando = true;
+
+    try {
       await this.storageService.saveSimulation({
         numero: this.numero,
         monto: this.monto
       });
       await this.storageService.saveModuleProgressForCurrentUser('simulation', 1);
       this.mensaje = '✅ Dinero enviado correctamente';
-    } else {
-      this.mensaje = '⚠️ Complete todos los campos';
+    } finally {
+      this.enviando = false;
     }
   }
 

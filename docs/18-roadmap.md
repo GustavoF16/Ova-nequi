@@ -4,6 +4,25 @@
 
 \# Roadmap de Evolución
 
+> **Revisión:** 13 de noviembre de 2026. Las fases históricas descritas más
+> abajo no deben interpretarse como pendientes actuales sin consultar
+> [`26-current-state-baseline.md`](./26-current-state-baseline.md). Las fases
+> completadas incluyen estabilización, aislamiento por usuario, cola offline,
+> PWA, seguridad nativa y validación Android.
+
+## Fase de sincronización remota completada
+
+La integración inicial con Supabase Free ya fue activada y validada:
+
+1. Proyecto creado y esquema ejecutado.
+2. URL y clave pública `anon` configuradas.
+3. `remoteSyncEnabled` activo.
+4. Sincronización online y reintentos offline probados.
+5. Duplicados por doble envío corregidos y validados.
+
+La autenticación remota, idempotencia persistente, pruebas E2E y publicación
+release son fases posteriores.
+
 
 
 \## Introducción
@@ -1315,4 +1334,3 @@ OVA Nequi posee una base técnica sólida.
 
 
 La arquitectura actual fue diseñada correctamente para permitir crecimiento progresivo sin necesidad de rediseños radicales, facilitando la incorporación futura de backend, seguridad avanzada y despliegues empresariales.
-

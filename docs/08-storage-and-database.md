@@ -25,7 +25,7 @@ Persistencia
       │
       ├── LocalStorage (Web)
       ├── SQLite (Android)
-      └── Secure Storage (Preparado)
+      └── Secure Storage (Android/iOS)
 ```
 
 ---
@@ -104,8 +104,11 @@ DatabaseService
 ### Estado actual
 
 ```text
-Preparado
-No operativo
+Operativo en Android/iOS para claves sensibles
+mediante `@aparajita/capacitor-secure-storage`.
+
+La Web continúa usando `localStorage`; los datos funcionales nativos
+continúan usando SQLite.
 ```
 
 ### Métodos

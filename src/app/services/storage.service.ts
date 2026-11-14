@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, catchError, firstValueFrom, of } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
+import { SecureStorage } from '@aparajita/capacitor-secure-storage';
 import { DatabaseService } from './database.service';
 import { NetworkService } from './network.service';
 import { ApiService } from './api.service';
@@ -72,6 +73,7 @@ export type PendingSyncType = 'survey' | 'simulation' | 'certificate';
 
 export interface PendingSyncItem {
   id: string;
+  userEmail: string;
   type: PendingSyncType;
   data: SurveyAnswers | SimulationData | CertificateData;
   timestamp: number;
@@ -91,6 +93,10 @@ export class StorageService {
 
   private pendingSyncItemsKey = 'pendingSyncQueue';
   private pendingSyncSubject = new BehaviorSubject<number>(0);
+  private pendingSyncFlush: Promise<number> | null = null;
+  private surveySaveInProgress = false;
+  private simulationSaveInProgress = false;
+  private certificateSaveInProgress = false;
   public pendingSyncCount$ = this.pendingSyncSubject.asObservable();
 
   constructor() {
@@ -299,27 +305,50 @@ export class StorageService {
 }
 
   async saveSurvey(answers: SurveyAnswers) {
-    await this.saveLocalSurvey(answers);
-
-    if (!this.networkService.isOnline) {
-      await this.enqueuePendingSync('survey', answers);
+    if (this.surveySaveInProgress) {
       return;
     }
 
-    await this.flushPendingSyncQueue();
+    this.surveySaveInProgress = true;
+
+    try {
+      await this.saveLocalSurvey(answers);
+
+      if (!this.networkService.isOnline) {
+        await this.enqueuePendingSync('survey', answers);
+        return;
+      }
+
+      try {
+        await this.sendPendingItem({
+          id: '',
+          userEmail: await this.getCurrentUserEmailOrThrow(),
+          type: 'survey',
+          data: answers,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.warn('No se pudo sincronizar la encuesta; quedó pendiente.', error);
+        await this.enqueuePendingSync('survey', answers);
+      }
+
+      await this.flushPendingSyncQueue();
+    } finally {
+      this.surveySaveInProgress = false;
+    }
   }
 
   async loadSurvey(): Promise<SurveyAnswers | null> {
-    const value = await this.loadValue('survey');
+    const value = await this.loadUserScopedValue('survey');
     return value ? JSON.parse(value) as SurveyAnswers : null;
   }
 
   async saveSendMoneyLesson(record: SendMoneyLessonRecord) {
-    await this.saveValue('send-money-lesson', JSON.stringify(record));
+    await this.saveUserScopedValue('send-money-lesson', JSON.stringify(record));
   }
 
   async loadSendMoneyLesson(): Promise<SendMoneyLessonRecord | null> {
-    const value = await this.loadValue('send-money-lesson');
+    const value = await this.loadUserScopedValue('send-money-lesson');
     return value ? JSON.parse(value) as SendMoneyLessonRecord : null;
   }
 
@@ -372,39 +401,87 @@ export class StorageService {
   }
 
   async saveSimulation(data: SimulationData) {
-    await this.saveLocalSimulation(data);
-
-    if (!this.networkService.isOnline) {
-      await this.enqueuePendingSync('simulation', data);
+    if (this.simulationSaveInProgress) {
       return;
     }
 
-    await this.flushPendingSyncQueue();
+    this.simulationSaveInProgress = true;
+
+    try {
+      await this.saveLocalSimulation(data);
+
+      if (!this.networkService.isOnline) {
+        await this.enqueuePendingSync('simulation', data);
+        return;
+      }
+
+      try {
+        await this.sendPendingItem({
+          id: '',
+          userEmail: await this.getCurrentUserEmailOrThrow(),
+          type: 'simulation',
+          data,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.warn('No se pudo sincronizar la simulación; quedó pendiente.', error);
+        await this.enqueuePendingSync('simulation', data);
+      }
+
+      await this.flushPendingSyncQueue();
+    } finally {
+      this.simulationSaveInProgress = false;
+    }
   }
 
   async loadSimulation(): Promise<SimulationData | null> {
-    const value = await this.loadValue('simulation');
+    const value = await this.loadUserScopedValue('simulation');
     return value ? JSON.parse(value) as SimulationData : null;
   }
 
   async saveCertificate(data: CertificateData) {
-    await this.saveLocalCertificate(data);
-
-    if (!this.networkService.isOnline) {
-      await this.enqueuePendingSync('certificate', data);
+    if (this.certificateSaveInProgress) {
       return;
     }
 
-    await this.flushPendingSyncQueue();
+    this.certificateSaveInProgress = true;
+
+    try {
+      await this.saveLocalCertificate(data);
+
+      if (!this.networkService.isOnline) {
+        await this.enqueuePendingSync('certificate', data);
+        return;
+      }
+
+      try {
+        await this.sendPendingItem({
+          id: '',
+          userEmail: await this.getCurrentUserEmailOrThrow(),
+          type: 'certificate',
+          data,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.warn('No se pudo sincronizar el certificado; quedó pendiente.', error);
+        await this.enqueuePendingSync('certificate', data);
+      }
+
+      await this.flushPendingSyncQueue();
+    } finally {
+      this.certificateSaveInProgress = false;
+    }
   }
 
   async loadCertificate(): Promise<CertificateData | null> {
-    const value = await this.loadValue('certificate');
+    const value = await this.loadUserScopedValue('certificate');
     return value ? JSON.parse(value) as CertificateData : null;
   }
 
   async saveLogin(data: LoginData) {
-    const token = Math.random().toString(36).slice(2);
+    const tokenBytes = new Uint8Array(32);
+    crypto.getRandomValues(tokenBytes);
+    const token = this.base64Encode(tokenBytes.buffer);
     const expires = Date.now() + 24 * 60 * 60 * 1000;
     const payload = { email: data.email, token, expires };
 
@@ -430,6 +507,12 @@ export class StorageService {
   }
 
   async logout() {
+    await this.init();
+    if (this.isNative) {
+      await this.secureRemove('login');
+      return;
+    }
+
     await this.saveValue('login', '');
   }
 
@@ -529,7 +612,8 @@ export class StorageService {
     const queue = await this.loadPendingSyncQueue();
 
     const item: PendingSyncItem = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: `${Date.now()}-${this.createRandomId()}`,
+      userEmail: await this.getCurrentUserEmailOrThrow(),
       type,
       data,
       timestamp: Date.now()
@@ -539,7 +623,27 @@ export class StorageService {
     await this.savePendingSyncQueue(queue);
   }
 
+  private createRandomId(): string {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    return this.base64Encode(bytes.buffer);
+  }
+
   async flushPendingSyncQueue(): Promise<number> {
+    if (this.pendingSyncFlush) {
+      return this.pendingSyncFlush;
+    }
+
+    this.pendingSyncFlush = this.flushPendingSyncQueueInternal();
+
+    try {
+      return await this.pendingSyncFlush;
+    } finally {
+      this.pendingSyncFlush = null;
+    }
+  }
+
+  private async flushPendingSyncQueueInternal(): Promise<number> {
     if (!this.networkService.isOnline) {
       return 0;
     }
@@ -549,54 +653,65 @@ export class StorageService {
       return 0;
     }
 
-    const failedItems: PendingSyncItem[] = [];
+    const currentUserEmail = await this.getCurrentUserEmail();
+    if (!currentUserEmail) {
+      return 0;
+    }
 
-    for (const item of queue) {
+    const pendingForCurrentUser = queue.filter(
+      item => item.userEmail === currentUserEmail
+    );
+    const failedItems: PendingSyncItem[] = queue.filter(
+      item => item.userEmail !== currentUserEmail
+    );
+
+    for (const item of pendingForCurrentUser) {
       try {
-        switch (item.type) {
-          case 'survey':
-            await firstValueFrom(
-              this.apiService.saveSurvey(item.data as SurveyAnswers).pipe(
-                catchError(() => of(null))
-              )
-            );
-            await this.saveLocalSurvey(item.data as SurveyAnswers);
-            break;
-
-          case 'simulation':
-            await firstValueFrom(
-              this.apiService.saveSimulation(item.data as SimulationData).pipe(
-                catchError(() => of(null))
-              )
-            );
-            await this.saveLocalSimulation(item.data as SimulationData);
-            break;
-
-          case 'certificate':
-            await firstValueFrom(
-              this.apiService.saveCertificate(item.data as CertificateData).pipe(
-                catchError(() => of(null))
-              )
-            );
-            await this.saveLocalCertificate(item.data as CertificateData);
-            break;
-        }
+        await this.sendPendingItem(item);
       } catch {
         failedItems.push(item);
       }
     }
 
-    if (failedItems.length > 0) {
-      await this.savePendingSyncQueue(failedItems);
-      return queue.length - failedItems.length;
-    }
-
-    await this.clearPendingSyncQueue();
-    return queue.length;
+    await this.savePendingSyncQueue(failedItems);
+    return pendingForCurrentUser.length - failedItems.filter(
+      item => item.userEmail === currentUserEmail
+    ).length;
   }
 
-  private async clearPendingSyncQueue() {
-    await this.savePendingSyncQueue([]);
+  private async sendPendingItem(item: PendingSyncItem): Promise<void> {
+    switch (item.type) {
+      case 'survey':
+        await firstValueFrom(this.apiService.saveSurvey(
+          item.data as SurveyAnswers,
+          item.userEmail
+        ));
+        await this.saveLocalSurvey(item.data as SurveyAnswers);
+        return;
+      case 'simulation':
+        await firstValueFrom(this.apiService.saveSimulation(
+          item.data as SimulationData,
+          item.userEmail
+        ));
+        await this.saveLocalSimulation(item.data as SimulationData);
+        return;
+      case 'certificate':
+        await firstValueFrom(this.apiService.saveCertificate(
+          item.data as CertificateData,
+          item.userEmail
+        ));
+        await this.saveLocalCertificate(item.data as CertificateData);
+        return;
+    }
+  }
+
+  private async getCurrentUserEmailOrThrow(): Promise<string> {
+    const email = await this.getCurrentUserEmail();
+    if (!email) {
+      throw new Error('No hay una sesión activa para sincronizar datos.');
+    }
+
+    return email;
   }
 
   private async updatePendingSyncCount() {
@@ -605,15 +720,25 @@ export class StorageService {
   }
 
   private async saveLocalSurvey(answers: SurveyAnswers) {
-    await this.saveValue('survey', JSON.stringify(answers));
+    await this.saveUserScopedValue('survey', JSON.stringify(answers));
   }
 
   private async saveLocalSimulation(data: SimulationData) {
-    await this.saveValue('simulation', JSON.stringify(data));
+    await this.saveUserScopedValue('simulation', JSON.stringify(data));
   }
 
   private async saveLocalCertificate(data: CertificateData) {
-    await this.saveValue('certificate', JSON.stringify(data));
+    await this.saveUserScopedValue('certificate', JSON.stringify(data));
+  }
+
+  private async saveUserScopedValue(key: string, value: string) {
+    const email = await this.getCurrentUserEmail();
+    await this.saveValue(email ? `${key}:${email}` : key, value);
+  }
+
+  private async loadUserScopedValue(key: string): Promise<string | null> {
+    const email = await this.getCurrentUserEmail();
+    return this.loadValue(email ? `${key}:${email}` : key);
   }
 
   private async saveValue(key: string, value: string) {
@@ -621,8 +746,8 @@ export class StorageService {
 
     if (this.isNative) {
       if (this.shouldUseSecureStorage(key)) {
-        const ok = await this.secureSet(key, value);
-        if (ok) return;
+        await this.secureSet(key, value);
+        return;
       }
 
       await this.databaseService.setItem(key, value);
@@ -639,6 +764,15 @@ export class StorageService {
       if (this.shouldUseSecureStorage(key)) {
         const value = await this.secureGet(key);
         if (value !== null) return value;
+
+        const legacyValue = await this.databaseService.getItem(key);
+        if (legacyValue !== null) {
+          await this.secureSet(key, legacyValue);
+          await this.databaseService.removeItem(key);
+          return legacyValue;
+        }
+
+        return null;
       }
 
       return this.databaseService.getItem(key);
@@ -652,43 +786,16 @@ export class StorageService {
     return key === 'login' || key.startsWith('user:') || key.includes('token');
   }
 
-  private async secureSet(key: string, value: string): Promise<boolean> {
-    try {
-      const dynamicImport: any = (eval('import') as any);
-      const mod: any = await dynamicImport('@capacitor-community/secure-storage');
-      const plugin = mod?.SecureStoragePlugin ?? mod?.SecureStorage ?? mod;
-
-      if (!plugin || typeof plugin.set !== 'function') {
-        return false;
-      }
-
-      await plugin.set({ key, value });
-      return true;
-    } catch {
-      return false;
-    }
+  private async secureSet(key: string, value: string): Promise<void> {
+    await SecureStorage.setItem(key, value);
   }
 
   private async secureGet(key: string): Promise<string | null> {
-    try {
-      const dynamicImport: any = (eval('import') as any);
-      const mod: any = await dynamicImport('@capacitor-community/secure-storage');
-      const plugin = mod?.SecureStoragePlugin ?? mod?.SecureStorage ?? mod;
+    return await SecureStorage.getItem(key);
+  }
 
-      if (!plugin || typeof plugin.get !== 'function') {
-        return null;
-      }
-
-      const res = await plugin.get({ key });
-
-      if (res == null) return null;
-      if (typeof res === 'object' && 'value' in res) return res.value as string;
-      if (typeof res === 'string') return res;
-
-      return null;
-    } catch {
-      return null;
-    }
+  private async secureRemove(key: string): Promise<void> {
+    await SecureStorage.removeItem(key);
   }
 
   private getWebItem(key: string): string | null {

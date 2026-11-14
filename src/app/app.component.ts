@@ -73,6 +73,6 @@ export class AppComponent implements OnInit, OnDestroy {
     await this.storageService.logout();
     this.toastMessage = 'Sesión cerrada';
     this.showToast = true;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

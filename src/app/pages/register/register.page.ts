@@ -21,6 +21,7 @@ export class RegisterPage {
   cedula: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = '';
 
   modoOscuro: boolean = false;
   tamanoTexto: 'pequeno' | 'medio' | 'grande' = 'medio';
@@ -35,19 +36,35 @@ export class RegisterPage {
       const cedula = this.cedula.trim();
       const email = this.email.trim().toLowerCase();
       const password = this.password.trim();
+      const confirmPassword = this.confirmPassword.trim();
 
       if (!nombre || !apellido || !cedula) {
         this.mensaje = '⚠️ Ingresa nombre, apellido y cédula';
         return;
       }
 
-      if (!email || !password) {
+      if (!email || !password || !confirmPassword) {
         this.mensaje = '⚠️ Ingresa correo y contraseña';
         return;
       }
 
-      if (password.length < 6) {
-        this.mensaje = '⚠️ La contraseña debe tener mínimo 6 caracteres';
+      if (!this.isValidEmail(email)) {
+        this.mensaje = '⚠️ Ingresa un correo electrónico válido';
+        return;
+      }
+
+      if (!/^\d{6,10}$/.test(cedula)) {
+        this.mensaje = '⚠️ La cédula debe tener entre 6 y 10 dígitos';
+        return;
+      }
+
+      if (!this.isStrongPassword(password)) {
+        this.mensaje = '⚠️ Usa mínimo 8 caracteres, una mayúscula, una minúscula y un número';
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        this.mensaje = '⚠️ Las contraseñas no coinciden';
         return;
       }
 
@@ -92,5 +109,16 @@ export class RegisterPage {
 
   goToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  private isStrongPassword(password: string): boolean {
+    return password.length >= 8
+      && /[A-Z]/.test(password)
+      && /[a-z]/.test(password)
+      && /\d/.test(password);
   }
 }

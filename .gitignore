@@ -22,6 +22,7 @@ log.txt
 /www
 /platforms
 /plugins
+/android/local.properties
 
 # Compiled output
 /dist

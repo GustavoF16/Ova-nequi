@@ -976,29 +976,17 @@ ExampleUnitTest.java
 
 \# Secure Storage
 
+> **Estado actualizado:** el plugin nativo ya está instalado y sincronizado.
+> Las notas que indiquen “preparado” o “no operativo” corresponden a una
+> situación anterior y quedan reemplazadas por
+> [`26-current-state-baseline.md`](./26-current-state-baseline.md).
+
 
 
 \## Estado
 
-
-
-Preparado.
-
-
-
-No operativo.
-
-
-
-\---
-
-
-
-\## Razón
-
-
-
-Plugin no instalado correctamente.
+Operativo mediante `@aparajita/capacitor-secure-storage` 8.0.1.
+La APK debug fue compilada correctamente después de `npx cap sync android`.
 
 
 
@@ -1133,4 +1121,3 @@ La solución aprovecha Capacitor para reutilizar el frontend Angular/Ionic y com
 
 
 La arquitectura actual proporciona una base sólida para futuras mejoras orientadas a seguridad móvil, sincronización remota y publicación oficial.
-

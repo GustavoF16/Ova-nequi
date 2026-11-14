@@ -30,7 +30,9 @@ Estado actual (implementado)
   - Implementado: `DatabaseService` (SQLite) y `saveValue/loadValue` con fallback a `localStorage`.
 
 - RF02: Sincronización offline
-  - Parcial: Cola de pendientes (`pendingSyncQueue`) y `flushPendingSyncQueue()` implementadas; `ApiService` scaffold existe.
+  - Implementado: Cola de pendientes (`pendingSyncQueue`) y
+    `flushPendingSyncQueue()`; Supabase está configurado para los tres recursos
+    y se conserva el modo local cuando no hay red.
 
 - RF03: Progreso por usuario/módulo
   - Implementado: API en `StorageService` (`saveModuleProgressForCurrentUser`, `loadAllModuleProgressForCurrentUser`, etc.) y wiring en páginas (`modulos`, `encuestas`, `simulaciones`, `certificados`, `progreso` page UI actualizado).
@@ -46,8 +48,8 @@ Estado actual (implementado)
   - Implementado: `hashPassword()` y `verifyPassword()` en `StorageService` (Web Crypto PBKDF2, 100000 iter, SHA-256, 256-bit derive). Migración de contraseñas legadas al primer login correcto implementada.
 
 - RF07: Secure storage en móvil
-  - Parcial/Preparado: Código agregado en `StorageService` para usar un plugin de secure storage (helpers `secureSet`/`secureGet` y `shouldUseSecureStorage()`).
-  - NOTA: El plugin no se instaló en el entorno (npm devuelve 404). Por eso, la integración nativa aún no está operativa en dispositivo.
+  - Implementado: `StorageService` usa `@aparajita/capacitor-secure-storage` 8.0.1 para `login`, perfiles y claves sensibles.
+  - Verificado: `npx cap sync android` registra el plugin en Android. Los datos antiguos de SQLite se migran una sola vez al almacenamiento seguro.
 
 - RF08: PWA / Service Worker
   - Implementado: `@angular/service-worker` agregado y `ngsw-config.json`, `manifest.webmanifest` y cambios en `main.ts` y `angular.json` aplicados.
@@ -59,7 +61,12 @@ Estado actual (implementado)
   - Parcial: Soporte y assets esporádico; no hay una integración E2E completa ni tests de reproducción definidos.
 
 - RF11: Sincronización remota
-  - Parcial: `ApiService` existe como scaffold; llamadas en `flushPendingSyncQueue()` usan `apiService.*` con `catchError` y fallback local; falta asegurar endpoints reales, auth token usage y manejo de colisiones/duplicados.
+  - Implementada y validada: `ApiService` usa el API REST de Supabase con
+    `apiUrl`, clave pública y `remoteSyncEnabled`.
+  - La aplicación conserva el comportamiento local/offline si no existe
+    conectividad.
+  - El esquema está en `supabase/schema.sql`; la autenticación remota todavía
+    no está implementada.
 
 - RF12: Pruebas
   - Parcial: No hay suite E2E completa; hay builds unitarias y la app compila en dev/prod.
@@ -68,8 +75,8 @@ Estado actual (implementado)
 Elementos faltantes (priorizados)
 ---------------------------------
 1. Integración nativa de almacenamiento seguro (ALTA)
-   - Estado: Código preparado, pero el plugin no está instalado (npm 404). Necesita que el equipo instale y sincronice un plugin soportado (por ejemplo: `@capacitor-community/secure-storage` si está disponible, o una alternativa como `cordova-plugin-secure-storage-echo`) y ejecutar `npx cap sync`.
-   - Resultado esperado: `StorageService` persiste `login` y claves sensibles en Keychain/Keystore en lugar de tabla SQLite / localStorage.
+   - Estado: Completada con `@aparajita/capacitor-secure-storage` 8.0.1 y sincronizada con Android.
+   - Resultado: `StorageService` persiste `login` y claves sensibles en Keychain/Keystore en lugar de la tabla SQLite.
 
 2. Validación backend / migración centralizada (ALTA)
    - Estado: Autenticación es 100% local; no hay servidor de auth ni revocación de tokens.
@@ -97,7 +104,7 @@ Riesgos críticos
 ----------------
 - Dependencia del plugin de secure storage no instalada (imposibilita protección de tokens en móviles).
 - Autenticación local únicamente: riesgo de control y pérdida de usuarios si el dispositivo se pierde.
-- Uso de `eval('import')` para import dinámico puede generar warnings y problemas con bundlers; su uso es temporal hasta que el plugin sea instalado y/o el patrón de import sea estabilizado.
+- Corregido: el plugin de almacenamiento seguro se importa de forma estática y no se usa `eval('import')`.
 
 
 Siguientes pasos recomendados (acciónable)
@@ -106,7 +113,7 @@ Siguientes pasos recomendados (acciónable)
 2. Ejecutar pruebas manuales (ve sección de pruebas abajo).
 3. Planear migración a autenticación server-side (mínimo: endpoints `/auth/login`, `/auth/register`, `/auth/refresh`).
 4. Añadir pruebas E2E con Playwright o Cypress.
-5. Remover el `eval('import')` después de integrar plugin y ajustar imports estáticos o wrappers con tipos.
+5. Diseñar autenticación remota, autorización e idempotencia antes de activar Supabase para producción.
 
 
 Archivos clave modificados

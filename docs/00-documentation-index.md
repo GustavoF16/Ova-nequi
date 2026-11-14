@@ -4,6 +4,12 @@
 
 \# OVA Nequi Documentation Index
 
+> **Línea base vigente:** consultar primero
+> [`26-current-state-baseline.md`](./26-current-state-baseline.md). Este
+> documento consolida el estado verificado al 13 de noviembre de 2026 y
+> prevalece sobre descripciones históricas que aún puedan aparecer en
+> documentos de auditoría o cambios anteriores.
+
 
 
 \## Introducción
@@ -37,6 +43,27 @@ Su propósito es servir como punto único de entrada para cualquier persona que 
 Toda la documentación oficial debe mantenerse actualizada y alineada con este índice.
 
 
+
+\---
+
+\# Documento de Estado Vigente
+
+\## 26 - Línea Base Técnica Actual
+
+```text
+
+docs/26-current-state-baseline.md
+
+```
+
+Incluye:
+
+- Estado funcional verificado en Android.
+- Persistencia, seguridad y aislamiento por usuario.
+- Cola offline y conectividad nativa.
+- Integración Supabase Free configurada, validada y con operación offline.
+- Comandos reproducibles.
+- Límites actuales y orden recomendado de trabajo.
 
 \---
 
@@ -1011,4 +1038,3 @@ Este índice constituye el punto central de navegación documental del proyecto 
 
 
 Antes de realizar cualquier modificación significativa se recomienda consultar los documentos asociados a la funcionalidad que será afectada.
-

@@ -4,6 +4,11 @@
 
 \# Referencia de API
 
+> **Estado vigente:** el placeholder `https://example.com/api` ya no se usa.
+> La sincronización Supabase está configurada y validada con el proyecto Free.
+> Consulte [`26-current-state-baseline.md`](./26-current-state-baseline.md) y
+> [`supabase/schema.sql`](../supabase/schema.sql) antes de activar el backend.
+
 
 
 \## Introducción
@@ -14,7 +19,9 @@ Este documento describe la interfaz de comunicación remota utilizada por OVA Ne
 
 
 
-Actualmente la aplicación se ejecuta utilizando almacenamiento local y sincronización Offline First.
+La aplicación combina almacenamiento local, cola Offline First y sincronización
+remota opcional con Supabase. Si no hay conexión, los datos quedan pendientes
+hasta que la red se restablece.
 
 
 
@@ -60,7 +67,7 @@ Actualmente configurado en:
 
 ```text
 
-https://example.com/api
+https://TU_PROYECTO.supabase.co/rest/v1
 
 ```
 
@@ -76,9 +83,9 @@ https://example.com/api
 
 ```text
 
-Placeholder
+Configurado y validado
 
-No productivo
+Activado mediante `remoteSyncEnabled: true`
 
 ```
 
@@ -168,7 +175,7 @@ POST
 
 ```http
 
-/survey
+/surveys
 
 ```
 
@@ -198,7 +205,8 @@ saveSurvey()
 
 {
 
-&#x20; "respuesta1": "si",
+&#x20; "user_email": "usuario@example.com",
+"respuesta1": "si",
 
 &#x20; "respuesta2": "no"
 
@@ -234,11 +242,7 @@ SurveyAnswers
 
 ```json
 
-{
-
-&#x20; "success": true
-
-}
+HTTP 201 o HTTP 204
 
 ```
 
@@ -274,7 +278,7 @@ POST
 
 ```http
 
-/simulation
+/simulations
 
 ```
 
@@ -304,7 +308,8 @@ saveSimulation()
 
 {
 
-&#x20; "numero": "3001234567",
+&#x20; "user_email": "usuario@example.com",
+"numero": "3001234567",
 
 &#x20; "monto": 50000
 
@@ -340,11 +345,7 @@ SimulationData
 
 ```json
 
-{
-
-&#x20; "success": true
-
-}
+HTTP 201 o HTTP 204
 
 ```
 
@@ -380,7 +381,7 @@ POST
 
 ```http
 
-/certificate
+/certificates
 
 ```
 
@@ -409,6 +410,8 @@ saveCertificate()
 ```json
 
 {
+
+&#x20; "user_email": "usuario@example.com",
 
 &#x20; "nombre": "Usuario",
 
@@ -444,13 +447,9 @@ CertificateData
 
 
 
-```json
+```text
 
-{
-
-&#x20; "success": true
-
-}
+HTTP 201 o HTTP 204
 
 ```
 
@@ -989,4 +988,3 @@ La arquitectura de API de OVA Nequi se encuentra correctamente desacoplada media
 
 
 Actualmente la aplicación opera principalmente de forma local, pero la estructura existente permite incorporar un backend productivo con cambios mínimos en la capa de presentación.
-

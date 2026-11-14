@@ -41,6 +41,11 @@ export class LoginPage {
       return;
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.mensaje = '⚠️ Ingresa un correo electrónico válido';
+      return;
+    }
+
     const profile = await this.storageService.loadUserProfile(email);
 
     if (!profile) {
@@ -79,8 +84,6 @@ export class LoginPage {
     }
 
     await this.storageService.saveLogin({ email });
-
-    this.mensaje = '✅ Sesión iniciada';
 
     this.router.navigate(['/home']);
   }

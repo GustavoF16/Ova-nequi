@@ -4,6 +4,11 @@
 
 \# Referencia Completa de Persistencia
 
+> La línea base vigente está en
+> [`26-current-state-baseline.md`](./26-current-state-baseline.md). El
+> almacenamiento seguro nativo ya es operativo; las menciones históricas a
+> “preparado” son anteriores a la integración.
+
 
 
 \## Introducción
@@ -62,7 +67,7 @@ Persistencia
 
 &#x20;     ├── SQLite
 
-&#x20;     └── Secure Storage (Preparado)
+&#x20;     └── Secure Storage (Android/iOS)
 
 ```
 
@@ -1281,4 +1286,3 @@ Cualquier modificación futura relacionada con:
 
 
 debe ser validada contra este inventario antes de implementarse.
-

@@ -71,6 +71,30 @@ La plataforma también puede ser utilizada por:
 
 - LocalStorage.
 - SQLite.
+- Secure Storage nativo para credenciales móviles.
+
+## Sincronización remota con Supabase
+
+La aplicación conserva los datos localmente y también puede sincronizarlos con
+Supabase. El modo local/offline sigue funcionando aunque el servicio remoto no
+esté disponible. En la configuración vigente del proyecto, la sincronización
+remota está habilitada para el proyecto gratuito `ova-nequi`.
+
+Para activarla:
+
+1. Crea un proyecto gratuito en Supabase.
+2. Ejecuta [`supabase/schema.sql`](./supabase/schema.sql) en el SQL Editor.
+3. Usa `https://TU_PROYECTO.supabase.co/rest/v1` como `apiUrl` y copia la clave pública `anon` en los archivos de entorno.
+4. Cambia `remoteSyncEnabled` a `true` en ambos entornos.
+5. Ejecuta las pruebas, sincroniza Capacitor y genera nuevamente la APK.
+
+La clave `service_role` nunca debe incluirse en la aplicación. La integración
+sincroniza encuestas, simulaciones y certificados; el login continúa siendo
+local hasta implementar autenticación remota.
+
+Cada operación se guarda primero localmente. Los botones se bloquean durante el
+envío y el servicio evita sincronizaciones concurrentes para impedir registros
+duplicados por doble clic, reconexiones simultáneas o eventos repetidos de red.
 - Arquitectura preparada para Secure Storage.
 
 ## Offline First
@@ -158,7 +182,7 @@ StorageService
     │
     ├── LocalStorage
     ├── SQLite
-    └── Secure Storage (Preparado)
+    └── Secure Storage (Android/iOS)
     │
     ▼
 Offline Queue
@@ -167,7 +191,7 @@ Offline Queue
 ApiService
     │
     ▼
-Backend (Pendiente)
+Supabase REST (opcional)
 ```
 
 ---
@@ -441,19 +465,25 @@ npx cap open android
 
 
 
-## Pendiente
+## Estado actual y pendientes
 
-⚠️ Backend real
+✅ Backend remoto Supabase Free configurado y validado
 
-⚠️ Secure Storage operativo
+✅ Secure Storage nativo operativo
 
-⚠️ PWA completamente habilitada
+✅ PWA habilitada en build de producción
 
 ⚠️ CI/CD
 
 ⚠️ SonarQube
 
 ⚠️ Pruebas E2E
+
+✅ Proyecto Supabase Free configurado y validado
+
+✅ Sincronización online y offline validada
+
+✅ Protección contra registros duplicados
 
 ---
 

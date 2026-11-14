@@ -4,6 +4,12 @@
 
 \# Problemas Conocidos y Deuda Técnica
 
+> Este inventario conserva hallazgos históricos. Los estados de los hallazgos
+> deben contrastarse con [`26-current-state-baseline.md`](./26-current-state-baseline.md).
+> Secure Storage, PWA, conectividad nativa, tests unitarios y build Android ya
+> fueron corregidos o verificados; permanecen como deuda la autenticación
+> remota, E2E, idempotencia del backend y firma release.
+
 
 
 \## Introducción
@@ -278,7 +284,8 @@ Configuran:
 
 ```text
 
-https://example.com/api
+Supabase REST configurado y validado con proyecto Free; la autenticación
+remota y la autorización por identidad siguen pendientes
 
 ```
 
@@ -292,7 +299,9 @@ https://example.com/api
 
 
 
-No existe backend productivo.
+Existe un backend Supabase funcional para la recepción de datos académicos,
+pero todavía no existe autenticación remota ni un modelo de autorización
+multiusuario completo.
 
 
 
@@ -320,7 +329,7 @@ certificate
 
 
 
-no llegan a un servidor real.
+se envían a las tablas `surveys`, `simulations` y `certificates`.
 
 
 
@@ -1409,4 +1418,3 @@ La mayor parte de la deuda técnica identificada corresponde a componentes empre
 
 
 Actualmente no existen defectos críticos que impidan el funcionamiento general de la plataforma.
-

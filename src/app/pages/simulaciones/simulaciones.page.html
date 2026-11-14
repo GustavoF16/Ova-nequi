@@ -48,9 +48,10 @@
           <ion-button
             expand="block"
             class="contrast-btn"
+            [disabled]="enviando"
             (click)="enviar()"
             aria-label="Enviar simulación de dinero">
-            Enviar dinero
+            {{ enviando ? 'Enviando...' : 'Enviar dinero' }}
           </ion-button>
         </div>
 

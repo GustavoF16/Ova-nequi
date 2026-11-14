@@ -28,6 +28,7 @@ export class EncuestasPage implements OnInit, OnDestroy {
   respuesta1: string = '';
   respuesta2: string = '';
   mensaje: string = '';
+  enviando = false;
 
   constructor() {
     this.cargarEncuesta();
@@ -53,24 +54,31 @@ export class EncuestasPage implements OnInit, OnDestroy {
   }
 
   async enviarEncuesta() {
+    if (this.enviando) {
+      return;
+    }
 
-    if (this.respuesta1 && this.respuesta2) {
+    if (!this.respuesta1 || !this.respuesta2) {
+      this.mensaje =
+        '⚠️ Debes responder todas las preguntas';
+      return;
+    }
+
+    this.enviando = true;
+
+    try {
       await this.storageService.saveSurvey({
         respuesta1: this.respuesta1,
         respuesta2: this.respuesta2
       });
       await this.storageService.saveModuleProgressForCurrentUser('survey', 1);
 
-      this.mensaje =
-      '✅ Encuesta enviada correctamente';
-
-    } else {
-
-      this.mensaje =
-      '⚠️ Debes responder todas las preguntas';
-
+      this.mensaje = this.isOnline
+        ? '✅ Encuesta enviada correctamente'
+        : '✅ Encuesta guardada localmente. Se enviará al recuperar la conexión.';
+    } finally {
+      this.enviando = false;
     }
-
   }
 
 }

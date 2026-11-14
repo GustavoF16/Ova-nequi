@@ -223,6 +223,7 @@ PendingSyncItem
 ```typescript
 {
   id,
+  userEmail,
   type,
   data,
   timestamp
@@ -379,7 +380,7 @@ No se pierde información.
 Cuando la sincronización finaliza correctamente:
 
 ```typescript
-clearPendingSyncQueue()
+savePendingSyncQueue()
 ```
 
 ---
@@ -432,6 +433,14 @@ El backend puede incorporarse posteriormente.
 
 ---
 
+## Protección contra duplicados
+
+Los botones de encuesta, simulación y certificado se deshabilitan mientras
+guardan. Además, `StorageService` mantiene una operación activa por tipo y
+evita que dos llamadas concurrentes a `flushPendingSyncQueue()` procesen el
+mismo lote. Esta protección fue validada en Android y produjo un solo registro
+remoto por acción.
+
 # Limitaciones Actuales
 
 ## API Real
@@ -439,7 +448,8 @@ El backend puede incorporarse posteriormente.
 Actualmente:
 
 ```text
-https://example.com/api
+Supabase REST configurado para `surveys`, `simulations` y `certificates`; la
+cola local continúa funcionando sin backend
 ```
 
 es un placeholder.
@@ -448,7 +458,8 @@ es un placeholder.
 
 ## Secure Storage
 
-Todavía no existe integración operativa.
+Las credenciales y la sesión móvil usan Secure Storage; los datos funcionales
+continúan en SQLite.
 
 ---
 
@@ -554,3 +565,9 @@ resolución de conflictos
 La estrategia Offline First constituye una de las características técnicas más importantes de OVA Nequi.
 
 Permite mantener continuidad operativa en escenarios sin conectividad y proporciona una base sólida para futuras integraciones con servicios backend y sincronización distribuida.
+## Garantías de la cola de sincronización
+
+Cada elemento de `pendingSyncQueue` conserva el correo del usuario que lo creó.
+Al recuperar la conexión solo se procesan los elementos de la sesión activa; los
+pendientes de otras cuentas permanecen intactos. Si la API responde con error,
+el elemento no se elimina y se reintenta en una reconexión posterior.

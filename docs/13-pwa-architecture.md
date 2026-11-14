@@ -644,9 +644,9 @@ pero no está completamente activa.
 
 | Service Worker registro | Implementado |
 
-| Angular Build SW | Deshabilitado |
+| Angular Build SW | Habilitado en producción |
 
-| Instalación PWA completa | Parcial |
+| Instalación PWA completa | Pendiente de validación HTTPS en navegador |
 
 
 
@@ -890,3 +890,9 @@ La base técnica necesaria ya existe:
 
 La activación completa requiere únicamente ajustes menores de configuración para convertir la aplicación en una PWA completamente funcional.
 
+## Estado operativo de producción
+
+La compilación de producción activa el Service Worker mediante `ngsw-config.json`.
+Los archivos estáticos públicos, iconos, subtítulos VTT y recursos compilados se
+incluyen en el artefacto final. La configuración de caché se limita a recursos
+estáticos y no cachea respuestas de API ni datos locales del usuario.
