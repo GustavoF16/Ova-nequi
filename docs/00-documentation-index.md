@@ -6,7 +6,7 @@
 
 > **Línea base vigente:** consultar primero
 > [`26-current-state-baseline.md`](./26-current-state-baseline.md). Este
-> documento consolida el estado verificado al 13 de noviembre de 2026 y
+> documento consolida el estado verificado al 14 de noviembre de 2026 y
 > prevalece sobre descripciones históricas que aún puedan aparecer en
 > documentos de auditoría o cambios anteriores.
 

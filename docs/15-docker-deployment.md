@@ -1228,7 +1228,9 @@ Traefik
 
 ✅ Publicación en contenedor.
 
+✅ Registro de acceso y errores de Nginx en stdout/stderr.
 
+✅ Rotación Docker json-file: 10 MB por archivo y 3 archivos por contenedor.
 
 \---
 

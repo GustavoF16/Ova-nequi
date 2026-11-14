@@ -60,6 +60,31 @@
     <div *ngIf="mensaje" class="status-note" role="status">
       {{ mensaje }}
     </div>
+
+    <section class="diagnostic-panel" aria-labelledby="diagnostic-title">
+      <h3 id="diagnostic-title">Diagnóstico de la aplicación</h3>
+      <p>
+        Los últimos errores se guardan localmente para ayudar a identificar
+        fallos sin enviar datos automáticamente.
+      </p>
+      <div class="button-group">
+        <ion-button
+          expand="block"
+          fill="outline"
+          (click)="exportarLogs()"
+          aria-label="Exportar registros de diagnóstico">
+          Exportar registros
+        </ion-button>
+        <ion-button
+          expand="block"
+          fill="clear"
+          color="medium"
+          (click)="limpiarLogs()"
+          aria-label="Eliminar registros de diagnóstico">
+          Limpiar registros
+        </ion-button>
+      </div>
+    </section>
   </div>
 
   <ion-button

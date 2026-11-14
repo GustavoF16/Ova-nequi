@@ -285,12 +285,16 @@ La verificación manual en navegador debe comprobar:
 
 Resultado de la fase actual:
 
-- Tests unitarios: 14/14 exitosos.
+- Tests unitarios: 17/17 exitosos, incluidos los tests del sistema de logging.
 - Lint: correcto.
 - Build de producción: correcto.
 - Contenedor Docker: `HTTP 200`.
 - Revisión de la página de login en navegador: estructura semántica y nombres
   accesibles verificados.
+- Docker Compose reconstruido y validado con `/`, `/login`, `manifest.webmanifest`
+  y `ngsw.json` respondiendo HTTP 200.
+- Rotación de logs verificada en ambos contenedores con `json-file`, `max-size`
+  de 10 MB y `max-file` de 3.
 
 La auditoría automatizada WCAG/axe y la revisión visual completa en Android
 quedan como actividad posterior; no se deben considerar sustitutos de las

@@ -120,9 +120,9 @@ Alta
 
 \### Estado
 
-
-
-Pendiente revisión.
+Resuelto y verificado. La tarjeta de configuración navega a
+`/configuracion`; la navegación a encuestas permanece en la tarjeta de
+encuestas correspondiente.
 
 
 

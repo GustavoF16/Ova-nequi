@@ -134,6 +134,46 @@ Workers > Unregister** y **Storage > Clear site data**. En una publicación
 real se debe esperar la actualización del Service Worker antes de evaluar una
 nueva versión y conservar el protocolo HTTPS.
 
+## Diagnóstico y registro de errores
+
+La aplicación incorpora un sistema local y gratuito de diagnóstico en
+[`LoggingService`](../src/app/services/logging.service.ts). Su objetivo es
+conservar evidencia útil para corregir errores sin enviar datos de la
+aplicación a terceros:
+
+- Captura errores globales de Angular, del navegador y promesas rechazadas.
+- Registra errores HTTP con método, URL, estado y duración mediante el
+  interceptor [`logging.interceptor.ts`](../src/app/interceptors/logging.interceptor.ts).
+- Registra fallos y recuperaciones de sincronización offline.
+- Conserva como máximo 200 entradas en `localStorage`.
+- Redacta claves que puedan contener contraseñas, tokens, secretos, API keys,
+  autorizaciones o salts.
+- Permite exportar un archivo JSON y limpiar los registros desde
+  **Configuración > Diagnóstico de la aplicación**.
+
+La exportación es manual y no implica costos de infraestructura. Para
+diagnosticar un incidente se debe reproducir el problema, exportar el JSON y
+revisar `level`, `source`, `message`, `route` y `details`, verificando que no
+contenga credenciales antes de compartirlo.
+
+Docker y Nginx envían sus registros al flujo estándar del contenedor y Docker
+aplica rotación automática sin costo adicional mediante el controlador
+`json-file`: cada contenedor conserva como máximo tres archivos de 10 MB
+(aproximadamente 30 MB por contenedor). Esto evita que los logs ocupen el disco
+indefinidamente. Se pueden consultar con:
+
+```powershell
+docker compose logs --tail=200 ova-nequi
+docker compose logs --tail=200 nginx-helper
+docker inspect --format='{{json .HostConfig.LogConfig}}' ova-nequi-app
+```
+
+La configuración se encuentra en [`docker-compose.yml`](../docker-compose.yml)
+y el servidor principal escribe el acceso en `stdout` y los errores en
+`stderr` mediante [`nginx.conf`](../nginx.conf). Los registros se conservan
+localmente en el equipo donde se ejecuta Docker; no se envían a servicios
+externos.
+
 ## Persistencia y aislamiento
 
 `StorageService` es la fachada única de persistencia:

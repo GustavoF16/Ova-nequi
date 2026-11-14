@@ -5,6 +5,7 @@ import { SecureStorage } from '@aparajita/capacitor-secure-storage';
 import { DatabaseService } from './database.service';
 import { NetworkService } from './network.service';
 import { ApiService } from './api.service';
+import { LoggingService } from './logging.service';
 
 export interface AppSettings {
   modoOscuro: boolean;
@@ -90,6 +91,7 @@ export class StorageService {
   private databaseService = inject(DatabaseService);
   private networkService = inject(NetworkService);
   private apiService = inject(ApiService);
+  private loggingService = inject(LoggingService);
 
   private pendingSyncItemsKey = 'pendingSyncQueue';
   private pendingSyncSubject = new BehaviorSubject<number>(0);
@@ -104,7 +106,7 @@ export class StorageService {
       if (online && this.initialized) {
         const count = await this.flushPendingSyncQueue();
         if (count > 0) {
-          console.log(`✅ Sincronizados ${count} elementos pendientes`);
+          this.loggingService.info('sync', 'Elementos pendientes sincronizados', { count });
         }
       }
     });
@@ -328,7 +330,7 @@ export class StorageService {
           timestamp: Date.now()
         });
       } catch (error) {
-        console.warn('No se pudo sincronizar la encuesta; quedó pendiente.', error);
+        this.loggingService.warn('sync', 'No se pudo sincronizar la encuesta; quedó pendiente.', error);
         await this.enqueuePendingSync('survey', answers);
       }
 
@@ -424,7 +426,7 @@ export class StorageService {
           timestamp: Date.now()
         });
       } catch (error) {
-        console.warn('No se pudo sincronizar la simulación; quedó pendiente.', error);
+        this.loggingService.warn('sync', 'No se pudo sincronizar la simulación; quedó pendiente.', error);
         await this.enqueuePendingSync('simulation', data);
       }
 
@@ -463,7 +465,7 @@ export class StorageService {
           timestamp: Date.now()
         });
       } catch (error) {
-        console.warn('No se pudo sincronizar el certificado; quedó pendiente.', error);
+        this.loggingService.warn('sync', 'No se pudo sincronizar el certificado; quedó pendiente.', error);
         await this.enqueuePendingSync('certificate', data);
       }
 

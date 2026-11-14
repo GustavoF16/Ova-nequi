@@ -4,6 +4,23 @@
 
 \# Historial de Cambios
 
+## Actualización 14 de noviembre de 2026
+
+Se completó el sistema gratuito de diagnóstico y observabilidad local:
+
+- Logger centralizado con captura global de errores Angular, navegador,
+  promesas rechazadas y errores HTTP.
+- Persistencia local limitada a 200 registros, sanitización de datos sensibles,
+  exportación manual y limpieza desde Configuración.
+- Logs de Nginx enviados a stdout/stderr.
+- Rotación Docker `json-file` configurada en 10 MB por archivo y 3 archivos por
+  contenedor.
+- Tests, lint, build y Docker validados; 17/17 tests exitosos y endpoints
+  principales con HTTP 200.
+
+La documentación de estado vigente se encuentra en
+[`26-current-state-baseline.md`](./26-current-state-baseline.md).
+
 ## Actualización 13 de noviembre de 2026
 
 Se consolidó la línea base técnica en

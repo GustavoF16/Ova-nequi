@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StorageService, AppSettings } from '../../services/storage.service';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -18,6 +19,7 @@ import { StorageService, AppSettings } from '../../services/storage.service';
 })
 export class ConfiguracionPage {
   private storageService = inject(StorageService);
+  private loggingService = inject(LoggingService);
 
   modoOscuro: boolean = false;
 
@@ -84,6 +86,16 @@ export class ConfiguracionPage {
     this.aplicarConfiguracion(settings);
     this.mensaje = '🔤 Tamaño de texto cambiado';
 
+  }
+
+  exportarLogs(): void {
+    this.loggingService.export();
+    this.mensaje = '📄 Registros de diagnóstico exportados';
+  }
+
+  limpiarLogs(): void {
+    this.loggingService.clear();
+    this.mensaje = '🧹 Registros de diagnóstico eliminados';
   }
 
   private aplicarConfiguracion(settings: AppSettings) {
