@@ -114,6 +114,26 @@ Durante la prueba se observaron advertencias de Ionicons y respuestas `504` de
 recursos no críticos en el navegador; no bloquearon el registro, el login ni la
 navegación validada y quedan como deuda técnica separada.
 
+### Diagnóstico del 504
+
+Se comparó el comportamiento del navegador con el servidor:
+
+- Docker/Nginx respondió `HTTP 200` para `/`, `/login`, `manifest.webmanifest`
+  y `ngsw.json`.
+- Los logs del contenedor no registraron respuestas `504`.
+- El navegador tenía activo `ngsw-worker.js` y varias cachés de Angular Service
+  Worker de una versión anterior.
+- Después de desregistrar el Service Worker, limpiar sus cachés y recargar,
+  la aplicación volvió a cargar correctamente sin reproducir el `504`.
+
+El diagnóstico es una caché PWA/Service Worker desactualizada o una solicitud
+intermitente del navegador integrado, no un fallo del contenedor ni de las
+rutas de la aplicación. La solución para desarrollo es hacer una recarga
+forzada (`Ctrl+F5`) o, desde DevTools, ejecutar **Application > Service
+Workers > Unregister** y **Storage > Clear site data**. En una publicación
+real se debe esperar la actualización del Service Worker antes de evaluar una
+nueva versión y conservar el protocolo HTTPS.
+
 ## Persistencia y aislamiento
 
 `StorageService` es la fachada única de persistencia:
