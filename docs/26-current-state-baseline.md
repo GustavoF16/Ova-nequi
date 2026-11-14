@@ -74,14 +74,17 @@ Estas mejoras aún no se han fusionado en
 `feature/entrega-semana3-docker`; primero deben revisarse visualmente en
 Android y completar una auditoría automatizada WCAG/axe.
 
-### Flujo funcional pendiente de aprobación
+### Flujo funcional verificado
 
-Antes de subir esta rama se debe completar y revisar el flujo:
+Se completó y revisó el flujo:
 
 1. Crear una cuenta de prueba sintética.
 2. Iniciar sesión con esa cuenta.
 3. Navegar por módulos, progreso y configuración.
 4. Verificar regreso al menú y permanencia de la sesión.
+
+También se verificó el cierre de sesión y la protección de rutas: después de
+cerrar sesión, acceder directamente a `/home` redirige al formulario de login.
 
 El resultado debe quedar respaldado por tests, lint, build, smoke test Docker y
 evidencia de navegación del navegador.
@@ -100,7 +103,10 @@ prueba sintéticos:
 | Abrir módulos | Correcto: `/modulos` |
 | Abrir progreso | Correcto: `/progreso` |
 | Abrir configuración | Correcto: `/configuracion` |
+| Abrir certificados | Correcto: `/certificados` |
 | Mantener la sesión durante la navegación | Correcto |
+| Cerrar sesión | Correcto: redirige a `/login` |
+| Intentar abrir `/home` sin sesión | Correcto: redirige a `/login` |
 
 El enlace `Saltar al contenido` fue verificado como navegación hacia
 `#main-content`; no ejecuta autenticación ni permite acceder a rutas protegidas.
