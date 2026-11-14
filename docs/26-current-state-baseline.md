@@ -70,9 +70,33 @@ El enlace `Saltar al contenido` apunta a `#main-content` y únicamente acelera
 la navegación hacia el formulario o contenido principal. No valida credenciales,
 no inicia sesión y no permite evadir la protección de rutas.
 
-Estas mejoras aún no se han fusionado en
-`feature/entrega-semana3-docker`; primero deben revisarse visualmente en
-Android y completar una auditoría automatizada WCAG/axe.
+Las mejoras anteriores ya están publicadas en
+`feature/entrega-semana3-docker`. Las correcciones de esta auditoría avanzada
+están en el árbol de trabajo y requieren aprobación antes de publicarse. La
+revisión visual en Android y la prueba con lector de pantalla real permanecen
+como validaciones manuales adicionales; la aplicación ya fue verificada con
+pruebas estructurales, de teclado, responsive y flujo E2E.
+
+### Resultado de validación E2E de accesibilidad
+
+El 14 de noviembre de 2026 se ejecutó en Docker un flujo E2E con datos
+sintéticos. Se verificaron registro, login, redirección a `/home`, navegación
+por las seis rutas principales, nombres accesibles en el árbol del navegador,
+activación del enlace `Saltar al contenido` con teclado y vista móvil de
+390 × 844 px sin desbordamiento horizontal.
+
+La prueba con lector de pantalla real queda pendiente porque el entorno actual
+no dispone de uno activo. Puede realizarse gratuitamente con Narrador de
+Windows mediante `Win + Ctrl + Enter`. Las pruebas automatizadas, de teclado,
+estructura semántica y responsive sí fueron ejecutadas.
+
+La auditoría CLI de axe-core no pudo ejecutarse por incompatibilidad del driver
+del entorno de validación (ChromeDriver 152 frente a Chrome 157). Como
+alternativa, se ejecutó axe-core 4.10.2 directamente en el navegador integrado
+después de limpiar el Service Worker. El resultado final fue cero violaciones
+en los criterios auditados: contraste, nombres de controles, landmarks y
+texto alternativo de imágenes. La limitación restante es la validación manual
+con lector de pantalla real.
 
 ### Flujo funcional verificado
 
@@ -107,6 +131,18 @@ prueba sintéticos:
 | Mantener la sesión durante la navegación | Correcto |
 | Cerrar sesión | Correcto: redirige a `/login` |
 | Intentar abrir `/home` sin sesión | Correcto: redirige a `/login` |
+
+### Resultado de regresión posterior a la auditoría
+
+| Verificación | Resultado |
+|---|---|
+| Tests unitarios | 17/17 exitosos |
+| Lint | Correcto |
+| Build de producción | Correcto, con advertencias CommonJS preexistentes |
+| Docker Compose | Contenedores activos |
+| `http://localhost:8080/login` | HTTP 200 |
+| axe-core 4.10.2 en navegador integrado | 0 violaciones en los criterios auditados |
+| Logs Nginx | Sin respuestas 504 |
 
 El enlace `Saltar al contenido` fue verificado como navegación hacia
 `#main-content`; no ejecuta autenticación ni permite acceder a rutas protegidas.

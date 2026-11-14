@@ -296,9 +296,49 @@ Resultado de la fase actual:
 - Rotación de logs verificada en ambos contenedores con `json-file`, `max-size`
   de 10 MB y `max-file` de 3.
 
-La auditoría automatizada WCAG/axe y la revisión visual completa en Android
-quedan como actividad posterior; no se deben considerar sustitutos de las
-pruebas funcionales.
+### Validación de Fase 4 — 14 de noviembre de 2026
+
+Se ejecutó una validación E2E en el navegador integrado contra Docker:
+
+- Creación de cuenta sintética y confirmación del mensaje de éxito.
+- Inicio de sesión y redirección a `/home`.
+- Navegación verificada en `/modulos`, `/simulaciones`, `/encuestas`,
+  `/configuracion`, `/progreso` y `/certificados`.
+- Enlace `Saltar al contenido` activado con teclado; el foco llegó a
+  `#main-content`.
+- Árbol de accesibilidad con nombres para formularios, campos, botones,
+  enlaces, regiones y encabezados principales.
+- Vista móvil de 390 × 844 px sin desbordamiento horizontal.
+
+La consola del navegador integrado mostró algunos 504 de recursos no críticos,
+pero no hubo respuestas 504 en los logs de Nginx y las páginas continuaron
+cargando correctamente. Tras desregistrar el Service Worker y reconstruir la
+imagen Docker, el flujo volvió a cargar correctamente; no se reprodujo un 504
+servido por Nginx.
+
+No se ejecutó todavía una prueba auditiva con lector de pantalla real. Puede
+completarse sin adquirir software usando **Narrador de Windows** (`Win` +
+`Ctrl` + `Enter`) y recorriendo la prueba manual descrita en esta sección.
+Esta limitación no invalida las verificaciones automatizadas y de teclado, pero
+impide declarar una validación completa con tecnología asistiva real.
+
+La auditoría CLI de `axe-core` no pudo utilizarse por una incompatibilidad del
+entorno: el ChromeDriver disponible soporta Chrome 152, mientras el navegador
+instalado es Chrome 157. Como alternativa equivalente, se cargó `axe-core`
+4.10.2 directamente en el navegador integrado y se ejecutó sobre la pantalla
+de login después de limpiar el Service Worker. La segunda auditoría terminó
+con cero violaciones en `color-contrast`,
+`label-content-name-mismatch`, `landmark-main-is-top-level`,
+`landmark-no-duplicate-main`, `landmark-unique` y `role-img-alt`.
+
+La revisión con lector de pantalla real y la revisión visual completa en
+Android siguen siendo actividades manuales posteriores; no se deben
+considerar sustitutos de las pruebas funcionales.
+
+Como corrección asociada a esta auditoría, el botón de salida ahora tiene un
+nombre accesible coincidente con su texto, el icono decorativo está oculto a
+tecnologías asistivas, el contenedor global ya no crea landmarks `main`
+duplicados y los colores de enlaces y salida cumplen el contraste WCAG AA.
 
 ## Enlace de salto al contenido
 

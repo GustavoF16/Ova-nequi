@@ -128,7 +128,7 @@ strong {
 }
 
 a {
-  color: #1677ff !important;
+  color: #0b5ed7 !important;
 }
 
 ion-button {
@@ -348,6 +348,11 @@ ion-toolbar ion-chip {
 
 ion-toolbar ion-button {
   text-transform: none !important;
+}
+
+ion-toolbar ion-button.logout-button {
+  --color: #ffffff !important;
+  --ion-color-light: #ffffff !important;
 }
 
 ion-toolbar ion-button::part(native) {

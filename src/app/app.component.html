@@ -30,7 +30,8 @@
         </ion-chip>
 
         <ion-button
-          aria-label="Cerrar sesión"
+          class="logout-button"
+          aria-label="Salir"
           color="light"
           fill="clear"
           size="small"
@@ -38,7 +39,8 @@
 
           <ion-icon
             name="log-out-outline"
-            slot="start">
+            slot="start"
+            aria-hidden="true">
           </ion-icon>
 
           Salir
@@ -53,7 +55,7 @@
 
   <ion-content
     id="main-content"
-    role="main"
+    role="presentation"
     tabindex="-1">
 
     <div

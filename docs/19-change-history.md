@@ -6,6 +6,21 @@
 
 ## Actualización 14 de noviembre de 2026
 
+Se completó la corrección de la auditoría avanzada de accesibilidad:
+
+- Se eliminaron landmarks `main` duplicados entre el shell global y las páginas.
+- El botón de salida conserva un nombre accesible coincidente con el texto
+  visible y su icono decorativo no se anuncia al lector de pantalla.
+- Se ajustaron los colores de enlaces y salida para cumplir contraste WCAG AA.
+- axe-core 4.10.2 ejecutado en el navegador integrado terminó con cero
+  violaciones en los criterios auditados.
+- Se repitieron tests, lint, build y Docker: 17/17 tests, lint correcto, build
+  correcto y login con HTTP 200.
+
+Estos cambios están pendientes de aprobación para publicarse en la rama remota.
+
+## Actualización 14 de noviembre de 2026 — observabilidad
+
 Se completó el sistema gratuito de diagnóstico y observabilidad local:
 
 - Logger centralizado con captura global de errores Angular, navegador,
