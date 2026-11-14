@@ -87,16 +87,7 @@ export class ConfiguracionPage {
   }
 
   private aplicarConfiguracion(settings: AppSettings) {
-    if (settings.modoOscuro) {
-      document.body.style.backgroundColor = '#121212';
-      document.body.style.color = '#f5f5f5';
-      this.mensaje = '🌙 Modo oscuro activado';
-    } else {
-      document.body.style.backgroundColor = '#ffffff';
-      document.body.style.color = '#000000';
-      this.mensaje = '☀️ Modo claro activado';
-    }
-
+    document.body.classList.toggle('dark', settings.modoOscuro);
     document.body.classList.remove('text-small', 'text-medium', 'text-large');
     document.body.classList.add(`text-${settings.tamanoTexto}`);
   }
