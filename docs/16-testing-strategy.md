@@ -296,6 +296,35 @@ La auditoría automatizada WCAG/axe y la revisión visual completa en Android
 quedan como actividad posterior; no se deben considerar sustitutos de las
 pruebas funcionales.
 
+## Enlace de salto al contenido
+
+Las pantallas principales incluyen el enlace `Saltar al contenido`. Este
+control es un mecanismo de navegación para teclado y lectores de pantalla:
+
+- Apunta al elemento `#main-content`.
+- Evita recorrer repetidamente encabezados y controles globales.
+- Lleva el foco visual al formulario o contenido principal de la pantalla.
+- No valida credenciales, no inicia sesión y no permite omitir las guardas de
+  autenticación.
+
+La validación de login continúa ejecutándose únicamente al enviar el
+formulario con correo y contraseña.
+
+## Prueba funcional manual de accesibilidad y navegación
+
+El flujo mínimo de aceptación es:
+
+1. Abrir la aplicación y activar `Saltar al contenido` con `Tab` y `Enter`.
+2. Ir a `Crear cuenta`.
+3. Registrar una cuenta de prueba con datos sintéticos.
+4. Confirmar el mensaje de creación y volver al login.
+5. Iniciar sesión con la cuenta recién creada.
+6. Recorrer módulos, progreso, configuración y regresar al menú.
+7. Confirmar que no se pierde la sesión ni se rompe la navegación.
+
+La prueba debe ejecutarse sin datos personales reales y debe registrar la fecha,
+la rama, el resultado de cada pantalla y cualquier advertencia de consola.
+
 
 
 ```typescript

@@ -66,9 +66,47 @@ respondió `HTTP 200`. El árbol de accesibilidad mostró un formulario nombrado
 campos de correo y contraseña etiquetados, botón “Iniciar sesión” y enlace de
 registro.
 
+El enlace `Saltar al contenido` apunta a `#main-content` y únicamente acelera
+la navegación hacia el formulario o contenido principal. No valida credenciales,
+no inicia sesión y no permite evadir la protección de rutas.
+
 Estas mejoras aún no se han fusionado en
 `feature/entrega-semana3-docker`; primero deben revisarse visualmente en
 Android y completar una auditoría automatizada WCAG/axe.
+
+### Flujo funcional pendiente de aprobación
+
+Antes de subir esta rama se debe completar y revisar el flujo:
+
+1. Crear una cuenta de prueba sintética.
+2. Iniciar sesión con esa cuenta.
+3. Navegar por módulos, progreso y configuración.
+4. Verificar regreso al menú y permanencia de la sesión.
+
+El resultado debe quedar respaldado por tests, lint, build, smoke test Docker y
+evidencia de navegación del navegador.
+
+### Resultado de la prueba funcional del 14 de noviembre de 2026
+
+Se ejecutó en Docker sobre `http://localhost:8080` usando únicamente datos de
+prueba sintéticos:
+
+| Paso | Resultado |
+|---|---|
+| Abrir registro | Correcto |
+| Crear cuenta de prueba | Correcto |
+| Redirección al login | Correcto |
+| Iniciar sesión con la cuenta creada | Correcto |
+| Abrir módulos | Correcto: `/modulos` |
+| Abrir progreso | Correcto: `/progreso` |
+| Abrir configuración | Correcto: `/configuracion` |
+| Mantener la sesión durante la navegación | Correcto |
+
+El enlace `Saltar al contenido` fue verificado como navegación hacia
+`#main-content`; no ejecuta autenticación ni permite acceder a rutas protegidas.
+Durante la prueba se observaron advertencias de Ionicons y respuestas `504` de
+recursos no críticos en el navegador; no bloquearon el registro, el login ni la
+navegación validada y quedan como deuda técnica separada.
 
 ## Persistencia y aislamiento
 
