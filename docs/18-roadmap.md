@@ -1051,7 +1051,71 @@ Integración Continua completa.
 
 
 
-\# Fase 7
+\# Iniciativa futura: contenido 3D educativo
+
+## Contenido 3D educativo
+
+### Estado
+
+Propuesta futura. No implementado.
+
+### Prioridad
+
+Baja-media, posterior a la estabilización, las pruebas integrales y la
+preparación de la versión release.
+
+### Objetivo
+
+Incorporar modelos tridimensionales creados en Blender para hacer más
+interactivas las explicaciones de enviar dinero, recibir pagos, pagar servicios
+y otros módulos educativos, sin convertir el contenido 3D en un requisito para
+comprender la lección.
+
+### Enfoque técnico recomendado
+
+- Crear modelos propios en Blender y exportarlos en formato `.glb` o `.gltf`.
+- Optimizar polígonos, texturas y animaciones para dispositivos móviles.
+- Integrar un visor mediante Three.js o Babylon.js.
+- Cargar los modelos bajo demanda desde los assets de la aplicación.
+- Mantener compatibilidad con Web, PWA, Docker y Android/Capacitor.
+- Mantener una alternativa textual, estática o 2D para accesibilidad y bajo
+  rendimiento.
+- Mantener disponibles offline los modelos de las lecciones descargadas.
+
+### Actividades
+
+1. Definir el objetivo pedagógico de un modelo piloto.
+2. Crear y optimizar un modelo de baja complejidad en Blender.
+3. Integrar un visor aislado en un módulo educativo.
+4. Implementar rotación, zoom, reinicio y etiquetas accesibles.
+5. Añadir descripción textual y alternativa 2D.
+6. Aplicar carga diferida para no aumentar el tiempo de inicio.
+7. Medir tamaño, memoria, batería y rendimiento en Android y navegador.
+8. Validar modo offline, responsive, teclado y lector de pantalla.
+9. Documentar licencias, formatos, tamaños máximos y actualización.
+10. Ejecutar tests, lint, build y E2E antes de ampliar la iniciativa.
+
+### Costos e impacto
+
+Blender, Three.js y Babylon.js son alternativas gratuitas. No se prevé un
+costo obligatorio si los modelos son propios y se distribuyen con la
+aplicación existente. Podrían aparecer costos opcionales por modelos
+comerciales, diseñadores externos, CDN, almacenamiento adicional o servicios
+de realidad aumentada.
+
+El impacto esperado es principalmente técnico: mayor tamaño de la aplicación,
+consumo de memoria y GPU, mayor consumo de batería y necesidad de pruebas
+adicionales. La iniciativa debe comenzar con un único modelo piloto y
+continuar solo si el rendimiento y la accesibilidad son aceptables.
+
+### Resultado esperado
+
+Contenido 3D educativo opcional, optimizado, accesible, compatible con Offline
+First y sin degradar los módulos existentes.
+
+---
+
+# Fase 7
 
 
 

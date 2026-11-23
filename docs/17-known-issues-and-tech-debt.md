@@ -8,7 +8,8 @@
 > deben contrastarse con [`26-current-state-baseline.md`](./26-current-state-baseline.md).
 > Secure Storage, PWA, conectividad nativa, tests unitarios y build Android ya
 > fueron corregidos o verificados; permanecen como deuda la autenticación
-> remota, E2E, idempotencia del backend y firma release.
+> remota, E2E, idempotencia del backend y firma release. El contenido 3D es
+> una mejora futura propuesta, no un defecto del estado actual.
 
 
 

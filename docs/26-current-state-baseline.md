@@ -355,6 +355,9 @@ pero deben tratarse como deuda técnica separada.
 5. La PWA tiene artefactos generados y debe validarse en un servidor HTTPS real.
 6. El backend debe diseñar idempotencia persistente y autorización antes de
    un uso multiusuario real.
+7. No existe contenido 3D integrado. La integración con Blender queda
+   documentada como iniciativa futura y no forma parte del comportamiento
+   actual.
 
 ## Orden recomendado para continuar
 
@@ -363,3 +366,19 @@ pero deben tratarse como deuda técnica separada.
 3. Diseñar idempotencia persistente para reintentos y recuperación de fallos.
 4. Validar la PWA en HTTPS real y añadir pruebas E2E.
 5. Preparar firma release y distribución únicamente si el proyecto lo requiere.
+6. Evaluar un modelo 3D educativo piloto después de completar las pruebas
+   integrales y la preparación release.
+
+## Iniciativa futura: contenido 3D
+
+Se considera viable incorporar modelos creados en Blender mediante archivos
+`.glb` o `.gltf` y un visor basado en Three.js o Babylon.js. Esta iniciativa
+no está implementada, no cambia el funcionamiento actual y no debe bloquear
+las fases de autenticación, pruebas, PWA, CI/CD o Android release.
+
+La implementación futura debe usar carga diferida, modelos optimizados para
+móvil y una alternativa textual/2D equivalente. Blender y las librerías
+recomendadas no requieren costo financiero obligatorio; sí podrían existir
+costos opcionales por modelos comerciales, diseño externo, CDN o almacenamiento
+adicional. Antes de adoptarla deben medirse tamaño, memoria, batería,
+rendimiento, accesibilidad y funcionamiento offline.

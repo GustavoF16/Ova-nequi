@@ -4,6 +4,17 @@
 
 \# Historial de Cambios
 
+## Actualización 14 de noviembre de 2026 — propuesta de contenido 3D
+
+Se documentó una iniciativa futura para incorporar modelos educativos creados
+en Blender. La propuesta contempla exportación `.glb`/`.gltf`, visor con
+Three.js o Babylon.js, carga diferida, compatibilidad Offline First y
+alternativas textuales/2D para accesibilidad.
+
+La iniciativa no modifica el código actual ni introduce dependencias. Blender y
+las librerías recomendadas pueden utilizarse sin costo obligatorio; el impacto
+esperado es de rendimiento, tamaño, memoria, batería y pruebas adicionales.
+
 ## Actualización 14 de noviembre de 2026
 
 Se completó la corrección de la auditoría avanzada de accesibilidad:
